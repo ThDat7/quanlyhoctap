@@ -1,0 +1,63 @@
+[
+  {
+    "major": "Information Technology",
+    "schoolYear": 2021,
+    "educationProgramCourse": [
+      {
+        "semester": 1,
+        "coursesCode": ["ITEC1401", "ITEC1505", "MATH1313"]
+      },
+      {
+        "semester": 2,
+        "coursesCode": ["ITEC1201", "ITEC1504", "MATH1314"]
+      },
+      {
+        "semester": 3,
+        "coursesCode": ["ITEC1406", "ITEC2301", "MISY2501"]
+      },
+      {
+        "semester": 4,
+        "coursesCode": ["ITEC2503", "ITEC2504", "POLI1205", "POLI1304"]
+      },
+      {
+        "semester": 5,
+        "coursesCode": ["ITEC2401", "ITEC2502", "MATH1315", "MATH2402"]
+      },
+      {
+        "semester": 6,
+        "coursesCode": ["GLAW1315", "ITEC3401", "ITEC4403", "POLI1206"]
+      },
+      {
+        "semester": 7,
+        "coursesCode": [
+          "ITEC3201",
+          "ITEC3412",
+          "ITEC4402",
+          "ITEC4409",
+          "PEDU0201",
+          "POLI1207"
+        ]
+      },
+      {
+        "semester": 8,
+        "coursesCode": [
+          "ITEC3406",
+          "ITEC3413",
+          "ITEC3421",
+          "ITEC4415",
+          "POLI1208"
+        ]
+      },
+      {
+        "semester": 9,
+        "coursesCode": [
+          "ITEC2302",
+          "ITEC3417",
+          "ITEC3418",
+          "ITEC4401",
+          "ITEC4408"
+        ]
+      }
+    ]
+  }
+]

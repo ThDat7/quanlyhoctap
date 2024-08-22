@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Information Technology",
+    "alias": "IT",
+    "majors": [
+      "Software Engineering",
+      "Information Technology",
+      "Computer Science",
+      "Computer Network",
+      "Data Science"
+    ],
+    "teachers": [
+      "TRƯƠNG HOÀNG VINH",
+      "PHẠM HÙNG CẨM HUYÊN ANH",
+      "NGUYỄN VĂN BẢY",
+      "NGUYỄN TIẾN ĐẠT",
+      "LÊ VIẾT TUẤN",
+      "PHAN TRẦN MINH KHUÊ",
+      "LÊ QUANG MINH",
+      "DƯƠNG HỮU THÀNH",
+      "TRƯƠNG CÔNG TUẤN",
+      "LƯƠNG CHI MAI",
+      "LÊ XUÂN TRƯỜNG",
+      "PHAN ĐẠT PHÚC",
+      "HỒ QUANG KHẢI",
+      "NGUYỄN THỊ MAI TRANG",
+      "LƯU QUANG PHƯƠNG",
+      "HỒ HƯỚNG THIÊN",
+      "PHẠM CHÍ CÔNG",
+      "DƯƠNG THÁI BẢO",
+      "NGUYỄN THỊ NGỌC THANH",
+      "NGUYỄN TRUNG HẬU",
+      "TÔ OAI HÙNG",
+      "LÊ HỒNG THÁI",
+      "VÕ THỊ HỒNG TUYẾT",
+      "NGUYỄN THỊ PHƯƠNG TRANG",
+      "VÕ THỊ KIM ANH"
+    ]
+  }
+]
