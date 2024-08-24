@@ -3,7 +3,7 @@ package com.thanhdat.quanlyhoctap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -21,7 +21,7 @@ public class Semester {
 
     private Integer year;
     private Integer semester;
-    private Date startDate;
+    private LocalDate startDate;
     private Integer durationWeeks;
 
     @OneToMany(mappedBy = "semester")

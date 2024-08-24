@@ -1,14 +1,19 @@
 package com.thanhdat.quanlyhoctap.datagenerator.helper;
 
 import com.github.javafaker.Faker;
-import com.thanhdat.quanlyhoctap.datagenerator.DataGenerator;
+import com.thanhdat.quanlyhoctap.dto.request.ClassroomAvailableRequest;
+import com.thanhdat.quanlyhoctap.dto.request.TimeToUseClassroomRequest;
 import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.repository.*;
+import com.thanhdat.quanlyhoctap.service.ClassroomService;
+import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
+import com.thanhdat.quanlyhoctap.util.DateTimeRange;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +28,8 @@ public class GenerateCourseClassHelper {
     private ScheduleStudyRepository scheduleStudyRepository;
     private StudentClassRepository studentClassRepository;
     private CourseClassRepository courseClassRepository;
-    private ClassroomRepository classroomRepository;
+    private ClassroomService classroomService;
+    private ScheduleStudyService scheduleStudyService;
     private StudyRepository studyRepository;
     private final Faker faker = new Faker();
 
@@ -56,19 +62,9 @@ public class GenerateCourseClassHelper {
         Integer periodStudyInWeek = course.getSessionInWeek() * shiftLength;
         Integer weekLength = (int) Math.ceil(periodByScheduleType / (float) periodStudyInWeek);
 
-        Date startDate = courseClass.getSemester().getStartDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.WEEK_OF_YEAR, weekLength - 1);
-        Date endDate = calendar.getTime();
+        LocalDate startDate = courseClass.getSemester().getStartDate();
+        LocalDate endDate = startDate.plusWeeks(weekLength - 1);
         Integer shiftEnd = shiftStart + shiftLength;
-
-        List<Classroom> validClassroom = classroomRepository
-                .findAvailableClassrooms(roomType,
-                        dayInWeek, startDate,
-                        endDate,
-                        shiftStart, shiftEnd);
-        Classroom classroom = validClassroom.get(faker.number().numberBetween(0, validClassroom.size() - 1));
 
         ScheduleStudy scheduleStudy = ScheduleStudy.builder()
                 .dayInWeek(dayInWeek)
@@ -77,8 +73,25 @@ public class GenerateCourseClassHelper {
                 .courseClass(courseClass)
                 .startDate(startDate)
                 .weekLength(weekLength)
-                .classroom(classroom)
+                .classroom(null)
                 .build();
+
+        List<DateTimeRange> scheduleDateTimeRanges = scheduleStudyService.convertToDateTimeRanges(scheduleStudy);
+        List<TimeToUseClassroomRequest> scheduleDateTimeRangesRequest = scheduleDateTimeRanges.stream()
+                .map(dateTimeRange -> TimeToUseClassroomRequest.builder()
+                        .startTime(dateTimeRange.getStart())
+                        .endTime(dateTimeRange.getEnd())
+                        .build())
+                .collect(Collectors.toList());
+
+        ClassroomAvailableRequest classroomAvailableRequest = ClassroomAvailableRequest.builder()
+                .roomType(roomType)
+                .timeToUseClassroomRequests(scheduleDateTimeRangesRequest)
+                .build();
+        List<Classroom> validClassroom = classroomService
+                .getUnUsedClassrooms(classroomAvailableRequest);
+        Classroom randomClassroom = validClassroom.get(faker.number().numberBetween(0, validClassroom.size() - 1));
+        scheduleStudy.setClassroom(randomClassroom);
 
         return scheduleStudy;
     }
@@ -151,14 +164,9 @@ public class GenerateCourseClassHelper {
                 return;
 
             ITEP.getEducationProgramCourses().stream().forEach(epc -> {
-                Integer semesterCurrentInYearEP = epc.getSemester() % DataGenerator.SEMESTER_IN_YEAR;
-                if (semesterCurrentInYearEP == 0)
-                    semesterCurrentInYearEP = DataGenerator.SEMESTER_IN_YEAR;
-                Integer yearCurrentEP = ITEP.getSchoolYear() + (epc.getSemester() - semesterCurrentInYearEP) / DataGenerator.SEMESTER_IN_YEAR;
-                Boolean isMatchYear = yearCurrentEP.equals(semester.getYear());
-                Boolean isMatchSemester = semesterCurrentInYearEP.equals(semester.getSemester());
-                if (!(isMatchYear && isMatchSemester)) return;
-
+                Boolean isMatchYear = epc.getSemester().getYear() == semester.getYear();
+                Boolean isMatchSemester = epc.getSemester().getSemester() == semester.getSemester();
+                if (!(isMatchSemester && isMatchYear)) return;
 
                 List<StudentClass> studentClasses = studentClassRepository.findByYearAndMajorName(ITEP.getSchoolYear(), "Information Technology");
                 studentClasses.stream().forEach(studentClass -> {
@@ -166,6 +174,7 @@ public class GenerateCourseClassHelper {
                     Integer capacityClass = studentRepository.countByStudentClassId(studentClass.getId()).intValue();
                     CourseClass courseClass = CourseClass.builder()
                             .course(epc.getCourse())
+                            .courseRule(epc.getCourseOutline().getCourseRule())
                             .semester(semester)
                             .teacher(randomTeacher)
                             .studentClass(studentClass)
@@ -175,7 +184,9 @@ public class GenerateCourseClassHelper {
                             .finalExam(null)
                             .build();
                     Set<ScheduleStudy> scheduleStudies = generateScheduleStudy(courseClass);
+                    FinalExam finalExam = generateFinalExam(scheduleStudies);
                     courseClass.setScheduleStudies(scheduleStudies);
+                    courseClass.setFinalExam(finalExam);
                     courseClassRepository.save(courseClass);
                 });
             });
@@ -185,7 +196,7 @@ public class GenerateCourseClassHelper {
     public Set<Score> generateScore(Study study) {
         Set<Score> scores = new HashSet<>();
         for (FactorScore factorScore : FactorScore.values()) {
-            Double score = faker.number().randomDouble(2, 0, 10);
+            Float score = (float) faker.number().randomDouble(2, 0, 10);
 
             Score s = Score.builder()
                     .factorScore(factorScore)
@@ -210,14 +221,13 @@ public class GenerateCourseClassHelper {
                 students.stream().forEach(student -> {
                     List<CourseClass> courseClasses = courseClassRepository.findBySemesterIdAndStudentClassId(semester.getId(), studentClass.getId());
                     courseClasses.stream().forEach(courseClass -> {
+                        LocalTime time = LocalTime.of(7, 0, 0);
+                        LocalDateTime timeRegistered = LocalDateTime.of(semester.getStartDate(), time);
+                        timeRegistered.minusDays(20);
+
                         Study study = Study.builder()
                                 .student(student)
-                                .timeRegistered(faker.date().between(
-                                        Date.from(semester.getStartDate().toInstant()
-                                                .atZone(ZoneId.systemDefault())
-                                                .toLocalDate().minusDays(20)
-                                                .atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                                        semester.getStartDate()))
+                                .timeRegistered(timeRegistered)
                                 .courseClass(courseClass)
                                 .build();
                         Set<Score> scores = generateScore(study);
@@ -227,6 +237,47 @@ public class GenerateCourseClassHelper {
                 });
             });
         });
+    }
 
+    private FinalExam generateFinalExam(Set<ScheduleStudy> scheduleStudies) {
+        ScheduleStudy latestEndSchedule = scheduleStudies.stream()
+                .max((a, b) -> {
+                    LocalDate aEndDate = a.getStartDate().plusWeeks(a.getWeekLength());
+                    LocalDate bEndDate = b.getStartDate().plusWeeks(b.getWeekLength());
+                    return aEndDate.compareTo(bEndDate);
+                }).get();
+        LocalDate endStudyDate = latestEndSchedule.getStartDate().plusWeeks(latestEndSchedule.getWeekLength());
+
+        FinalExam finalExam = null;
+
+        Integer dateAfter = 20;
+        LocalTime examStartTime = LocalTime.of(7, 0, 0);
+        LocalDateTime examStart = LocalDateTime.of(endStudyDate.plusDays(dateAfter), examStartTime);
+        List<Classroom> availableClassroom;
+        do {
+            LocalDateTime examEnd = examStart.plusHours(1).plusMinutes(30);
+            TimeToUseClassroomRequest timeToUseClassroomRequest = TimeToUseClassroomRequest.builder()
+                    .startTime(examStart)
+                    .endTime(examEnd)
+                    .build();
+            ClassroomAvailableRequest classroomAvailableRequest = ClassroomAvailableRequest.builder()
+                    .roomType(RoomType.CLASS_ROOM)
+                    .timeToUseClassroomRequests(List.of(timeToUseClassroomRequest))
+                    .build();
+
+            availableClassroom = classroomService.getUnUsedClassrooms(classroomAvailableRequest);
+            if (availableClassroom.size() == 0) {
+                examStart = examStart.plusDays(1);
+                continue;
+            }
+
+            Classroom randomClassroom = availableClassroom.get(faker.number().numberBetween(0, availableClassroom.size() - 1));
+            finalExam = FinalExam.builder()
+                    .classroom(randomClassroom)
+                    .startTime(examStart)
+                    .endTime(examEnd)
+                    .build();
+        } while(availableClassroom.size() == 0);
+        return finalExam;
     }
 }

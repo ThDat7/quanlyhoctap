@@ -1,26 +1,21 @@
 package com.thanhdat.quanlyhoctap.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "scores")
+@Table(name = "course_rules")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Score {
-
+public class CourseRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "study_id")
-    private Study study;
-
-    private FactorScore factorScore;
-    private Float score;
+    private Float midTermFactor;
+    private Float finalTermFactor;
+    private Float passScore;
 }

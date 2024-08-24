@@ -1,9 +1,11 @@
 package com.thanhdat.quanlyhoctap.datagenerator;
 
 import com.github.javafaker.Faker;
+import com.thanhdat.quanlyhoctap.config.DateTimeFormatters;
 import com.thanhdat.quanlyhoctap.datagenerator.helper.GenerateCourseClassHelper;
 import com.thanhdat.quanlyhoctap.datagenerator.model.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.helper.settingbag.StudySettingType;
 import com.thanhdat.quanlyhoctap.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,10 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @AllArgsConstructor
 public class DataGenerator {
     private DataLoader dataLoader;
-    private SimpleDateFormat simpleDateFormat;
     private final Faker faker = new Faker();
     private GenerateCourseClassHelper generateCourseClassHelper;
 
@@ -37,15 +42,17 @@ public class DataGenerator {
     private CourseOutlineRepository courseOutlineRepository;
     private TeacherRepository teacherRepository;
     private EducationProgramCourseRepository educationProgramCourseRepository;
+    private SettingRepository settingRepository;
     public void generateData() throws Exception {
+        createSettings();
         createFaculties();
         createCourses();
+        createSemesters();
         createEducationPrograms();
         createStudentClassesWithStudents();
-        createSemesters();
         createClassroom();
-        generateCourseClassHelper.createCourseClassesForITMajor();
         createCourseOutline();
+        generateCourseClassHelper.createCourseClassesForITMajor();
         generateCourseClassHelper.createStudiesAndScore();
     }
 
@@ -128,8 +135,9 @@ public class DataGenerator {
                     .build();
             epModel.getEducationProgramCourse().forEach(epcModel -> epcModel.getCoursesCode().forEach(cCode -> {
                 Course course = courseRepository.findByCode(cCode).get();
+                Semester semester = semesterRepository.findByYearAndSemester(epcModel.getYear(), epcModel.getSemester());
                 EducationProgramCourse educationProgramCourse = EducationProgramCourse.builder()
-                        .semester(epcModel.getSemester())
+                        .semester(semester)
                         .course(course)
                         .educationProgram(educationProgram)
                         .build();
@@ -190,7 +198,8 @@ public class DataGenerator {
                         "12/06/2024");
         int baseYear = 2021;
         for (int i = 0; i < startDateStrings.size(); i++) {
-            Date startDate = simpleDateFormat.parse(startDateStrings.get(i));
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormatters.DATE_FORMAT);
+            LocalDate startDate = LocalDate.parse(startDateStrings.get(i), dateFormatter);
             int year = baseYear + i / SEMESTER_IN_YEAR;
 
             Semester semester = Semester.builder()
@@ -250,13 +259,29 @@ public class DataGenerator {
                 Set<EducationProgramCourse> allEpcAssociateWithCourse =
                         new HashSet<>(educationProgramCourseRepository
                                 .findByCourse(course));
+                List<Float> randomMidTermFactors = List.of((float) 0.3, (float) 0.4, (float) 0.5);
+                List<Float> randomPassScores = List.of((float) 5.0, (float) 4.0);
+                Float midTermFactor = randomMidTermFactors
+                        .get(faker.random().nextInt(randomMidTermFactors.size() - 1));
+                Float finalTermFactor = 1 - midTermFactor;
+                Float passScore = randomPassScores.get(faker.random().nextInt(randomPassScores.size() - 1));
+                CourseRule courseRule = CourseRule.builder()
+                        .midTermFactor(midTermFactor)
+                        .finalTermFactor(finalTermFactor)
+                        .passScore(passScore)
+                        .build();
+
+                LocalDateTime deadline = LocalDateTime.now().withYear(defaultYearPublished - 1);
+
+
                 CourseOutline courseOutline = CourseOutline.builder()
                         .url(url)
                         .yearPublished(defaultYearPublished)
                         .course(course)
+                        .courseRule(courseRule)
                         .teacher(randomTeacher)
                         .status(defaultOutlineStatus)
-                        .deadlineDate(faker.date().past(365 * 10, TimeUnit.DAYS))
+                        .deadline(deadline)
                         .educationProgramCourses(allEpcAssociateWithCourse)
                         .build();
                 courseOutlineRepository.save(courseOutline);
@@ -267,5 +292,25 @@ public class DataGenerator {
                 });
             });
         });
+    }
+
+    private void createSettings() {
+        LocalTime timeStartStudy = LocalTime.of(7, 30);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(DateTimeFormatters.TIME_FORMAT);
+        String timeString = timeStartStudy.format(timeFormatter);
+        Integer shiftLengthMinutes = 45;
+
+        List<Setting> settings = new ArrayList<>();
+        settings.add(Setting.builder()
+                .key(StudySettingType.TIME_START_STUDY.name())
+                .value(timeString)
+                .build());
+
+        settings.add(Setting.builder()
+                .key(StudySettingType.SHIFT_LENGTH_MINUTES.name())
+                .value(shiftLengthMinutes.toString())
+                .build());
+
+        settingRepository.saveAll(settings);
     }
 }

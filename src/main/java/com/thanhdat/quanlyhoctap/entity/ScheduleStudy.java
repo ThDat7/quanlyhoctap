@@ -3,7 +3,7 @@ package com.thanhdat.quanlyhoctap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "schedule_studies")
@@ -20,7 +20,7 @@ public class ScheduleStudy {
     private Integer shiftStart;
     private Integer shiftLength;
 
-    private Date startDate;
+    private LocalDate startDate;
     private Integer weekLength;
 
     @ManyToOne

@@ -30,4 +30,9 @@ public class Teacher {
 
     @OneToMany(mappedBy = "teacher")
     private Set<CourseClass> courseClass;
+
+    @Transient
+    public String getFullName() {
+        return user.getLastName() + " " + user.getFirstName();
+    }
 }

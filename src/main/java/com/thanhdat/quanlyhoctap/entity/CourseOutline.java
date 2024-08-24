@@ -3,7 +3,7 @@ package com.thanhdat.quanlyhoctap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -17,6 +17,10 @@ public class CourseOutline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_rule_id")
+    private CourseRule courseRule;
 
     private String url;
 
@@ -33,7 +37,7 @@ public class CourseOutline {
     @Column(name = "status", length = 15, columnDefinition = "varchar(15) default 'DOING'", nullable = false)
     @Enumerated(EnumType.STRING)
     private OutlineStatus status;
-    private Date deadlineDate;
+    private LocalDateTime deadline;
 
     @OneToMany(mappedBy = "courseOutline")
     private Set<EducationProgramCourse> educationProgramCourses;

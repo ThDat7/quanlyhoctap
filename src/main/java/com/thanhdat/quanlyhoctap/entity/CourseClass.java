@@ -21,6 +21,10 @@ public class CourseClass {
     @JoinColumn(name = "course_id")
     private Course course;
 
+    @OneToOne
+    @JoinColumn(name = "course_rule_id")
+    private CourseRule courseRule;
+
     @ManyToOne
     @JoinColumn(name = "semester_id")
     private Semester semester;

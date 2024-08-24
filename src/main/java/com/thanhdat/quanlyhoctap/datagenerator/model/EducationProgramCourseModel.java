@@ -7,5 +7,6 @@ import java.util.Set;
 @Data
 public class EducationProgramCourseModel {
     private Integer semester;
+    private Integer year;
     private Set<String> coursesCode;
 }

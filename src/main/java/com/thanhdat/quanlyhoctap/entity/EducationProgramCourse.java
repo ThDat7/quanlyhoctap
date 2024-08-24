@@ -18,8 +18,9 @@ public class EducationProgramCourse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private int semester;
+    @ManyToOne
+    @JoinColumn(name = "semester_id", nullable = false)
+    private Semester semester;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)

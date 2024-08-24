@@ -3,7 +3,7 @@ package com.thanhdat.quanlyhoctap.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -19,7 +19,7 @@ public class Study {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Date timeRegistered;
+    private LocalDateTime timeRegistered;
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
