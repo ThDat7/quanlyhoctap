@@ -11,6 +11,7 @@ import com.thanhdat.quanlyhoctap.util.DateTimeRange;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -43,7 +44,7 @@ public class GenerateCourseClassHelper {
         THEORY, PRACTICE
     }
 
-    private ScheduleStudy createScheduleStudy(CourseClass courseClass, Integer dayInWeek,
+    private ScheduleStudy createScheduleStudy(CourseClass courseClass, DayOfWeek dayOfWeek,
                                               Integer shiftStart, ScheduleType scheduleType) {
         Integer shiftLength;
         Integer periodByScheduleType;
@@ -63,11 +64,10 @@ public class GenerateCourseClassHelper {
         Integer weekLength = (int) Math.ceil(periodByScheduleType / (float) periodStudyInWeek);
 
         LocalDate startDate = courseClass.getSemester().getStartDate();
-        LocalDate endDate = startDate.plusWeeks(weekLength - 1);
-        Integer shiftEnd = shiftStart + shiftLength;
+        Integer gapFromStartDay = dayOfWeek.getValue() - startDate.getDayOfWeek().getValue();
+        startDate = startDate.plusDays(gapFromStartDay);
 
         ScheduleStudy scheduleStudy = ScheduleStudy.builder()
-                .dayInWeek(dayInWeek)
                 .shiftStart(shiftStart)
                 .shiftLength(shiftLength)
                 .courseClass(courseClass)
@@ -106,16 +106,19 @@ public class GenerateCourseClassHelper {
                 = scheduleStudyRepository.findByCourseClassSemesterIdAndCourseClassStudentClassId(courseClass.getSemester().getId(),
                 courseClass.getStudentClass().getId());
 
-        List<Integer> available = new ArrayList<>(Arrays.asList(2, 3, 4, 5, 6, 7));
+        List<DayOfWeek> available = new ArrayList<>(List.of(DayOfWeek.values()));
         Integer sessionInWeek = course.getSessionInWeek();
         for (int i = 1; i <= sessionInWeek; i++) {
 
             Boolean isFindValidDate;
             do {
-                Integer randomDay = available.get(faker.number().numberBetween(0, available.size() - 1));
+                DayOfWeek randomDay = available.get(faker.number().numberBetween(0, available.size() - 1));
 
                 List<Integer> startShifts = existScheduleStudy.stream()
-                        .filter(scheduleStudy -> scheduleStudy.getDayInWeek().equals(randomDay))
+                        .filter(scheduleStudy -> {
+                            DayOfWeek dayInWeekSchedule = scheduleStudy.getStartDate().getDayOfWeek();
+                            return dayInWeekSchedule == randomDay;
+                        })
                         .map(ScheduleStudy::getShiftStart)
                         .collect(Collectors.toList());
 
@@ -271,8 +274,10 @@ public class GenerateCourseClassHelper {
                 continue;
             }
 
+            CourseClass courseClass = latestEndSchedule.getCourseClass();
             Classroom randomClassroom = availableClassroom.get(faker.number().numberBetween(0, availableClassroom.size() - 1));
             finalExam = FinalExam.builder()
+                    .courseClass(courseClass)
                     .classroom(randomClassroom)
                     .startTime(examStart)
                     .endTime(examEnd)

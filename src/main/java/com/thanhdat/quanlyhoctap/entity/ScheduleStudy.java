@@ -16,7 +16,6 @@ public class ScheduleStudy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer dayInWeek;
     private Integer shiftStart;
     private Integer shiftLength;
 

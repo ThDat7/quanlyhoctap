@@ -8,6 +8,6 @@ import java.util.List;
 public class FacultyWithTeachersModel {
     private String name;
     private String alias;
-    private List<String> majors;
+    private List<MajorModel> majors;
     private List<String> teachers;
 }

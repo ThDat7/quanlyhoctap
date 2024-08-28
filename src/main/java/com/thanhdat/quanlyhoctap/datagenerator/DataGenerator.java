@@ -13,13 +13,14 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
@@ -98,9 +99,10 @@ public class DataGenerator {
                 faculty.getTeachers().add(teacher);
             });
 
-            fModel.getMajors().forEach(mName -> {
+            fModel.getMajors().forEach(mModel -> {
                 Major major = Major.builder()
-                        .name(mName)
+                        .name(mModel.getName())
+                        .alias(mModel.getAlias())
                         .faculty(faculty)
                         .build();
                 faculty.getMajors().add(major);
@@ -195,7 +197,7 @@ public class DataGenerator {
                         "05/06/2023",
                         "16/10/2023",
                         "26/02/2024",
-                        "12/06/2024");
+                        "17/06/2024");
         int baseYear = 2021;
         for (int i = 0; i < startDateStrings.size(); i++) {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormatters.DATE_FORMAT);

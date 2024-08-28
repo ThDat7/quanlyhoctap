@@ -3,11 +3,22 @@
     "name": "Information Technology",
     "alias": "IT",
     "majors": [
-      "Software Engineering",
-      "Information Technology",
-      "Computer Science",
-      "Computer Network",
-      "Data Science"
+      {
+        "name": "Information Technology",
+        "alias": "IT"
+      },
+      {
+        "name": "Computer Science",
+        "alias": "CS"
+      },
+      {
+        "name": "Information Management",
+        "alias": "IM"
+      },
+      {
+        "name": "Artificial intelligence",
+        "alias": "AI"
+      }
     ],
     "teachers": [
       "TRƯƠNG HOÀNG VINH",
