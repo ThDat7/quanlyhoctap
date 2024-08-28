@@ -38,6 +38,7 @@ public class TimeTableServiceImpl implements TimeTableService {
                 .id(courseClass.getId())
                 .courseName(courseClass.getCourse().getName())
                 .courseCode(courseClass.getCourse().getCode())
+                .courseCredits(courseClass.getCourse().getCredits())
                 .studentClassName(courseClass.getStudentClass().getName())
                 .teacherName(courseClass.getTeacher().getFullName())
                 .schedules(schedules)

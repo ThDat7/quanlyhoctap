@@ -13,6 +13,7 @@ public class CourseClassScheduleResponse {
     private Integer id;
     private String courseName;
     private String courseCode;
+    private Float courseCredits;
     private String studentClassName;
     private String teacherName;
     List<ScheduleStudyTimeTableResponse> schedules;
