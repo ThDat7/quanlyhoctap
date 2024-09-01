@@ -21,7 +21,7 @@ public class CourseClass {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "course_rule_id")
     private CourseRule courseRule;
 
