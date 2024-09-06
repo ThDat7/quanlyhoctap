@@ -160,7 +160,8 @@ public class GenerateCourseClassHelper {
         EducationProgram ITEP = educationProgramRepository.findByMajorName("Information Technology").get();
         List<Semester> semesters = semesterRepository.findAll();
         semesters.stream().forEach(semester -> {
-            if (semester.getId() > CURRENT_SEMESTER_ID)
+            Integer nextSemesterId = CURRENT_SEMESTER_ID + 1;
+            if (semester.getId() > nextSemesterId)
                 return;
 
             if (ITEP.getSchoolYear() > semester.getYear())
@@ -187,9 +188,12 @@ public class GenerateCourseClassHelper {
                             .finalExam(null)
                             .build();
                     Set<ScheduleStudy> scheduleStudies = generateScheduleStudy(courseClass);
-                    FinalExam finalExam = generateFinalExam(scheduleStudies);
                     courseClass.setScheduleStudies(scheduleStudies);
-                    courseClass.setFinalExam(finalExam);
+                    if (scheduleStudies.size() > 0) {
+                        FinalExam finalExam = generateFinalExam(scheduleStudies);
+                        courseClass.setFinalExam(finalExam);
+                    }
+
                     courseClassRepository.save(courseClass);
                 });
             });

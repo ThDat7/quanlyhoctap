@@ -18,4 +18,7 @@ public interface SemesterRepository extends JpaRepository<Semester, Integer> {
             "sc.major = ep.major AND sc.year = ep.schoolYear JOIN sc.students s WHERE s.id = :studentId " +
             "ORDER BY epc.semester.year DESC, epc.semester.semester DESC")
     List<Semester> findByStudentId(Integer studentId);
+
+    @Query("SELECT s FROM Semester s WHERE s.id = cast((SELECT st.value FROM Setting st WHERE st.key = 'SEMESTER_ID_FOR_REGISTER') as int)")
+    Semester findForRegister();
 }

@@ -5,6 +5,7 @@ import com.thanhdat.quanlyhoctap.config.DateTimeFormatters;
 import com.thanhdat.quanlyhoctap.datagenerator.helper.GenerateCourseClassHelper;
 import com.thanhdat.quanlyhoctap.datagenerator.model.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.helper.settingbag.RegisterCourseSettingType;
 import com.thanhdat.quanlyhoctap.helper.settingbag.StudySettingType;
 import com.thanhdat.quanlyhoctap.repository.*;
 import lombok.AllArgsConstructor;
@@ -311,6 +312,12 @@ public class DataGenerator {
         settings.add(Setting.builder()
                 .key(StudySettingType.SHIFT_LENGTH_MINUTES.name())
                 .value(shiftLengthMinutes.toString())
+                .build());
+
+        Integer semesterIdForRegister = 9;
+        settings.add(Setting.builder()
+                .key(RegisterCourseSettingType.SEMESTER_ID_FOR_REGISTER.name())
+                .value(semesterIdForRegister.toString())
                 .build());
 
         settingRepository.saveAll(settings);
