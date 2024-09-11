@@ -5,8 +5,8 @@ import com.thanhdat.quanlyhoctap.entity.Semester;
 import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.SemesterService;
 import com.thanhdat.quanlyhoctap.service.StudentService;
+import com.thanhdat.quanlyhoctap.service.TeacherService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +17,20 @@ import java.util.stream.Collectors;
 public class SemesterServiceImpl implements SemesterService {
     private final SemesterRepository semesterRepository;
     private final StudentService studentService;
+    private final TeacherService teacherService;
 
     @Override
     public List<SemesterResponse> getByCurrentStudent() {
         Integer currentStudentId = studentService.getCurrentStudentId();
         return semesterRepository.findByStudentId(currentStudentId).stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SemesterResponse> getByCurrentTeacher() {
+        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+        return semesterRepository.findByTeacherId(currentTeacherId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }

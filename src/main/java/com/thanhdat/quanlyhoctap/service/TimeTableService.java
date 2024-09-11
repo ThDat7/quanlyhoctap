@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface TimeTableService {
     List<CourseClassScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId);
+
+    List<CourseClassScheduleResponse> getByCurrentTeacherAndSemester(Integer semesterId);
 }

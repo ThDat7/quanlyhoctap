@@ -22,4 +22,10 @@ public class TimeTableController {
     public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {
         return ResponseEntity.ok(timeTableService.getByCurrentStudentAndSemester(semesterId));
     }
+
+
+    @GetMapping("/semester/{semesterId}/current-teacher")
+    public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentTeacherAndSemester(@PathVariable Integer semesterId) {
+        return ResponseEntity.ok(timeTableService.getByCurrentTeacherAndSemester(semesterId));
+    }
 }

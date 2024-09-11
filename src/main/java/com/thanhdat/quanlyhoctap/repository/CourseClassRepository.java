@@ -47,4 +47,7 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
                 ")" +
             ")")
     Boolean isCourseClassInStudentEducationProgram(Integer courseClassId, Integer studentId);
+
+    @Query("SELECT cc FROM CourseClass cc WHERE cc.semester.id = :semesterId AND cc.teacher.id = :teacherId")
+    List<CourseClass> findBySemesterIdAndTeacherId(Integer semesterId, int teacherId);
 }

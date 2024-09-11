@@ -1,15 +1,15 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
-import com.thanhdat.quanlyhoctap.dto.response.*;
+import com.thanhdat.quanlyhoctap.dto.response.CourseClassScheduleResponse;
+import com.thanhdat.quanlyhoctap.dto.response.ScheduleStudyTimeTableResponse;
 import com.thanhdat.quanlyhoctap.entity.CourseClass;
 import com.thanhdat.quanlyhoctap.entity.ScheduleStudy;
-import com.thanhdat.quanlyhoctap.entity.Semester;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.StudentService;
+import com.thanhdat.quanlyhoctap.service.TeacherService;
 import com.thanhdat.quanlyhoctap.service.TimeTableService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +21,19 @@ public class TimeTableServiceImpl implements TimeTableService {
     private CourseClassRepository courseClassRepository;
     private final SemesterRepository semesterRepository;
     private StudentService studentService;
+    private final TeacherService teacherService;
     @Override
     public List<CourseClassScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {
         int currentStudentId = studentService.getCurrentStudentId();
         return courseClassRepository.findBySemesterIdAndStudentId(semesterId, currentStudentId).stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CourseClassScheduleResponse> getByCurrentTeacherAndSemester(Integer semesterId) {
+        int currentStudentId = teacherService.getCurrentTeacherId();
+        return courseClassRepository.findBySemesterIdAndTeacherId(semesterId, currentStudentId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }

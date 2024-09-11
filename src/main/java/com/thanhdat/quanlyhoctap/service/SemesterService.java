@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SemesterService {
     List<SemesterResponse> getByCurrentStudent();
+
+    List<SemesterResponse> getByCurrentTeacher();
 }
