@@ -25,4 +25,7 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private Set<Study> studies;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<StudentStatus> studentStatuses;
 }

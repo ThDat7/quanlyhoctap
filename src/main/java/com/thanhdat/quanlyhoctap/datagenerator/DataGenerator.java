@@ -171,10 +171,26 @@ public class DataGenerator {
                     .user(user)
                     .studentClass(studentClass)
                     .build();
+            Set<StudentStatus> studentStatuses = generateStudentStatuses(student);
+            student.setStudentStatuses(studentStatuses);
             students.add(student);
 
             studentClass.getStudents().add(student);
         }
+    }
+
+    private Set<StudentStatus> generateStudentStatuses(Student student) {
+        Set<StudentStatus> studentStatuses = new HashSet<>();
+        for (int i = 1; i <= GenerateCourseClassHelper.CURRENT_SEMESTER_ID; i++) {
+            Semester semester = semesterRepository.findById(i).get();
+            StudentStatus studentStatus = StudentStatus.builder()
+                    .semester(semester)
+                    .student(student)
+                    .isLock(false)
+                    .build();
+            studentStatuses.add(studentStatus);
+        }
+        return studentStatuses;
     }
 
     private void createStudentClassesWithStudents() throws IOException {

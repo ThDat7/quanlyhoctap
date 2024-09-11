@@ -38,7 +38,7 @@ public class GenerateCourseClassHelper {
     private static final Integer THEORY_SHIFT_LENGTH = 4;
     private static final Integer PRACTICE_SHIFT_LENGTH = 3;
     private static final Integer PRACTICE_SHIFT_START = COMMON_SHIFT_STUDY_START.get(1);
-    private static final Integer CURRENT_SEMESTER_ID = 8;
+    public static final Integer CURRENT_SEMESTER_ID = 8;
 
     private enum ScheduleType {
         THEORY, PRACTICE
