@@ -45,6 +45,8 @@ public class DataGenerator {
     private TeacherRepository teacherRepository;
     private EducationProgramCourseRepository educationProgramCourseRepository;
     private SettingRepository settingRepository;
+    private StaffRepository staffRepository;
+    private NewsRepository newsRepository;
     public void generateData() throws Exception {
         createSettings();
         createFaculties();
@@ -56,6 +58,8 @@ public class DataGenerator {
         createCourseOutline();
         generateCourseClassHelper.createCourseClassesForITMajor();
         generateCourseClassHelper.createStudiesAndScore();
+        createStaffs();
+        createNews();
     }
 
     private User initUser(String name) {
@@ -321,5 +325,44 @@ public class DataGenerator {
                 .build());
 
         settingRepository.saveAll(settings);
+    }
+
+    private void createStaffs() {
+        List<Staff> staffs = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = User.builder()
+                    .firstName(faker.name().firstName())
+                    .lastName(faker.name().lastName())
+                    .username("staff" + i)
+                    .password(COMMON_PASSWORD)
+                    .role(UserRole.STAFF)
+                    .build();
+            Staff staff = Staff.builder()
+                    .code("NV" + i)
+                    .user(user)
+                    .build();
+            staffs.add(staff);
+        }
+        staffRepository.saveAll(staffs);
+    }
+
+    private void createNews() {
+        List<Staff> staffs = staffRepository.findAll();
+        List<News> news = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Staff randomStaff = staffs.get(faker.random().nextInt(staffs.size() - 1));
+            News newsItem = News.builder()
+                    .title(faker.lorem().sentence())
+                    .content("<p>Thong bao minh hoa</p>")
+                    .author(randomStaff)
+                    .createdAt(LocalDateTime.now().plusSeconds(i))
+                    .isImportant(false)
+                    .build();
+            news.add(newsItem);
+        }
+
+        News importantNews = news.get(faker.random().nextInt(news.size() - 1));
+        importantNews.setIsImportant(true);
+        newsRepository.saveAll(news);
     }
 }
