@@ -21,6 +21,7 @@ public class Course {
     @Column(nullable = false, unique = true)
     private String code;
     private Float credits;
+    private CourseType type;
 
     private Integer sessionInWeek;
     private Integer theoryPeriod;

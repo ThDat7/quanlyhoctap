@@ -32,6 +32,7 @@ public class GenerateCourseClassHelper {
     private ClassroomService classroomService;
     private ScheduleStudyService scheduleStudyService;
     private StudyRepository studyRepository;
+    private InvoiceRepository invoiceRepository;
     private final Faker faker = new Faker();
 
     private static final List<Integer> COMMON_SHIFT_STUDY_START = List.of(1, 7);
@@ -244,6 +245,45 @@ public class GenerateCourseClassHelper {
                 });
             });
         });
+    }
+
+    public void createInvoice() {
+        List<Student> students = studentRepository.findAll();
+        List<Semester> semesters = semesterRepository.findAll();
+        List<Invoice> invoices = new ArrayList<>();
+        semesters.stream()
+                .filter(semester -> semester.getId() <= CURRENT_SEMESTER_ID)
+                .forEach(semester -> {
+                    students.stream().forEach(student -> {
+                        Invoice invoice = Invoice.builder()
+                                .student(student)
+                                .status(InvoiceStatus.PAID)
+                                .paymentTime(LocalDateTime.now())
+                                .semester(semester)
+                                .build();
+
+                        List<Study> studies = studyRepository.findByStudentIdAndSemesterId(student.getId(), semester.getId());
+                        Major major = student.getStudentClass().getMajor();
+                        Set invoiceDetails = generateInvoiceDetails(invoice, studies, major);
+                        invoice.setInvoiceDetails(invoiceDetails);
+                        invoices.add(invoice);
+                    });
+                });
+        invoiceRepository.saveAll(invoices);
+    }
+    private Set<InvoiceDetail> generateInvoiceDetails(Invoice invoice, List<Study> studies, Major major) {
+        return studies.stream().map(study -> {
+                    CourseClass courseClass = study.getCourseClass();
+                    CourseType courseType = courseClass.getCourse().getType();
+                    Integer tuitionPerCredit = courseType == CourseType.SPECIALIZE ? major.getSpecializeTuition()
+                            : major.getGeneralTuition();
+                    return InvoiceDetail.builder()
+                            .invoice(invoice)
+                            .courseClass(courseClass)
+                            .tuition(tuitionPerCredit)
+                            .build();
+                })
+                .collect(Collectors.toSet());
     }
 
     private FinalExam generateFinalExam(Set<ScheduleStudy> scheduleStudies) {

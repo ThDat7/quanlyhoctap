@@ -58,6 +58,7 @@ public class DataGenerator {
         createCourseOutline();
         generateCourseClassHelper.createCourseClassesForITMajor();
         generateCourseClassHelper.createStudiesAndScore();
+        generateCourseClassHelper.createInvoice();
         createStaffs();
         createNews();
     }
@@ -109,6 +110,8 @@ public class DataGenerator {
                         .name(mModel.getName())
                         .alias(mModel.getAlias())
                         .faculty(faculty)
+                        .generalTuition(mModel.getGeneralTuition())
+                        .specializeTuition(mModel.getSpecializeTuition())
                         .build();
                 faculty.getMajors().add(major);
             });
@@ -126,6 +129,7 @@ public class DataGenerator {
                     .sessionInWeek(cModel.getSessionInWeek())
                     .theoryPeriod(cModel.getTheoryPeriod())
                     .practicePeriod(cModel.getPracticePeriod())
+                    .type(CourseType.valueOf(cModel.getType()))
                     .build();
             courseRepository.save(course);
         });

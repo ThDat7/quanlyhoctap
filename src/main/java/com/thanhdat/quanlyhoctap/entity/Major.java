@@ -21,6 +21,9 @@ public class Major {
     private String name;
     private String alias;
 
+    private Integer specializeTuition;
+    private Integer generalTuition;
+
     @ManyToOne
     @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;

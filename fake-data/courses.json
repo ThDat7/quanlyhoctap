@@ -3,6 +3,7 @@
     "code": "ITEC1401",
     "name": "Nhập môn tin học",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -11,6 +12,7 @@
     "code": "ITEC1505",
     "name": "Cơ sở lập trình",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -19,6 +21,7 @@
     "code": "MATH1313",
     "name": "Đại số tuyến tính",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -27,6 +30,7 @@
     "code": "ITEC1201",
     "name": "Kiến trúc máy tính",
     "credits": "2",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -35,6 +39,7 @@
     "code": "ITEC1504",
     "name": "Kỹ thuật lập trình",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -43,6 +48,7 @@
     "code": "MATH1314",
     "name": "Giải tích",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -51,6 +57,7 @@
     "code": "ITEC1406",
     "name": "Thiết kế Web",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -59,6 +66,7 @@
     "code": "ITEC2301",
     "name": "Hệ điều hành",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -67,6 +75,7 @@
     "code": "MISY2501",
     "name": "Cấu trúc dữ liệu và giải thuật",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -75,6 +84,7 @@
     "code": "ITEC2503",
     "name": "Mạng máy tính (Nhập môn MMT)",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -83,6 +93,7 @@
     "code": "ITEC2504",
     "name": "Lập trình hướng đối tượng",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -91,6 +102,7 @@
     "code": "POLI1205",
     "name": "Kinh tế chính trị Mác - Lênin",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -99,6 +111,7 @@
     "code": "POLI1304",
     "name": "Triết học Mác - Lênin",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -107,6 +120,7 @@
     "code": "ITEC2401",
     "name": "Lập trình giao diện",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -115,6 +129,7 @@
     "code": "ITEC2502",
     "name": "Cơ sở dữ liệu (Nhập môn CSDL)",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -123,6 +138,7 @@
     "code": "MATH1315",
     "name": "Xác suất và Thống kê",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -131,6 +147,7 @@
     "code": "MATH2402",
     "name": "Toán rời rạc",
     "credits": "4",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -139,6 +156,7 @@
     "code": "GLAW1315",
     "name": "Pháp luật đại cương",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -147,6 +165,7 @@
     "code": "ITEC3401",
     "name": "Phân tích thiết kế hệ thống",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -155,6 +174,7 @@
     "code": "ITEC4403",
     "name": "Quản trị mạng",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -163,6 +183,7 @@
     "code": "POLI1206",
     "name": "Chủ nghĩa xã hội khoa học",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -171,6 +192,7 @@
     "code": "DEDU0103",
     "name": "Giáo dục quốc phòng và an ninh: Quân sự chung",
     "credits": "1",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -179,6 +201,7 @@
     "code": "DEDU0202",
     "name": "Giáo dục quốc phòng và an ninh: Công tác quốc phòng và an ninh",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -187,6 +210,7 @@
     "code": "DEDU0204",
     "name": "Giáo dục quốc phòng và an ninh: Kỹ thuật chiến đấu bộ binh và chiến thuật",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -195,6 +219,7 @@
     "code": "DEDU0301",
     "name": "Giáo dục quốc phòng và an ninh: Đường lối quốc phòng và an ninh của Đảng Cộng sản Việt Nam",
     "credits": "3",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -203,6 +228,7 @@
     "code": "ITEC3201",
     "name": "Kỹ năng nghề nghiệp",
     "credits": "2",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -211,6 +237,7 @@
     "code": "ITEC3412",
     "name": "An toàn hệ thống thông tin",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -219,6 +246,7 @@
     "code": "ITEC4402",
     "name": "Quản trị hệ cơ sở dữ liệu",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -227,6 +255,7 @@
     "code": "ITEC4409",
     "name": "Công nghệ phần mềm",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -235,6 +264,7 @@
     "code": "PEDU0201",
     "name": "GDTC1-Thể dục Phát triển chung",
     "credits": "1.5",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 0
@@ -243,6 +273,7 @@
     "code": "POLI1207",
     "name": "Lịch sử Đảng Cộng sản Việt Nam",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -251,6 +282,7 @@
     "code": "ITEC3406",
     "name": "Lập trình cơ sở dữ liệu",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -259,6 +291,7 @@
     "code": "ITEC3413",
     "name": "Trí tuệ nhân tạo",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -267,6 +300,7 @@
     "code": "ITEC3421",
     "name": "Các công nghệ lập trình hiện đại",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -275,6 +309,7 @@
     "code": "ITEC4415",
     "name": "Kiểm thử phần mềm",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -283,6 +318,7 @@
     "code": "POLI1208",
     "name": "Tư tưởng Hồ Chí Minh",
     "credits": "2",
+    "type": "GENERAL",
     "sessionInWeek": 1,
     "theoryPeriod": 20,
     "practicePeriod": 0
@@ -291,6 +327,7 @@
     "code": "ITEC2302",
     "name": "Phát triển hệ thống Web",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -299,6 +336,7 @@
     "code": "ITEC3417",
     "name": "Khai phá dữ liệu",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -307,6 +345,7 @@
     "code": "ITEC3418",
     "name": "Cơ sở dữ liệu phân tán",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30
@@ -315,6 +354,7 @@
     "code": "ITEC4401",
     "name": "Đồ án ngành",
     "credits": "4",
+    "type": "SPECIALIZE",
     "sessionInWeek": 0,
     "theoryPeriod": 0,
     "practicePeriod": 0
@@ -323,6 +363,7 @@
     "code": "ITEC4408",
     "name": "Quản lý dự án phần mềm",
     "credits": "3",
+    "type": "SPECIALIZE",
     "sessionInWeek": 1,
     "theoryPeriod": 40,
     "practicePeriod": 30

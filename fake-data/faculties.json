@@ -5,19 +5,27 @@
     "majors": [
       {
         "name": "Information Technology",
-        "alias": "IT"
+        "alias": "IT",
+        "specializeTuition": 700000,
+        "generalTuition": 500000
       },
       {
         "name": "Computer Science",
-        "alias": "CS"
+        "alias": "CS",
+        "specializeTuition": 700000,
+        "generalTuition": 500000
       },
       {
         "name": "Information Management",
-        "alias": "IM"
+        "alias": "IM",
+        "specializeTuition": 700000,
+        "generalTuition": 500000
       },
       {
         "name": "Artificial intelligence",
-        "alias": "AI"
+        "alias": "AI",
+        "specializeTuition": 700000,
+        "generalTuition": 500000
       }
     ],
     "teachers": [
