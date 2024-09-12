@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,6 @@ public interface SemesterRepository extends JpaRepository<Semester, Integer> {
     @Query("SELECT s FROM Semester s JOIN CourseClass cc ON cc.semester = s JOIN cc.teacher t WHERE t.id = :teacherId " +
             "ORDER BY s.year DESC, s.semester DESC")
     List<Semester> findByTeacherId(Integer teacherId);
+
+    List<Semester> findByLockTimeGreaterThan(LocalDateTime lockTime);
 }

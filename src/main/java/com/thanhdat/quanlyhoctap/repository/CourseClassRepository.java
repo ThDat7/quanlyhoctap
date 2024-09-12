@@ -50,4 +50,10 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
 
     @Query("SELECT cc FROM CourseClass cc WHERE cc.semester.id = :semesterId AND cc.teacher.id = :teacherId")
     List<CourseClass> findBySemesterIdAndTeacherId(Integer semesterId, int teacherId);
+
+
+    Boolean existsByIdAndTeacherId(Integer id, int teacherId);
+
+    @Query("SELECT COUNT(cc.id) > 0 FROM CourseClass cc WHERE cc.id = :id AND cc.semester.lockTime > CURRENT_TIMESTAMP")
+    Boolean existsByIdAndSemesterNotLocked(Integer id);
 }

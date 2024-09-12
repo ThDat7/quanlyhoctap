@@ -9,6 +9,7 @@ import com.thanhdat.quanlyhoctap.service.TeacherService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,15 @@ public class SemesterServiceImpl implements SemesterService {
     public List<SemesterResponse> getByCurrentTeacher() {
         Integer currentTeacherId = teacherService.getCurrentTeacherId();
         return semesterRepository.findByTeacherId(currentTeacherId).stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SemesterResponse> getNoneLocked() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Semester> noneLocked = semesterRepository.findByLockTimeGreaterThan(now);
+        return noneLocked.stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }

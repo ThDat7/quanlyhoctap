@@ -1,13 +1,13 @@
 package com.thanhdat.quanlyhoctap.controller;
 
+import com.thanhdat.quanlyhoctap.dto.request.UpdateMidtermExamRequest;
+import com.thanhdat.quanlyhoctap.dto.response.AvailableDateForMidtermExamResponse;
 import com.thanhdat.quanlyhoctap.dto.response.ExamScheduleResponse;
+import com.thanhdat.quanlyhoctap.dto.response.MidtermExamResponse;
 import com.thanhdat.quanlyhoctap.service.ExamService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +20,21 @@ public class ExamController {
     @GetMapping("/semester/{semesterId}/current-student")
     public ResponseEntity<List<ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {
         return ResponseEntity.ok(examService.getByCurrentStudentAndSemester(semesterId));
+    }
+
+    @GetMapping("/semester/{semesterId}/current-teacher")
+    public ResponseEntity<List<MidtermExamResponse>> getByCurrentTeacherAndSemester(@PathVariable Integer semesterId) {
+        return ResponseEntity.ok(examService.getByCurrentTeacherAndSemester(semesterId));
+    }
+
+    @GetMapping("/course-class/{courseClassId}/available-date-midterm-exam")
+    public ResponseEntity<List<AvailableDateForMidtermExamResponse>> getAvailableDateMidtermExam(@PathVariable Integer courseClassId) {
+        return ResponseEntity.ok(examService.getAvailableDateMidtermExam(courseClassId));
+    }
+
+    @PostMapping("/course-class/{courseClassId}/midterm-exam/current-teacher")
+    public ResponseEntity updateMidtermExam(@PathVariable Integer courseClassId, @RequestBody UpdateMidtermExamRequest updateMidtermExamRequest) {
+        examService.updateMidtermExamCurrentTeacher(courseClassId, updateMidtermExamRequest);
+        return ResponseEntity.ok().build();
     }
 }

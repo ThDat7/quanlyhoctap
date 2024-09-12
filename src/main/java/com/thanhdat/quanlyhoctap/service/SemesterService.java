@@ -8,4 +8,6 @@ public interface SemesterService {
     List<SemesterResponse> getByCurrentStudent();
 
     List<SemesterResponse> getByCurrentTeacher();
+
+    List<SemesterResponse> getNoneLocked();
 }

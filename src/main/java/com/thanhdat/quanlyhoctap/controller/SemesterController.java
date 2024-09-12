@@ -20,6 +20,10 @@ public class SemesterController {
     public ResponseEntity<List<SemesterResponse>> getCurrentStudentSemesters(){
         return ResponseEntity.ok(semesterService.getByCurrentStudent());
     }
+    @GetMapping("none-locked")
+    public ResponseEntity<List<SemesterResponse>> getNoneLockedSemesters(){
+        return ResponseEntity.ok(semesterService.getNoneLocked());
+    }
     @GetMapping("/current-teacher")
     public ResponseEntity<List<SemesterResponse>> getCurrentTeacherSemesters(){
         return ResponseEntity.ok(semesterService.getByCurrentTeacher());

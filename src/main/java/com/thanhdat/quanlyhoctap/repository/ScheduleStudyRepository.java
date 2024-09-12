@@ -13,4 +13,6 @@ public interface ScheduleStudyRepository extends JpaRepository<ScheduleStudy, In
 
     @Query("SELECT s FROM ScheduleStudy s WHERE s.courseClass.semester.id = :semesterId")
     List<ScheduleStudy> findBySemesterId(Integer semesterId);
+
+    List<ScheduleStudy> findByCourseClassId(Integer courseClassId);
 }
