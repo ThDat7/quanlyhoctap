@@ -31,6 +31,7 @@
 		<javafaker.version>1.0.2</javafaker.version>
 		<modelmapper.version>3.1.1</modelmapper.version>
 		<hibernate-jpamodelgen.version>6.5.2.Final</hibernate-jpamodelgen.version>
+		<cloudinary.version>1.39.0</cloudinary.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -84,6 +85,11 @@
 			<version>${hibernate-jpamodelgen.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>${cloudinary.version}</version>
+		</dependency>
 
 
 	</dependencies>

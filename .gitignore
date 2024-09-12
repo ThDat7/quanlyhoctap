@@ -34,3 +34,6 @@ build/
 
 ### Test file js ###
 /fake-data/*.js
+
+### Secret config file ###
+/src/main/resources/config.yml
