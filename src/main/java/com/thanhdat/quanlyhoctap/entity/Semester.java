@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,7 @@ public class Semester {
     private Integer semester;
     private LocalDate startDate;
     private Integer durationWeeks;
+    private LocalDateTime lockTime;
 
     @OneToMany(mappedBy = "semester")
     private Set<CourseClass> courseClasses;

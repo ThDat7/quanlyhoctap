@@ -45,6 +45,6 @@ public class CourseClass {
     @OneToMany(mappedBy = "courseClass", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleStudy> scheduleStudies;
 
-    @OneToOne(mappedBy = "courseClass", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FinalExam finalExam;
+    @OneToMany(mappedBy = "courseClass", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Exam> exams;
 }

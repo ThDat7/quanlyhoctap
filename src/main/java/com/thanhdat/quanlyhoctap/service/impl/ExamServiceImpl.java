@@ -8,31 +8,37 @@ import com.thanhdat.quanlyhoctap.service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ExamServiceImpl implements ExamService {
     private final StudentService studentService;
-    private final CourseClassRepository courseClassService;
+    private final CourseClassRepository courseClassRepository;
 
     @Override
     public List<ExamScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {
         int currentStudentId = studentService.getCurrentStudentId();
-        return courseClassService.findBySemesterIdAndStudentId(semesterId, currentStudentId)
+        return courseClassRepository.findBySemesterIdAndStudentId(semesterId, currentStudentId)
                 .stream()
-                .map(this::convertToResponse)
+                .flatMap(e -> convertToResponse(e).stream())
+                .sorted(Comparator.comparing(ExamScheduleResponse::getStartTime))
                 .toList();
     }
 
-    private ExamScheduleResponse convertToResponse(CourseClass courseClass){
-        return ExamScheduleResponse.builder()
+    private List<ExamScheduleResponse> convertToResponse(CourseClass courseClass){
+        return courseClass.getExams().stream()
+                .map(exam -> ExamScheduleResponse.builder()
                 .courseCode(courseClass.getCourse().getCode())
                 .courseName(courseClass.getCourse().getName())
                 .studentClassName(courseClass.getStudentClass().getName())
                 .quantityStudent((int) courseClass.getStudies().stream().count())
-                .startTime(courseClass.getFinalExam().getStartTime())
-                .roomName(courseClass.getFinalExam().getClassroom().getName())
-                .build();
+                .startTime(exam.getStartTime())
+                .roomName(exam.getClassroom().getName())
+                .type(exam.getType())
+                .build())
+        .collect(Collectors.toList());
     }
 }

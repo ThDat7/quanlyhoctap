@@ -3,7 +3,7 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.request.ClassroomAvailableRequest;
 import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.repository.ClassroomRepository;
-import com.thanhdat.quanlyhoctap.repository.FinalExamRepository;
+import com.thanhdat.quanlyhoctap.repository.ExamRepository;
 import com.thanhdat.quanlyhoctap.repository.ScheduleStudyRepository;
 import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.ClassroomService;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class ClassroomServiceImpl implements ClassroomService {
     private ClassroomRepository classroomRepository;
     private ScheduleStudyRepository scheduleStudyRepository;
-    private FinalExamRepository finalExamRepository;
+    private ExamRepository examRepository;
     private final ScheduleStudyService scheduleStudyService;
     private final SemesterRepository semesterRepository;
 
@@ -35,7 +35,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         Semester semester = semesterRepository.findByDateRange(sampleStartDate, sampleEndDate);
 
         List<ScheduleStudy> schedules = scheduleStudyRepository.findBySemesterId(semester.getId());
-        List<FinalExam> finalExams = finalExamRepository.findBySemesterId(semester.getId());
+        List<Exam> finalExams = examRepository.findBySemesterIdAndType(semester.getId(), ExamType.FINAL);
         RoomType roomType = classroomAvailableRequest.getRoomType();
         Boolean isAvailable = true;
 
@@ -66,7 +66,7 @@ public class ClassroomServiceImpl implements ClassroomService {
                                         .build();
                                 return examDateTimeRange.overlaps(toUseDateTimeRange);
                             })
-                            .map(FinalExam::getClassroom)
+                            .map(Exam::getClassroom)
                             .map(Classroom::getId)
                             .collect(Collectors.toList()));
                 });

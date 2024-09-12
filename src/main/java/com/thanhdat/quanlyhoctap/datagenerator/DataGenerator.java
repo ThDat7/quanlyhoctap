@@ -228,12 +228,14 @@ public class DataGenerator {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormatters.DATE_FORMAT);
             LocalDate startDate = LocalDate.parse(startDateStrings.get(i), dateFormatter);
             int year = baseYear + i / SEMESTER_IN_YEAR;
+            LocalDateTime lockTime = startDate.plusWeeks(DURATION_WEEKS).plusWeeks(1).atStartOfDay();
 
             Semester semester = Semester.builder()
                     .year(year)
                     .semester(i % SEMESTER_IN_YEAR + 1)
                     .startDate(startDate)
                     .durationWeeks(DURATION_WEEKS)
+                    .lockTime(lockTime)
                     .build();
             semesterRepository.save(semester);
         }

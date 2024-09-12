@@ -1,5 +1,6 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
+import com.thanhdat.quanlyhoctap.entity.ExamType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class ExamScheduleResponse {
     private String courseName;
     private String studentClassName;
     private Integer quantityStudent;
+    private ExamType type;
     private LocalDateTime startTime;
     private String roomName;
 }

@@ -186,13 +186,15 @@ public class GenerateCourseClassHelper {
                             .capacity(capacityClass)
                             .scheduleStudies(null)
                             .studies(null)
-                            .finalExam(null)
+                            .exams(null)
                             .build();
                     Set<ScheduleStudy> scheduleStudies = generateScheduleStudy(courseClass);
                     courseClass.setScheduleStudies(scheduleStudies);
                     if (scheduleStudies.size() > 0) {
-                        FinalExam finalExam = generateFinalExam(scheduleStudies);
-                        courseClass.setFinalExam(finalExam);
+                        Set<Exam> exams = new HashSet<>();
+                        exams.add(generateFinalExam(scheduleStudies));
+                        exams.add(generateMidtermExam(courseClass));
+                        courseClass.setExams(exams);
                     }
 
                     courseClassRepository.save(courseClass);
@@ -286,7 +288,7 @@ public class GenerateCourseClassHelper {
                 .collect(Collectors.toSet());
     }
 
-    private FinalExam generateFinalExam(Set<ScheduleStudy> scheduleStudies) {
+    private Exam generateFinalExam(Set<ScheduleStudy> scheduleStudies) {
         ScheduleStudy latestEndSchedule = scheduleStudies.stream()
                 .max((a, b) -> {
                     LocalDate aEndDate = a.getStartDate().plusWeeks(a.getWeekLength());
@@ -295,7 +297,7 @@ public class GenerateCourseClassHelper {
                 }).get();
         LocalDate endStudyDate = latestEndSchedule.getStartDate().plusWeeks(latestEndSchedule.getWeekLength());
 
-        FinalExam finalExam = null;
+        Exam exam = null;
 
         Integer dateAfter = 20;
         LocalTime examStartTime = LocalTime.of(7, 0, 0);
@@ -320,13 +322,33 @@ public class GenerateCourseClassHelper {
 
             CourseClass courseClass = latestEndSchedule.getCourseClass();
             Classroom randomClassroom = availableClassroom.get(faker.number().numberBetween(0, availableClassroom.size() - 1));
-            finalExam = FinalExam.builder()
+            exam = Exam.builder()
                     .courseClass(courseClass)
                     .classroom(randomClassroom)
                     .startTime(examStart)
                     .endTime(examEnd)
+                    .type(ExamType.FINAL)
                     .build();
         } while(availableClassroom.size() == 0);
-        return finalExam;
+        return exam;
+    }
+
+    private Exam generateMidtermExam(CourseClass courseClass) {
+        ScheduleStudy randomScheduleStudy =
+                courseClass.getScheduleStudies().stream().findFirst().get();
+
+        if (randomScheduleStudy == null) return null;
+        List<DateTimeRange> scheduleDateTimeRanges = scheduleStudyService.convertToDateTimeRanges(randomScheduleStudy);
+        DateTimeRange lastDayOfStudy = scheduleDateTimeRanges.get(scheduleDateTimeRanges.size() - 1);
+        LocalDateTime startTime = lastDayOfStudy.getStart();
+        LocalDateTime endTime = lastDayOfStudy.getEnd();
+
+        return Exam.builder()
+                .courseClass(courseClass)
+                .startTime(startTime)
+                .endTime(endTime)
+                .classroom(randomScheduleStudy.getClassroom())
+                .type(ExamType.MIDTERM)
+                .build();
     }
 }
