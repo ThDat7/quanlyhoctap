@@ -56,4 +56,6 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
 
     @Query("SELECT COUNT(cc.id) > 0 FROM CourseClass cc WHERE cc.id = :id AND cc.semester.lockTime > CURRENT_TIMESTAMP")
     Boolean existsByIdAndSemesterNotLocked(Integer id);
+
+    List<CourseClass> findByTeacherIdAndSemesterId(Integer teacherId, Integer semesterId);
 }
