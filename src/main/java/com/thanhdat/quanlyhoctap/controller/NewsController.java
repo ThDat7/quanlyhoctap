@@ -1,8 +1,7 @@
 package com.thanhdat.quanlyhoctap.controller;
 
-import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
-import com.thanhdat.quanlyhoctap.dto.response.NewsResponse;
-import com.thanhdat.quanlyhoctap.dto.response.NewsViewResponse;
+import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
+import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.NewsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import java.util.Map;
 public class NewsController {
     private final NewsService newsService;
 
-    @GetMapping
+    @GetMapping("/view")
     public ResponseEntity<DataWithCounterDto<NewsResponse>> getAllNews(@RequestParam Map<String, String> params){
         return ResponseEntity.ok(newsService.getAll(params));
     }
@@ -24,5 +23,34 @@ public class NewsController {
     @GetMapping("/view/{id}")
     public ResponseEntity<NewsViewResponse> get(@PathVariable Integer id){
         return ResponseEntity.ok(newsService.get(id));
+    }
+
+
+    @PostMapping
+    public ResponseEntity<Void> create(@RequestBody NewsCrudRequest createRequest) {
+        newsService.create(createRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        newsService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NewsViewCrudResponse> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(newsService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody NewsCrudRequest updateRequest) {
+        newsService.update(id, updateRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<DataWithCounterDto<NewsCrudResponse>> getAllCrud(@RequestParam Map<String, String> params) {
+        return ResponseEntity.ok(newsService.getAllCrud(params));
     }
 }

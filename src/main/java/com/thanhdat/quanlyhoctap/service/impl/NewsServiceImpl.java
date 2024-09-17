@@ -1,18 +1,20 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.config.PaginationProperties;
-import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
-import com.thanhdat.quanlyhoctap.dto.response.NewsResponse;
-import com.thanhdat.quanlyhoctap.dto.response.NewsViewResponse;
-import com.thanhdat.quanlyhoctap.entity.News;
+import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
+import com.thanhdat.quanlyhoctap.dto.response.*;
+import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.repository.NewsRepository;
+import com.thanhdat.quanlyhoctap.repository.StaffRepository;
 import com.thanhdat.quanlyhoctap.service.NewsService;
+import com.thanhdat.quanlyhoctap.util.PagingHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,7 +23,90 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
+    private final StaffRepository staffRepository;
     private final PaginationProperties paginationProperties;
+    private final PagingHelper pagingHelper;
+
+    @Override
+    public void create(NewsCrudRequest createRequest) {
+        if (createRequest.getAuthorId() == null)
+            throw new RuntimeException("Author id is required");
+
+        Staff author = staffRepository.findById(createRequest.getAuthorId())
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+
+        News newNews = News.builder()
+                .title(createRequest.getTitle())
+                .content(createRequest.getContent())
+                .isImportant(createRequest.getIsImportant())
+                .author(author)
+                .createdAt(LocalDateTime.now())
+                .build();
+        newsRepository.save(newNews);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        newsRepository.deleteById(id);
+    }
+
+    @Override
+    public NewsViewCrudResponse getById(Integer id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found"));
+        return mapToNewsViewCrudDto(news);
+    }
+
+    private NewsViewCrudResponse mapToNewsViewCrudDto(News news) {
+        return NewsViewCrudResponse.builder()
+                .id(news.getId())
+                .title(news.getTitle())
+                .content(news.getContent())
+                .authorId(news.getAuthor().getId())
+                .isImportant(news.getIsImportant())
+                .createdAt(news.getCreatedAt())
+                .build();
+    }
+
+    @Override
+    public void update(Integer id, NewsCrudRequest updateRequest) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found"));
+
+        news.setTitle(updateRequest.getTitle());
+        news.setContent(updateRequest.getContent());
+        news.setIsImportant(updateRequest.getIsImportant());
+
+        Boolean isAuthorChanged = !news.getAuthor().getId().equals(updateRequest.getAuthorId());
+        if (isAuthorChanged) {
+            Staff author = staffRepository.findById(updateRequest.getAuthorId())
+                    .orElseThrow(() -> new RuntimeException("Staff not found"));
+            news.setAuthor(author);
+        }
+
+        newsRepository.save(news);
+    }
+
+    @Override
+    public DataWithCounterDto<NewsCrudResponse> getAllCrud(Map<String, String> params) {
+        Pageable paging = pagingHelper.getPageable(params);
+        Page<News> page = newsRepository.findAll(paging);
+        List<NewsCrudResponse> dto = page.getContent().stream()
+                .map(this::mapToNewsCrudResponse)
+                .collect(Collectors.toList());
+        Integer total = (int) page.getTotalElements();
+        return new DataWithCounterDto<>(dto, total);
+    }
+
+    private NewsCrudResponse mapToNewsCrudResponse(News news) {
+        return NewsCrudResponse.builder()
+                .id(news.getId())
+                .title(news.getTitle())
+                .isImportant(news.getIsImportant())
+                .createdAt(news.getCreatedAt())
+                .authorName(news.getAuthor().getFullName())
+                .build();
+    }
 
     public DataWithCounterDto<NewsResponse> getAll(Map<String, String> params) {
         Integer page = 0;
