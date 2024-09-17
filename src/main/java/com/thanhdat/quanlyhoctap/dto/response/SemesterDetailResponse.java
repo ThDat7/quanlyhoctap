@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SemesterResponse {
+public class SemesterDetailResponse {
     private Integer id;
     private String year;
     private Integer semester;

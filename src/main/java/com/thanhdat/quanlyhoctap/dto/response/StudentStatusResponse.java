@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentStatusResponse {
-    private SemesterResponse semester;
+    private SemesterDetailResponse semester;
     private Boolean isLock;
 }

@@ -1,6 +1,6 @@
 package com.thanhdat.quanlyhoctap.controller;
 
-import com.thanhdat.quanlyhoctap.dto.response.SemesterResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 import com.thanhdat.quanlyhoctap.service.SemesterService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +17,15 @@ public class SemesterController {
     private final SemesterService semesterService;
 
     @GetMapping("/current-student")
-    public ResponseEntity<List<SemesterResponse>> getCurrentStudentSemesters(){
+    public ResponseEntity<List<SemesterDetailResponse>> getCurrentStudentSemesters(){
         return ResponseEntity.ok(semesterService.getByCurrentStudent());
     }
     @GetMapping("none-locked")
-    public ResponseEntity<List<SemesterResponse>> getNoneLockedSemesters(){
+    public ResponseEntity<List<SemesterDetailResponse>> getNoneLockedSemesters(){
         return ResponseEntity.ok(semesterService.getNoneLocked());
     }
     @GetMapping("/current-teacher")
-    public ResponseEntity<List<SemesterResponse>> getCurrentTeacherSemesters(){
+    public ResponseEntity<List<SemesterDetailResponse>> getCurrentTeacherSemesters(){
         return ResponseEntity.ok(semesterService.getByCurrentTeacher());
     }
 }

@@ -1,6 +1,6 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
-import com.thanhdat.quanlyhoctap.dto.response.SemesterResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 import com.thanhdat.quanlyhoctap.dto.response.StudentStatusResponse;
 import com.thanhdat.quanlyhoctap.entity.StudentStatus;
 import com.thanhdat.quanlyhoctap.repository.StudentStatusRepository;
@@ -27,7 +27,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
     private List<StudentStatusResponse> mapToStudentStatusResponse(List<StudentStatus> studentStatuses){
         return studentStatuses.stream()
                         .map(studentStatus -> {
-                            SemesterResponse semester = SemesterResponse.builder()
+                            SemesterDetailResponse semester = SemesterDetailResponse.builder()
                                     .id(studentStatus.getSemester().getId())
                                     .year(String.format("%s-%s",
                                             studentStatus.getSemester().getYear(),

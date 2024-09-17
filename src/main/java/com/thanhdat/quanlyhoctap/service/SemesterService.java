@@ -1,13 +1,14 @@
 package com.thanhdat.quanlyhoctap.service;
 
-import com.thanhdat.quanlyhoctap.dto.response.SemesterResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 
 import java.util.List;
 
 public interface SemesterService {
-    List<SemesterResponse> getByCurrentStudent();
+    List<SemesterDetailResponse> getByCurrentStudent();
 
-    List<SemesterResponse> getByCurrentTeacher();
+    List<SemesterDetailResponse> getByCurrentTeacher();
 
-    List<SemesterResponse> getNoneLocked();
+    List<SemesterDetailResponse> getNoneLocked();
 }
