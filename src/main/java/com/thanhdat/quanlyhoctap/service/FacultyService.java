@@ -1,13 +1,13 @@
 package com.thanhdat.quanlyhoctap.service;
 
 import com.thanhdat.quanlyhoctap.dto.request.FacultyCrudRequest;
-import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
-import com.thanhdat.quanlyhoctap.dto.response.FacultyCrudResponse;
-import com.thanhdat.quanlyhoctap.dto.response.FacultyViewCrudResponse;
+import com.thanhdat.quanlyhoctap.dto.response.*;
 
+import java.util.List;
 import java.util.Map;
 
 public interface FacultyService {
+    List<SelectOptionResponse> getAllForSelect();
 
     void create(FacultyCrudRequest createRequest);
 

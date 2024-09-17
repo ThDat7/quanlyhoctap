@@ -16,6 +16,11 @@ import java.util.Map;
 public class FacultyController {
     private final FacultyService faculTyService;
 
+    @GetMapping("/select-options")
+    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions(){
+        return ResponseEntity.ok(faculTyService.getAllForSelect());
+    }
+
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody FacultyCrudRequest createRequest) {
         faculTyService.create(createRequest);
