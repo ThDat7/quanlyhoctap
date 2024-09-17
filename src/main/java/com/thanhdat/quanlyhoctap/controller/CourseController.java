@@ -48,4 +48,9 @@ public class CourseController {
     public ResponseEntity<List<SelectOptionResponse>> getTypes() {
         return ResponseEntity.ok(courseService.getTypes());
     }
+
+    @GetMapping("/select-options")
+    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions() {
+        return ResponseEntity.ok(courseService.getSelectOptions());
+    }
 }

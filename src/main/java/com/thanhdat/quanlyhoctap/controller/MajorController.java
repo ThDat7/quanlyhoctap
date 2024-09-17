@@ -4,11 +4,13 @@ import com.thanhdat.quanlyhoctap.dto.request.MajorCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
 import com.thanhdat.quanlyhoctap.dto.response.MajorCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.MajorViewCrudResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.service.MajorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,5 +45,10 @@ public class MajorController {
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         majorService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/select-options")
+    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions() {
+        return ResponseEntity.ok(majorService.getSelectOptions());
     }
 }

@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "semesters")
+@Table(name = "semesters",
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"year", "semester"}))
 @Getter
 @Setter
 @Builder

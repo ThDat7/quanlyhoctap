@@ -19,4 +19,6 @@ public interface MajorService {
     void delete(Integer id);
 
     MajorViewCrudResponse getById(Integer id);
+
+    List<SelectOptionResponse> getSelectOptions();
 }

@@ -82,6 +82,21 @@ public class MajorServiceImpl implements MajorService {
         return mapToMajorViewCrudResponse(major);
     }
 
+    @Override
+    public List<SelectOptionResponse> getSelectOptions() {
+        List<Major> majors = majorRepository.findAll();
+        return majors.stream()
+                .map(major -> mapToSelectOptionResponse(major.getId(), major.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private SelectOptionResponse mapToSelectOptionResponse(Object value, String label) {
+        return SelectOptionResponse.builder()
+                .value(value)
+                .label(label)
+                .build();
+    }
+
     private MajorViewCrudResponse mapToMajorViewCrudResponse(Major major) {
         return MajorViewCrudResponse.builder()
                 .id(major.getId())

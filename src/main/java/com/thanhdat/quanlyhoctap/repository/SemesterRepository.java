@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SemesterRepository extends JpaRepository<Semester, Integer> {
@@ -28,4 +29,8 @@ public interface SemesterRepository extends JpaRepository<Semester, Integer> {
     List<Semester> findByTeacherId(Integer teacherId);
 
     List<Semester> findByLockTimeGreaterThan(LocalDateTime lockTime);
+
+    Optional<Semester> findBySemesterAndYear(Integer semester, Integer year);
+
+    List<Semester> findByYearBetween(int fromYear, int toYear);
 }

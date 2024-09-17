@@ -22,7 +22,7 @@ public class EducationProgram {
     @Column(nullable = false)
     private int schoolYear;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "major_id", nullable = false)
     private Major major;
 

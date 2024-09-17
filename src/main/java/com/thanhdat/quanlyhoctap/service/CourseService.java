@@ -14,4 +14,6 @@ public interface CourseService {
     void update(Integer id, CourseCrudRequest updateRequest);
 
     List<SelectOptionResponse> getTypes();
+
+    List<SelectOptionResponse> getSelectOptions();
 }

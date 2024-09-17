@@ -110,6 +110,14 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<SelectOptionResponse> getSelectOptions() {
+        List<Course> courses = courseRepository.findAll();
+        return courses.stream()
+                .map(course -> mapToSelectOptionResponse(course.getId(), course.getName()))
+                .collect(Collectors.toList());
+    }
+
     private SelectOptionResponse mapToSelectOptionResponse(Object value, String label) {
         return SelectOptionResponse.builder()
                 .value(value)
