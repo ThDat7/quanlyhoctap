@@ -21,13 +21,13 @@ public class CourseRegisterController {
     }
 
     @PostMapping("/register-course/{courseClassId}")
-    public ResponseEntity<StudentCourseRegisterResponse> registerCourse(@PathVariable Integer courseClassId) {
+    public ResponseEntity<StudentCourseRegisterResponse> registerCourse(@PathVariable Long courseClassId) {
         courseRegisterService.registerCourse(courseClassId);
         return getStudentCourseRegisterInfo();
     }
 
     @PostMapping("/unregister-course/{courseClassId}")
-    public ResponseEntity<StudentCourseRegisterResponse> unregisterCourse(@PathVariable Integer courseClassId) {
+    public ResponseEntity<StudentCourseRegisterResponse> unregisterCourse(@PathVariable Long courseClassId) {
         courseRegisterService.unregisterCourse(courseClassId);
         return getStudentCourseRegisterInfo();
     }

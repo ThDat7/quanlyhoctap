@@ -17,7 +17,7 @@ public class Score {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "study_id")

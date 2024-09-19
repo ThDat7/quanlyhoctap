@@ -10,7 +10,7 @@ import static com.thanhdat.quanlyhoctap.specification.JoinHelper.join;
 
 public class StudySpecification {
 
-    public static Specification<Study> belongsToTeacherId(Integer teacherId) {
+    public static Specification<Study> belongsToTeacherId(Long teacherId) {
         return (root, query, cb) -> {
             Join<Study, CourseClass> courseClassJoin = join(root, Study_.courseClass, JoinType.INNER);
             Join<CourseClass, Teacher> teacherJoin = join(courseClassJoin, CourseClass_.teacher, JoinType.INNER);
@@ -28,7 +28,7 @@ public class StudySpecification {
         };
     }
 
-    public static Specification<Study> inListIds(List<Integer> ids) {
+    public static Specification<Study> inListIds(List<Long> ids) {
         return (root, query, cb) -> root.get(Study_.id).in(ids);
     }
 }

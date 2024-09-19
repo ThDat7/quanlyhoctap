@@ -21,22 +21,22 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping("/semester/{semesterId}/current-student")
-    public ResponseEntity<List<ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {
+    public ResponseEntity<List<? extends ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Long semesterId) {
         return ResponseEntity.ok(examService.getByCurrentStudentAndSemester(semesterId));
     }
 
     @GetMapping("/semester/{semesterId}/current-teacher")
-    public ResponseEntity<List<MidtermExamResponse>> getByCurrentTeacherAndSemester(@PathVariable Integer semesterId) {
+    public ResponseEntity<List<MidtermExamResponse>> getByCurrentTeacherAndSemester(@PathVariable Long semesterId) {
         return ResponseEntity.ok(examService.getByCurrentTeacherAndSemester(semesterId));
     }
 
     @GetMapping("/course-class/{courseClassId}/available-date-midterm-exam")
-    public ResponseEntity<List<AvailableDateForMidtermExamResponse>> getAvailableDateMidtermExam(@PathVariable Integer courseClassId) {
+    public ResponseEntity<List<AvailableDateForMidtermExamResponse>> getAvailableDateMidtermExam(@PathVariable Long courseClassId) {
         return ResponseEntity.ok(examService.getAvailableDateMidtermExam(courseClassId));
     }
 
     @PostMapping("/course-class/{courseClassId}/midterm-exam/current-teacher")
-    public ResponseEntity updateMidtermExam(@PathVariable Integer courseClassId, @RequestBody UpdateMidtermExamRequest updateMidtermExamRequest) {
+    public ResponseEntity updateMidtermExam(@PathVariable Long courseClassId, @RequestBody UpdateMidtermExamRequest updateMidtermExamRequest) {
         examService.updateMidtermExamCurrentTeacher(courseClassId, updateMidtermExamRequest);
         return ResponseEntity.ok().build();
     }

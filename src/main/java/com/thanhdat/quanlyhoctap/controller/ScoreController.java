@@ -20,7 +20,7 @@ public class ScoreController {
     ScoreService scoreService;
 
     @GetMapping("/course-class/{courseClassId}/current-teacher")
-    public ResponseEntity<List<TeacherScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Integer courseClassId) {
+    public ResponseEntity<List<TeacherScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Long courseClassId) {
         return ResponseEntity.ok(scoreService.getByCourseClassAndCurrentTeacher(courseClassId));
     }
 

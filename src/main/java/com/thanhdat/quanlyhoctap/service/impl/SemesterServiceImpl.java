@@ -27,7 +27,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public List<SemesterDetailResponse> getByCurrentStudent() {
-        Integer currentStudentId = studentService.getCurrentStudentId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         return semesterRepository.findByStudentId(currentStudentId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
@@ -35,7 +35,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public List<SemesterDetailResponse> getByCurrentTeacher() {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         return semesterRepository.findByTeacherId(currentTeacherId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());

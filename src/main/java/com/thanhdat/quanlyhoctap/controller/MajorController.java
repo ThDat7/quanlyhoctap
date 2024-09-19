@@ -28,7 +28,7 @@ public class MajorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MajorViewCrudResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<MajorViewCrudResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(majorService.getById(id));
     }
 
@@ -39,13 +39,13 @@ public class MajorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody MajorCrudRequest majorCrudRequest) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody MajorCrudRequest majorCrudRequest) {
         majorService.update(id, majorCrudRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         majorService.delete(id);
         return ResponseEntity.ok().build();
     }

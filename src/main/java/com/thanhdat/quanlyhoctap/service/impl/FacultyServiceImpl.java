@@ -3,7 +3,6 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.request.FacultyCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.Faculty;
-import com.thanhdat.quanlyhoctap.entity.Major;
 import com.thanhdat.quanlyhoctap.repository.FacultyRepository;
 import com.thanhdat.quanlyhoctap.service.FacultyService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
@@ -41,7 +40,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         facultyRepository.deleteById(id);
     }
 
@@ -52,7 +51,7 @@ public class FacultyServiceImpl implements FacultyService {
         List<FacultyCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToFacultyCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
@@ -65,7 +64,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public FacultyViewCrudResponse getById(Integer id) {
+    public FacultyViewCrudResponse getById(Long id) {
         Faculty faculty = facultyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Faculty not found"));
         return mapToFacultyViewCrudResponse(faculty);
@@ -80,7 +79,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void update(Integer id, FacultyCrudRequest updateRequest) {
+    public void update(Long id, FacultyCrudRequest updateRequest) {
         Faculty faculty = facultyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Faculty not found"));
         faculty.setName(updateRequest.getName());

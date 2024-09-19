@@ -31,7 +31,7 @@ public class FacultyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         faculTyService.delete(id);
         return ResponseEntity.ok().build();
     }
@@ -42,12 +42,12 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FacultyViewCrudResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<FacultyViewCrudResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(faculTyService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody FacultyCrudRequest updateRequest) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody FacultyCrudRequest updateRequest) {
         faculTyService.update(id, updateRequest);
         return ResponseEntity.ok().build();
     }

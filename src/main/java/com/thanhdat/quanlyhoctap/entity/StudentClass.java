@@ -17,7 +17,7 @@ import java.util.Set;
 public class StudentClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     Integer year;
     String classOrder;
 

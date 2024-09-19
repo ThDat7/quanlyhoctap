@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramCrudResponse {
-    Integer id;
+    Long id;
     String majorName;
     Integer schoolYear;
     Integer numberOfCourses;

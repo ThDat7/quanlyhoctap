@@ -21,7 +21,7 @@ public class CourseClassController {
     CourseClassService courseClassService;
 
     @GetMapping("/semester/{semesterId}/current-teacher-teaching")
-    public ResponseEntity<List<TeacherCourseClassTeachingResponse>> getCurrentTeacherTeachingBySemesterCourseClass(@PathVariable Integer semesterId){
+    public ResponseEntity<List<TeacherCourseClassTeachingResponse>> getCurrentTeacherTeachingBySemesterCourseClass(@PathVariable Long semesterId){
         return ResponseEntity.ok(courseClassService.getCurrentTeacherTeaching(semesterId));
     }
 }

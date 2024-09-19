@@ -11,11 +11,11 @@ public interface FacultyService {
 
     void create(FacultyCrudRequest createRequest);
 
-    void delete(Integer id);
+    void delete(Long id);
 
     DataWithCounterDto<FacultyCrudResponse> getAll(Map params);
 
-    FacultyViewCrudResponse getById(Integer id);
+    FacultyViewCrudResponse getById(Long id);
 
-    void update(Integer id, FacultyCrudRequest updateRequest);
+    void update(Long id, FacultyCrudRequest updateRequest);
 }

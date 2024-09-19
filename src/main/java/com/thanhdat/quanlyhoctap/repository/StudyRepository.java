@@ -9,15 +9,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudyRepository extends JpaRepository<Study, Integer>,
+public interface StudyRepository extends JpaRepository<Study, Long>,
         JpaSpecificationExecutor<Study> {
-    List<Study> findByStudentId(Integer studentId);
+    List<Study> findByStudentId(Long studentId);
     @Query("SELECT s FROM Study s WHERE s.student.id = :studentId AND s.courseClass.semester.id = :semesterId")
-    List<Study> findByStudentIdAndSemesterId(Integer studentId, Integer semesterId);
+    List<Study> findByStudentIdAndSemesterId(Long studentId, Long semesterId);
 
-    Boolean existsByStudentIdAndCourseClassId(Integer studentId, Integer courseClassId);
+    Boolean existsByStudentIdAndCourseClassId(Long studentId, Long courseClassId);
 
-    void deleteByStudentIdAndCourseClassId(Integer studentId, Integer courseClassId);
+    void deleteByStudentIdAndCourseClassId(Long studentId, Long courseClassId);
 
-    List<Study> findByCourseClassId(Integer courseClassId);
+    List<Study> findByCourseClassId(Long courseClassId);
 }

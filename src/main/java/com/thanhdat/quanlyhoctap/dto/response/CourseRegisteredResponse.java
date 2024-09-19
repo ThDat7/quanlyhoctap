@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseRegisteredResponse {
-    Integer id;
+    Long id;
     String courseCode;
     String courseName;
     String studentClassName;

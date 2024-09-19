@@ -27,12 +27,12 @@ public class CourseOutlineController {
     }
 
     @GetMapping("/{id}/current-teacher")
-    public ResponseEntity<CourseOutlineViewTeacherResponse> teacherView(@PathVariable Integer id) {
+    public ResponseEntity<CourseOutlineViewTeacherResponse> teacherView(@PathVariable Long id) {
         return ResponseEntity.ok(courseOutlineService.getViewByCurrentTeacher(id));
     }
 
     @PostMapping(value = "/{id}/current-teacher", consumes = {"multipart/form-data"})
-    public ResponseEntity teacherUpdate(@PathVariable Integer id,
+    public ResponseEntity teacherUpdate(@PathVariable Long id,
                                         @RequestPart(value = "file") MultipartFile file,
                                         @RequestPart(value = "data") CourseOutlineEditTeacherRequest request) {
         courseOutlineService.updateByCurrentTeacher(id, file, request);

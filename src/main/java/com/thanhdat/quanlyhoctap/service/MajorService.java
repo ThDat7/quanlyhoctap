@@ -14,11 +14,11 @@ public interface MajorService {
 
     void create(MajorCrudRequest majorCrudRequest);
 
-    void update(Integer id, MajorCrudRequest majorCrudRequest);
+    void update(Long id, MajorCrudRequest majorCrudRequest);
 
-    void delete(Integer id);
+    void delete(Long id);
 
-    MajorViewCrudResponse getById(Integer id);
+    MajorViewCrudResponse getById(Long id);
 
     List<SelectOptionResponse> getSelectOptions();
 }

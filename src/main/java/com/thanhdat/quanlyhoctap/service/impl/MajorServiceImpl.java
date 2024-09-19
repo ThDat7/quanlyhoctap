@@ -36,7 +36,7 @@ public class MajorServiceImpl implements MajorService {
         List<MajorCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToMajorCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
@@ -55,7 +55,7 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
-    public void update(Integer id, MajorCrudRequest majorCrudRequest) {
+    public void update(Long id, MajorCrudRequest majorCrudRequest) {
         Major oldMajor = majorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Major not found"));
 //        validate
@@ -74,12 +74,12 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         majorRepository.deleteById(id);
     }
 
     @Override
-    public MajorViewCrudResponse getById(Integer id) {
+    public MajorViewCrudResponse getById(Long id) {
         Major major = majorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Major not found"));
         return mapToMajorViewCrudResponse(major);

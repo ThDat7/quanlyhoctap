@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TeacherServiceImpl implements TeacherService {
-    private static final Integer CURRENT_TEACHER_LOGGED_ID = 2;
+    private static final Long CURRENT_TEACHER_LOGGED_ID = (long) 2;
 
-    public Integer getCurrentTeacherId() {
+    public Long getCurrentTeacherId() {
         return CURRENT_TEACHER_LOGGED_ID;
     }
 }

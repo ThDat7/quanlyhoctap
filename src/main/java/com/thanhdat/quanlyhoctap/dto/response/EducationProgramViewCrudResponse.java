@@ -11,10 +11,10 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramViewCrudResponse {
-    Integer id;
+    Long id;
     Integer schoolYear;
 
-    Integer majorId;
+    Long majorId;
 
     List<EducationProgramCourseResponse> educationProgramCourses;
 }

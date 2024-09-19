@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SemesterDetailResponse {
-    Integer id;
+    Long id;
     String year;
     Integer semester;
     LocalDate startDate;

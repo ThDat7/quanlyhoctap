@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CourseClassRepository extends JpaRepository<CourseClass, Integer> {
-    List<CourseClass> findBySemesterIdAndStudentClassId(Integer semesterId, Integer studentClassId);
+public interface CourseClassRepository extends JpaRepository<CourseClass, Long> {
+    List<CourseClass> findBySemesterIdAndStudentClassId(Long semesterId, Long studentClassId);
     @Query("SELECT cc FROM CourseClass cc JOIN cc.studies s WHERE cc.semester.id = ?1 AND s.student.id = ?2")
-    List<CourseClass> findBySemesterIdAndStudentId(Integer semesterId, Integer studentId);
+    List<CourseClass> findBySemesterIdAndStudentId(Long semesterId, Long studentId);
 
     @Query("SELECT cs, (cs.capacity - COUNT(study.id)) " +
             "FROM CourseClass cs " +
@@ -28,13 +28,13 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
                 ")" +
             ") " +
             "GROUP BY cs.id, cs.capacity")
-    List<Object[]> findOpenRegisterInStudentEducationProgram(Integer studentId);
+    List<Object[]> findOpenRegisterInStudentEducationProgram(Long studentId);
 
     @Query("SELECT COUNT(cs.id) > 0  FROM CourseClass cs LEFT JOIN cs.studies st " +
             "WHERE cs.id = :courseClassId " +
             "GROUP BY cs.id, cs.capacity " +
             "HAVING COUNT(st.id) < cs.capacity")
-    Boolean existsByIdAndNotFull(Integer courseClassId);
+    Boolean existsByIdAndNotFull(Long courseClassId);
     @Query("SELECT COUNT(cs.id) > 0 " +
             "FROM CourseClass cs WHERE cs.id = :courseClassId " +
             "AND cs.course IN (" +
@@ -46,16 +46,16 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
                     "SELECT student.studentClass.year FROM Student student WHERE student.id = :studentId" +
                 ")" +
             ")")
-    Boolean isCourseClassInStudentEducationProgram(Integer courseClassId, Integer studentId);
+    Boolean isCourseClassInStudentEducationProgram(Long courseClassId, Long studentId);
 
     @Query("SELECT cc FROM CourseClass cc WHERE cc.semester.id = :semesterId AND cc.teacher.id = :teacherId")
-    List<CourseClass> findBySemesterIdAndTeacherId(Integer semesterId, int teacherId);
+    List<CourseClass> findBySemesterIdAndTeacherId(Long semesterId, Long teacherId);
 
 
-    Boolean existsByIdAndTeacherId(Integer id, int teacherId);
+    Boolean existsByIdAndTeacherId(Long id, Long teacherId);
 
     @Query("SELECT COUNT(cc.id) > 0 FROM CourseClass cc WHERE cc.id = :id AND cc.semester.lockTime > CURRENT_TIMESTAMP")
-    Boolean existsByIdAndSemesterNotLocked(Integer id);
+    Boolean existsByIdAndSemesterNotLocked(Long id);
 
-    List<CourseClass> findByTeacherIdAndSemesterId(Integer teacherId, Integer semesterId);
+    List<CourseClass> findByTeacherIdAndSemesterId(Long teacherId, Long semesterId);
 }

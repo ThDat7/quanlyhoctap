@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineViewTeacherResponse {
-    Integer id;
+    Long id;
     String courseName;
     String courseCode;
     String url;

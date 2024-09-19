@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseRegisterOpenResponse {
-    Integer id;
+    Long id;
     String courseCode;
     String courseName;
 //    String groupName; ???

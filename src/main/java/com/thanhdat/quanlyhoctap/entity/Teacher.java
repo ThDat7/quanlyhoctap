@@ -18,7 +18,7 @@ import java.util.Set;
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     String teacherCode;
     @OneToOne(cascade = CascadeType.ALL)
     User user;

@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewsViewCrudResponse {
-    Integer id;
+    Long id;
     String title;
-    Integer authorId;
+    Long authorId;
     String content;
     Boolean isImportant;
     LocalDateTime createdAt;

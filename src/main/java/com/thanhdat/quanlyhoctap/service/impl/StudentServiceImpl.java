@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentServiceImpl implements StudentService {
-    private static final Integer CURRENT_STUDENT_LOGGED_ID = 1;
+    private static final Long CURRENT_STUDENT_LOGGED_ID = (long) 1;
     StudentRepository studentRepository;
 
     @Override
-    public Integer getCurrentStudentId() {
+    public Long getCurrentStudentId() {
         return CURRENT_STUDENT_LOGGED_ID;
     }
 

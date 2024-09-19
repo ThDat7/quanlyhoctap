@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ScheduleStudyRepository extends JpaRepository<ScheduleStudy, Integer> {
-    List<ScheduleStudy> findByCourseClassSemesterIdAndCourseClassStudentClassId(Integer courseClassSemesterId, Integer courseClassStudentClassId);
+public interface ScheduleStudyRepository extends JpaRepository<ScheduleStudy, Long> {
+    List<ScheduleStudy> findByCourseClassSemesterIdAndCourseClassStudentClassId(Long courseClassSemesterId, Long courseClassStudentClassId);
 
     @Query("SELECT s FROM ScheduleStudy s WHERE s.courseClass.semester.id = :semesterId")
-    List<ScheduleStudy> findBySemesterId(Integer semesterId);
+    List<ScheduleStudy> findBySemesterId(Long semesterId);
 
-    List<ScheduleStudy> findByCourseClassId(Integer courseClassId);
+    List<ScheduleStudy> findByCourseClassId(Long courseClassId);
 }

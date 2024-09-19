@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     LocalDateTime startTime;
     LocalDateTime endTime;

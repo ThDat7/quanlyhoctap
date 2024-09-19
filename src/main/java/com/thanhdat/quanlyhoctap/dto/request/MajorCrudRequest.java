@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class MajorCrudRequest {
     String name;
     String alias;
-    Integer facultyId;
+    Long facultyId;
 
     Integer specializeTuition;
     Integer generalTuition;

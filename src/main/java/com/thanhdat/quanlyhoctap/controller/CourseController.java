@@ -26,18 +26,18 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         courseService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseViewCrudResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<CourseViewCrudResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(courseService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody CourseCrudRequest updateRequest) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CourseCrudRequest updateRequest) {
         courseService.update(id, updateRequest);
         return ResponseEntity.ok().build();
     }

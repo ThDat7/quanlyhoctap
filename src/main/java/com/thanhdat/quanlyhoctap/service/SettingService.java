@@ -8,7 +8,7 @@ import com.thanhdat.quanlyhoctap.dto.response.SettingViewCrudResponse;
 import java.util.Map;
 
 public interface SettingService {
-    Integer getSemesterIdForRegister();
+    Long getSemesterIdForRegister();
 
     SettingViewCrudResponse getById(String key);
 

@@ -9,10 +9,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorViewCrudResponse {
-    Integer id;
+    Long id;
     String name;
     String alias;
-    Integer facultyId;
+    Long facultyId;
 
     Integer specializeTuition;
     Integer generalTuition;

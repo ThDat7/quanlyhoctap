@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseResponse {
-    Integer id;
+    Long id;
     String code;
     String name;
 }

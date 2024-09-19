@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EducationProgramRepository extends JpaRepository<EducationProgram, Integer>,
+public interface EducationProgramRepository extends JpaRepository<EducationProgram, Long>,
             JpaSpecificationExecutor<EducationProgram> {
     Optional<EducationProgram> findByMajorName(String majorName);
 

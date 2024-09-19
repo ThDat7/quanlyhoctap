@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramSearchDto {
-    int id;
+    Long id;
     String majorName;
     int schoolYear;
 }

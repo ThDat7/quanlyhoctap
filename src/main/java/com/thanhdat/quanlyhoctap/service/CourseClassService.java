@@ -5,5 +5,5 @@ import com.thanhdat.quanlyhoctap.dto.response.TeacherCourseClassTeachingResponse
 import java.util.List;
 
 public interface CourseClassService {
-    List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Integer semesterId);
+    List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Long semesterId);
 }

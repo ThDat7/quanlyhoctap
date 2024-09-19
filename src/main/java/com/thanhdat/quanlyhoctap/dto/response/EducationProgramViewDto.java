@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramViewDto {
-    Integer id;
+    Long id;
     String majorName;
     Integer schoolYear;
     List<EducationProgramCourseDto> educationProgramCourses;

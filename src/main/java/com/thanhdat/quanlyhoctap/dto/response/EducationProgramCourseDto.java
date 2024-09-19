@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramCourseDto {
-    Integer courseOutlineId;
+    Long courseOutlineId;
     String courseName;
     Integer semester;
     String courseOutlineUrl;

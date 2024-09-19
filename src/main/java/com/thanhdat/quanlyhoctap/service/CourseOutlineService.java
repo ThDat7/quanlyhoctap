@@ -14,7 +14,7 @@ public interface CourseOutlineService {
 
     DataWithCounterDto<CourseOutlineTeacherResponse> getAllByCurrentTeacher(Map<String, String> params);
 
-    CourseOutlineViewTeacherResponse getViewByCurrentTeacher(Integer id);
+    CourseOutlineViewTeacherResponse getViewByCurrentTeacher(Long id);
 
-    void updateByCurrentTeacher(Integer id, MultipartFile file, CourseOutlineEditTeacherRequest request);
+    void updateByCurrentTeacher(Long id, MultipartFile file, CourseOutlineEditTeacherRequest request);
 }

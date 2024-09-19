@@ -18,7 +18,7 @@ import java.util.Set;
 public class CourseOutline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_rule_id")

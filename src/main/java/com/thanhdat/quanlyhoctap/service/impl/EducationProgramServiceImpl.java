@@ -48,12 +48,12 @@ public class EducationProgramServiceImpl implements EducationProgramService {
 
         Page<EducationProgram> pageEducationPrograms = educationProgramRepository.findAll(specification, paging);
         List<EducationProgramSearchDto> educationProgramsDto = educationProgram2Dto(pageEducationPrograms.getContent());
-        Integer total = (int) pageEducationPrograms.getTotalElements();
+        long total = pageEducationPrograms.getTotalElements();
         return new DataWithCounterDto<>(educationProgramsDto, total);
     }
 
     @Override
-    public EducationProgramViewDto getView(int id) {
+    public EducationProgramViewDto getView(Long id) {
         Optional<EducationProgram> oEP =  educationProgramRepository.findById(id);
         if (oEP.isEmpty())
             throw new RuntimeException("Education program not found");
@@ -105,7 +105,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         List<EducationProgramCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToEducationProgramCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
@@ -129,12 +129,12 @@ public class EducationProgramServiceImpl implements EducationProgramService {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         educationProgramRepository.deleteById(id);
     }
 
     @Override
-    public EducationProgramViewCrudResponse getById(Integer id) {
+    public EducationProgramViewCrudResponse getById(Long id) {
         EducationProgram educationProgram = educationProgramRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Education program not found"));
         return mapToEducationProgramViewCrudResponse(educationProgram);
@@ -170,7 +170,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
 
     @Override
     @Transactional
-    public void update(Integer id, EducationProgramCrudRequest updateRequest) {
+    public void update(Long id, EducationProgramCrudRequest updateRequest) {
         EducationProgram ep = educationProgramRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Education program not found"));
         Boolean isMajorChanged = !ep.getMajor().getId().equals(updateRequest.getMajorId());
@@ -185,10 +185,10 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     }
 
     private void updateEducationProgramCourses(EducationProgram ep, List<EducationProgramCourseRequest> epcs) {
-        List<Integer> epcIds = epcs.stream().map(EducationProgramCourseRequest::getId).collect(Collectors.toList());
+        List<Long> epcIds = epcs.stream().map(EducationProgramCourseRequest::getId).collect(Collectors.toList());
         List<EducationProgramCourse> epcsInDb = ep.getEducationProgramCourses();
-        List<Integer> epcIdsInDb = epcsInDb.stream().map(epc -> epc.getId()).collect(Collectors.toList());
-        List<Integer> epcIdsToDelete = epcIdsInDb.stream().filter(epcId -> !epcIds.contains(epcId)).collect(Collectors.toList());
+        List<Long> epcIdsInDb = epcsInDb.stream().map(epc -> epc.getId()).collect(Collectors.toList());
+        List<Long> epcIdsToDelete = epcIdsInDb.stream().filter(epcId -> !epcIds.contains(epcId)).collect(Collectors.toList());
 
         List<EducationProgramCourse> epcsToSave = epcs.stream().map(newEpc -> {
             EducationProgramCourse oldEpc = epcsInDb.stream()
@@ -266,7 +266,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
                                                                                EducationProgramCourse epc) {
         Course course = epc.getCourse();
         CourseOutline courseOutline = epc.getCourseOutline();
-        Integer courseOutlineId = courseOutline == null ? null : courseOutline.getId();
+        Long courseOutlineId = courseOutline == null ? null : courseOutline.getId();
         String courseOutlineUrl = courseOutline == null ? null : courseOutline.getUrl();
         Integer semesterOnProgram = calculateSemesterInEP(educationProgram, epc.getSemester());
 

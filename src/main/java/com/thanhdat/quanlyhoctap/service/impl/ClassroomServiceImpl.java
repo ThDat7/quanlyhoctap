@@ -42,8 +42,8 @@ public class ClassroomServiceImpl implements ClassroomService {
         RoomType roomType = classroomAvailableRequest.getRoomType();
         Boolean isAvailable = true;
 
-        Set<Integer> usedClassroomIdsForSchedule = new HashSet<>();
-        Set<Integer> usedClassroomIdsForExam= new HashSet<>();
+        Set<Long> usedClassroomIdsForSchedule = new HashSet<>();
+        Set<Long> usedClassroomIdsForExam= new HashSet<>();
 
         classroomAvailableRequest.getTimeToUseClassroomRequests().stream()
                 .forEach(timeToUseClassroomRequest -> {
@@ -74,7 +74,7 @@ public class ClassroomServiceImpl implements ClassroomService {
                             .collect(Collectors.toList()));
                 });
 
-        Set<Integer> usedClassroomIds = new HashSet<>();
+        Set<Long> usedClassroomIds = new HashSet<>();
         usedClassroomIds.addAll(usedClassroomIdsForSchedule);
         usedClassroomIds.addAll(usedClassroomIdsForExam);
 

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentStatusRepository extends JpaRepository<StudentStatus, Integer> {
+public interface StudentStatusRepository extends JpaRepository<StudentStatus, Long> {
     @Query("SELECT s FROM StudentStatus s WHERE s.student.id = :studentId " +
             "ORDER BY s.semester.year DESC, s.semester.semester DESC")
-    List<StudentStatus> findByStudentId(Integer studentId);
+    List<StudentStatus> findByStudentId(Long studentId);
 }

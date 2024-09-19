@@ -19,7 +19,7 @@ public class Study {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     LocalDateTime timeRegistered;
     @ManyToOne

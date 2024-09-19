@@ -32,7 +32,7 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
     StudentService studentService;
 
     @Override
-    public void registerCourse(Integer courseClassId) {
+    public void registerCourse(Long courseClassId) {
         Student currentStudent = studentService.getCurrentStudent();
         CourseClass courseClass = courseClassRepository.findById(courseClassId).get();
 
@@ -49,8 +49,8 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
     }
 
     @Transactional
-    public void unregisterCourse(Integer courseClassId) {
-        Integer currentStudentId = studentService.getCurrentStudentId();
+    public void unregisterCourse(Long courseClassId) {
+        Long currentStudentId = studentService.getCurrentStudentId();
         validateIsOnRegisterTime();
 
         studyRepository.deleteByStudentIdAndCourseClassId(currentStudentId, courseClassId);
@@ -61,13 +61,13 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
         validateStudentViewRegister();
 
         Semester semesterRegister = semesterRepository.findForRegister();
-        Integer currentStudentId = studentService.getCurrentStudentId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         List<Study> registered = studyRepository.findByStudentIdAndSemesterId(currentStudentId, semesterRegister.getId());
         Map<CourseClass, Integer> openWithRemaining = findOpenRegisterInStudentEducationProgram(currentStudentId);
         return convertToStudentCourseRegisterResponse(semesterRegister, openWithRemaining, registered);
     }
 
-    private Map<CourseClass, Integer> findOpenRegisterInStudentEducationProgram(Integer studentId) {
+    private Map<CourseClass, Integer> findOpenRegisterInStudentEducationProgram(Long studentId) {
         List<Object[]> results = courseClassRepository.findOpenRegisterInStudentEducationProgram(studentId);
         return results.stream()
                 .collect(Collectors.toMap(
@@ -148,8 +148,8 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
 
     private void validateStudentCanRegister(Student student, CourseClass courseClass) {
         validateIsOnRegisterTime();
-        Integer studentId = student.getId();
-        Integer courseClassId = courseClass.getId();
+        Long studentId = student.getId();
+        Long courseClassId = courseClass.getId();
 
         Boolean isRegistered = studyRepository.existsByStudentIdAndCourseClassId(studentId, courseClassId);
         if (isRegistered)

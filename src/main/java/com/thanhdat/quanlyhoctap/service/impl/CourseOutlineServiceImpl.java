@@ -63,13 +63,13 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
 
         Page<CourseOutline> pageCourseOutlines = courseOutlineRepository.findAll(specification, paging);
         List<CourseOutlineSearchDto> courseOutlinesDto = courseOutline2Dto(pageCourseOutlines.getContent());
-        Integer total = (int) pageCourseOutlines.getTotalElements();
+        long total = pageCourseOutlines.getTotalElements();
         return new DataWithCounterDto(courseOutlinesDto, total);
     }
 
     @Override
     public DataWithCounterDto<CourseOutlineTeacherResponse> getAllByCurrentTeacher(Map<String, String> params) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
 
         Specification<CourseOutline> specification = Specification.where(belongsToTeacherId(currentTeacherId));
 
@@ -87,13 +87,13 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
 
         Page<CourseOutline> pageCourseOutlines = courseOutlineRepository.findAll(specification, paging);
         List<CourseOutlineTeacherResponse> courseOutlinesDto = mapToCourseOutlineTeacherResponse(pageCourseOutlines.getContent());
-        Integer total = (int) pageCourseOutlines.getTotalElements();
+        long total = pageCourseOutlines.getTotalElements();
         return new DataWithCounterDto(courseOutlinesDto, total);
     }
 
     @Override
-    public CourseOutlineViewTeacherResponse getViewByCurrentTeacher(Integer id) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+    public CourseOutlineViewTeacherResponse getViewByCurrentTeacher(Long id) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         Specification<CourseOutline> specification = Specification.where(belongsToTeacherId(currentTeacherId));
 
         Specification statusEqual = statusEqual(OutlineStatus.DOING);
@@ -109,7 +109,7 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
     }
 
     @Override
-    public void updateByCurrentTeacher(Integer id, MultipartFile file, CourseOutlineEditTeacherRequest request) {
+    public void updateByCurrentTeacher(Long id, MultipartFile file, CourseOutlineEditTeacherRequest request) {
         CourseRuleRequest courseRuleRequest = request.getCourseRule();
         validateTeacherCanUpDate(id, courseRuleRequest);
 
@@ -140,8 +140,8 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         courseOutlineRepository.save(courseOutline);
     }
 
-    private void validateTeacherCanUpDate(Integer id, CourseRuleRequest courseRuleRequest) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+    private void validateTeacherCanUpDate(Long id, CourseRuleRequest courseRuleRequest) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         Specification<CourseOutline> specification = Specification.where(belongsToTeacherId(currentTeacherId));
 
         Specification statusEqual = statusEqual(OutlineStatus.DOING);

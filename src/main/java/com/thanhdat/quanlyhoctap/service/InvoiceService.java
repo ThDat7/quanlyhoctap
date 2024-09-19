@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface InvoiceService {
 
-    List<InvoiceResponse> getByCurrentStudentAndSemester(Integer semesterId);
+    List<InvoiceResponse> getByCurrentStudentAndSemester(Long semesterId);
 }

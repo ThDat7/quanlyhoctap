@@ -9,7 +9,6 @@ import com.thanhdat.quanlyhoctap.service.ClassroomService;
 import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
 import com.thanhdat.quanlyhoctap.util.DateTimeRange;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
@@ -43,7 +42,7 @@ public class GenerateCourseClassHelper {
     private static final Integer THEORY_SHIFT_LENGTH = 4;
     private static final Integer PRACTICE_SHIFT_LENGTH = 3;
     private static final Integer PRACTICE_SHIFT_START = COMMON_SHIFT_STUDY_START.get(1);
-    public static final Integer CURRENT_SEMESTER_ID = 8;
+    public static final Long CURRENT_SEMESTER_ID = (long) 8;
 
     private enum ScheduleType {
         THEORY, PRACTICE
@@ -165,7 +164,7 @@ public class GenerateCourseClassHelper {
         EducationProgram ITEP = educationProgramRepository.findByMajorName("Information Technology").get();
         List<Semester> semesters = semesterRepository.findAll();
         semesters.stream().forEach(semester -> {
-            Integer nextSemesterId = CURRENT_SEMESTER_ID + 1;
+            Long nextSemesterId = CURRENT_SEMESTER_ID + 1;
             if (semester.getId() > nextSemesterId)
                 return;
 

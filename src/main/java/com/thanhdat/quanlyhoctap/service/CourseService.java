@@ -8,10 +8,10 @@ import java.util.Map;
 
 public interface CourseService {
     void create(CourseCrudRequest createRequest);
-    void delete(Integer id);
+    void delete(Long id);
     DataWithCounterDto<CourseCrudResponse> getAll(Map<String, String> params);
-    CourseViewCrudResponse getById(Integer id);
-    void update(Integer id, CourseCrudRequest updateRequest);
+    CourseViewCrudResponse getById(Long id);
+    void update(Long id, CourseCrudRequest updateRequest);
 
     List<SelectOptionResponse> getTypes();
 

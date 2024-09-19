@@ -22,7 +22,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
     StudentService studentService;
 
     public List<StudentStatusResponse> getByCurrentStudent() {
-        Integer currentStudentId = studentService.getCurrentStudent().getId();
+        Long currentStudentId = studentService.getCurrentStudent().getId();
         List<StudentStatus> studentStatuses =  studentStatusRepository.findByStudentId(currentStudentId);
         return mapToStudentStatusResponse(studentStatuses);
     }

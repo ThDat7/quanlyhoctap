@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     String code;
     @OneToOne(cascade = CascadeType.ALL)
     User user;

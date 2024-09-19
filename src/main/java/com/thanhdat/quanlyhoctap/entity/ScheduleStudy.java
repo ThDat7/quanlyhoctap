@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class ScheduleStudy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     Integer shiftStart;
     Integer shiftLength;
 

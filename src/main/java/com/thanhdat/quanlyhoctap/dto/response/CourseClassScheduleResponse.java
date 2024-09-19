@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseClassScheduleResponse {
-    Integer id;
+    Long id;
     String courseName;
     String courseCode;
     Float courseCredits;

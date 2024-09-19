@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorCrudResponse {
-    Integer id;
+    Long id;
     String name;
     String alias;
     String faculty;

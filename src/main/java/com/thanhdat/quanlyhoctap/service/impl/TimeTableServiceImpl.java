@@ -26,16 +26,16 @@ public class TimeTableServiceImpl implements TimeTableService {
     StudentService studentService;
     TeacherService teacherService;
     @Override
-    public List<CourseClassScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {
-        int currentStudentId = studentService.getCurrentStudentId();
+    public List<CourseClassScheduleResponse> getByCurrentStudentAndSemester(Long semesterId) {
+        Long currentStudentId = studentService.getCurrentStudentId();
         return courseClassRepository.findBySemesterIdAndStudentId(semesterId, currentStudentId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CourseClassScheduleResponse> getByCurrentTeacherAndSemester(Integer semesterId) {
-        int currentStudentId = teacherService.getCurrentTeacherId();
+    public List<CourseClassScheduleResponse> getByCurrentTeacherAndSemester(Long semesterId) {
+        Long currentStudentId = teacherService.getCurrentTeacherId();
         return courseClassRepository.findBySemesterIdAndTeacherId(semesterId, currentStudentId).stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());

@@ -25,14 +25,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     MajorRepository majorRepository;
     InvoiceRepository invoiceRepository;
     SettingService settingService;
-    public List<InvoiceResponse> getByCurrentStudentAndSemester(Integer semesterId) {
-        Integer semesterIdForRegister = settingService.getSemesterIdForRegister();
+    public List<InvoiceResponse> getByCurrentStudentAndSemester(Long semesterId) {
+        Long semesterIdForRegister = settingService.getSemesterIdForRegister();
         // need more check for register is open to return temporary invoice
         Boolean isMatchSemesterRegister = semesterId.equals(semesterIdForRegister);
         if (isMatchSemesterRegister)
             return getTemporaryInvoice(semesterId);
 
-        Integer currentStudentId = studentService.getCurrentStudent().getId();
+        Long currentStudentId = studentService.getCurrentStudent().getId();
         Invoice invoice = invoiceRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
         Major major = majorRepository.getByStudentId(currentStudentId);
@@ -45,8 +45,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         return mapToInvoiceResponse(courses, specializeTuition, generalTuition);
     }
 
-    private List<InvoiceResponse> getTemporaryInvoice(Integer semesterId) {
-        Integer currentStudentId = studentService.getCurrentStudent().getId();
+    private List<InvoiceResponse> getTemporaryInvoice(Long semesterId) {
+        Long currentStudentId = studentService.getCurrentStudent().getId();
         List<Study> studies = studyRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
         Major major = majorRepository.getByStudentId(currentStudentId);

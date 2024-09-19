@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer> {
-    Long countByStudentClassId(Integer studentClassId);
-    Student findByUserId(Integer userId);
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    Long countByStudentClassId(Long studentClassId);
+    Student findByUserId(Long userId);
 }

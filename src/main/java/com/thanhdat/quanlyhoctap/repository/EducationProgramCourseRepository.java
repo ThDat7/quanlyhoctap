@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EducationProgramCourseRepository
-        extends JpaRepository<EducationProgramCourse, Integer>,
+        extends JpaRepository<EducationProgramCourse, Long>,
         JpaSpecificationExecutor<EducationProgramCourse> {
     List<EducationProgramCourse> findByCourse(Course course);
 

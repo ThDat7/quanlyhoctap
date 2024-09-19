@@ -22,13 +22,13 @@ public class TimeTableController {
     TimeTableService timeTableService;
 
     @GetMapping("/semester/{semesterId}/current-student")
-    public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {
+    public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Long semesterId) {
         return ResponseEntity.ok(timeTableService.getByCurrentStudentAndSemester(semesterId));
     }
 
 
     @GetMapping("/semester/{semesterId}/current-teacher")
-    public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentTeacherAndSemester(@PathVariable Integer semesterId) {
+    public ResponseEntity<List<CourseClassScheduleResponse>> getByCurrentTeacherAndSemester(@PathVariable Long semesterId) {
         return ResponseEntity.ok(timeTableService.getByCurrentTeacherAndSemester(semesterId));
     }
 }

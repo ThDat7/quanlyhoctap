@@ -18,14 +18,14 @@ public class CourseOutlineSpecification {
         return (root, query, cb) -> cb.equal(root.get(CourseOutline_.status), status);
     }
 
-    public static Specification<CourseOutline> courseEqual(Integer courseId) {
+    public static Specification<CourseOutline> courseEqual(Long courseId) {
         return (root, query, cb) -> {
             Join<CourseOutline, Course> courseJoin = join(root, CourseOutline_.course, JoinType.INNER);
             return cb.equal(courseJoin.get(Course_.id), courseId);
         };
     }
 
-    public static Specification<CourseOutline> belongsToMajor(Integer majorId) {
+    public static Specification<CourseOutline> belongsToMajor(Long majorId) {
         return (root, query, cb) -> {
             Join<CourseOutline, EducationProgramCourse> educationProgramCourseJoin = join(root, CourseOutline_.educationProgramCourses, JoinType.INNER);
             Join<EducationProgramCourse, EducationProgram> educationProgramJoin = join(educationProgramCourseJoin, EducationProgramCourse_.educationProgram, JoinType.INNER);
@@ -34,14 +34,14 @@ public class CourseOutlineSpecification {
         };
     }
 
-    public static Specification<CourseOutline> belongsToTeacherId(Integer teacherId) {
+    public static Specification<CourseOutline> belongsToTeacherId(Long teacherId) {
         return (root, query, cb) -> {
             Join<CourseOutline, Teacher> teacherJoin = join(root, CourseOutline_.teacher, JoinType.INNER);
             return cb.equal(teacherJoin.get(Teacher_.id), teacherId);
         };
     }
 
-    public static Specification<CourseOutline> idEqual(Integer id) {
+    public static Specification<CourseOutline> idEqual(Long id) {
         return (root, query, cb) -> cb.equal(root.get(CourseOutline_.id), id);
     }
 

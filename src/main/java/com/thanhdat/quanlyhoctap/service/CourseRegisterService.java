@@ -5,7 +5,7 @@ import com.thanhdat.quanlyhoctap.dto.response.StudentCourseRegisterResponse;
 public interface CourseRegisterService {
     StudentCourseRegisterResponse getStudentCourseRegisterInfo();
 
-    void registerCourse(Integer courseClassId);
+    void registerCourse(Long courseClassId);
 
-    void unregisterCourse(Integer courseClassId);
+    void unregisterCourse(Long courseClassId);
 }

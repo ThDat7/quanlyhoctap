@@ -21,7 +21,7 @@ public class InvoiceController {
     InvoiceService invoiceService;
 
     @GetMapping("/semester/{semesterId}/current-student")
-    public ResponseEntity<List<InvoiceResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {
+    public ResponseEntity<List<InvoiceResponse>> getByCurrentStudentAndSemester(@PathVariable Long semesterId) {
         return ResponseEntity.ok(invoiceService.getByCurrentStudentAndSemester(semesterId));
     }
 }

@@ -29,7 +29,7 @@ public class EducationProgramController {
     }
 
     @GetMapping("/view/{id}")
-    public ResponseEntity<EducationProgramViewDto> getView(@PathVariable int id) {
+    public ResponseEntity<EducationProgramViewDto> getView(@PathVariable Long id) {
         return ResponseEntity.ok(educationProgramService.getView(id));
     }
 
@@ -50,18 +50,18 @@ public class EducationProgramController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         educationProgramService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Integer id) {
+    public ResponseEntity getById(@PathVariable Long id) {
         return ResponseEntity.ok(educationProgramService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody EducationProgramCrudRequest updateRequest) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody EducationProgramCrudRequest updateRequest) {
         educationProgramService.update(id, updateRequest);
         return ResponseEntity.ok().build();
     }

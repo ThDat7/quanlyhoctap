@@ -29,7 +29,7 @@ public class ScoreServiceImpl implements ScoreService {
     StudyRepository studyRepository;
     TeacherService teacherService;
     CourseClassRepository courseClassRepository;
-    public List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Integer courseClassId) {
+    public List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId) {
         validateTeacherCanGetScoreResponse(courseClassId);
 
         List<Study> studies = studyRepository.findByCourseClassId(courseClassId);
@@ -39,7 +39,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     @Transactional
     public void updateByCurrentTeacher(List<MidtermExamScoreUpdateRequest> midtermExamScoreUpdateRequests) {
-        List<Integer> requestIds = midtermExamScoreUpdateRequests.stream()
+        List<Long> requestIds = midtermExamScoreUpdateRequests.stream()
                 .map(MidtermExamScoreUpdateRequest::getStudyId)
                 .collect(Collectors.toList());
 
@@ -73,8 +73,8 @@ public class ScoreServiceImpl implements ScoreService {
         studyRepository.saveAll(studies);
     }
 
-    private void validateTeacherCanUpdateScoreRequest(List<Integer> requestIds) {
-        int currentTeacherId = teacherService.getCurrentTeacherId();
+    private void validateTeacherCanUpdateScoreRequest(List<Long> requestIds) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
 
         Specification<Study> rootSpecification = Specification.where(null);
         rootSpecification = rootSpecification.and(belongsToTeacherId(currentTeacherId));
@@ -88,9 +88,9 @@ public class ScoreServiceImpl implements ScoreService {
             throw new RuntimeException("Teacher is not teach this course class");
     }
 
-    private void validateTeacherCanGetScoreResponse(Integer courseClassId) {
+    private void validateTeacherCanGetScoreResponse(Long courseClassId) {
 
-        int currentTeacherId = teacherService.getCurrentTeacherId();
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         Boolean isTeacherTeachCourseClass = courseClassRepository.existsByIdAndTeacherId(courseClassId, currentTeacherId);
 
         if (!isTeacherTeachCourseClass)

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewsResponse {
-    Integer id;
+    Long id;
     String title;
     LocalDateTime createdAt;
     Boolean isImportant;

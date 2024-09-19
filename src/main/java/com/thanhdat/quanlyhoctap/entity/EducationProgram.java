@@ -19,7 +19,7 @@ import java.util.List;
 public class EducationProgram {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @Column(nullable = false)
     int schoolYear;

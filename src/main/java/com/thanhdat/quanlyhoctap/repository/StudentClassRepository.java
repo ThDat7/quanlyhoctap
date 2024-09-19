@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentClassRepository extends JpaRepository<StudentClass, Integer> {
+public interface StudentClassRepository extends JpaRepository<StudentClass, Long> {
     List<StudentClass> findByYearAndMajorName(int grade, String majorName);
 }

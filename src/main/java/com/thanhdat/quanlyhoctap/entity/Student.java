@@ -17,7 +17,7 @@ import java.util.Set;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     String studentCode;
     @OneToOne(cascade = CascadeType.ALL)
     User user;

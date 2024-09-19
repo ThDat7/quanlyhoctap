@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MidtermExamScoreUpdateRequest {
-    private Integer studyId;
+    private Long studyId;
     private Float score;
 }

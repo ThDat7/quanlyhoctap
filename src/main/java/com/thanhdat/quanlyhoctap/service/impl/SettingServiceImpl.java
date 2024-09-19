@@ -28,10 +28,10 @@ public class SettingServiceImpl implements SettingService {
     SettingRepository settingRepository;
     PagingHelper pagingHelper;
 
-    public Integer getSemesterIdForRegister() {
+    public Long getSemesterIdForRegister() {
         Optional<Setting> setting = settingRepository.findById(RegisterCourseSettingType
                 .SEMESTER_ID_FOR_REGISTER.name());
-        return Integer.parseInt(setting
+        return Long.parseLong(setting
                 .orElseThrow(() -> new RuntimeException("Setting not found"))
                 .getValue());
     }
@@ -66,7 +66,7 @@ public class SettingServiceImpl implements SettingService {
         List<SettingCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToSettingCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 

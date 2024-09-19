@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class CourseRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     Float midTermFactor;
     Float finalTermFactor;

@@ -1,13 +1,9 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
-import com.thanhdat.quanlyhoctap.dto.request.MajorCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.Course;
 import com.thanhdat.quanlyhoctap.entity.CourseType;
-import com.thanhdat.quanlyhoctap.entity.Faculty;
-import com.thanhdat.quanlyhoctap.entity.Major;
-import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.CourseRepository;
 import com.thanhdat.quanlyhoctap.service.CourseService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
@@ -44,7 +40,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         courseRepository.deleteById(id);
     }
 
@@ -55,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
         List<CourseCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToCourseCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
@@ -70,7 +66,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseViewCrudResponse getById(Integer id) {
+    public CourseViewCrudResponse getById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         return mapToCourseViewCrudResponse(course);
@@ -91,7 +87,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void update(Integer id, CourseCrudRequest updateRequest) {
+    public void update(Long id, CourseCrudRequest updateRequest) {
         Course oldCourse = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 //        validate

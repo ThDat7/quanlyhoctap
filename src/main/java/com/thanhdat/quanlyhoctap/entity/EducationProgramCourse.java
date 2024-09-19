@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class EducationProgramCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)

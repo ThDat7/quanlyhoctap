@@ -6,7 +6,7 @@ import com.thanhdat.quanlyhoctap.dto.response.TeacherScoreResponse;
 import java.util.List;
 
 public interface ScoreService {
-    List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Integer courseClassId);
+    List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId);
 
     void updateByCurrentTeacher(List<MidtermExamScoreUpdateRequest> midtermExamScoreUpdateRequests);
 }

@@ -12,5 +12,5 @@ public class NewsCrudRequest {
     String title;
     String content;
     Boolean isImportant;
-    Integer authorId;
+    Long authorId;
 }

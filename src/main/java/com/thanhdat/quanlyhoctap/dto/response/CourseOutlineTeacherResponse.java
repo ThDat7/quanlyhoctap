@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineTeacherResponse {
-    Integer id;
+    Long id;
     String courseName;
     String courseCode;
     OutlineStatus status;

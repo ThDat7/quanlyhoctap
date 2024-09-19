@@ -23,7 +23,7 @@ public class EducationProgramSpecification {
         return (root, query, cb) -> cb.equal(root.get(EducationProgram_.schoolYear), year);
     }
 
-    public static Specification<EducationProgram> majorEqual(int majorId) {
+    public static Specification<EducationProgram> majorEqual(Long majorId) {
         return (root, query, cb) -> {
             Join<EducationProgram, Major> majorJoin = join(root, EducationProgram_.major, JoinType.INNER);
             return cb.equal(majorJoin.get(Major_.id), majorId);

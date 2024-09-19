@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CourseOutlineRepository
-        extends JpaRepository<CourseOutline, Integer>,
+        extends JpaRepository<CourseOutline, Long>,
         JpaSpecificationExecutor<CourseOutline> {
-    List<CourseOutline> findByTeacherIdAndStatus(Integer teacherId, OutlineStatus status);
+    List<CourseOutline> findByTeacherIdAndStatus(Long teacherId, OutlineStatus status);
 }

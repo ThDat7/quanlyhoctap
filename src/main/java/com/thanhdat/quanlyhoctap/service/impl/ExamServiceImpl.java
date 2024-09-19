@@ -36,8 +36,8 @@ public class ExamServiceImpl implements ExamService {
     ExamRepository examRepository;
 
     @Override
-    public List<ExamScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {
-        int currentStudentId = studentService.getCurrentStudentId();
+    public List<? extends ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId) {
+        Long currentStudentId = studentService.getCurrentStudentId();
         return courseClassRepository.findBySemesterIdAndStudentId(semesterId, currentStudentId)
                 .stream()
                 .flatMap(e -> convertToResponse(e).stream())
@@ -46,14 +46,14 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<MidtermExamResponse> getByCurrentTeacherAndSemester(Integer semesterId) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+    public List<MidtermExamResponse> getByCurrentTeacherAndSemester(Long semesterId) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         List<CourseClass> courseClasses = courseClassRepository.findBySemesterIdAndTeacherId(semesterId, currentTeacherId);
         return mapToMidtermExamResponse(courseClasses);
     }
 
     @Override
-    public List<AvailableDateForMidtermExamResponse> getAvailableDateMidtermExam(Integer courseClassId) {
+    public List<AvailableDateForMidtermExamResponse> getAvailableDateMidtermExam(Long courseClassId) {
         List<ScheduleStudy> scheduleStudies = scheduleStudyRepository.findByCourseClassId(courseClassId);
         return scheduleStudies.stream()
                 .flatMap(e -> mapToAvailableDateForMidtermExamResponse(e).stream())
@@ -62,8 +62,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void updateMidtermExamCurrentTeacher(Integer courseClassId, UpdateMidtermExamRequest updateMidtermExamRequest) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+    public void updateMidtermExamCurrentTeacher(Long courseClassId, UpdateMidtermExamRequest updateMidtermExamRequest) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
         validateTeacherCanUpdateMidtermExam(currentTeacherId, courseClassId);
         validateStartTimeMidtermExam(courseClassId, updateMidtermExamRequest.getStartTime());
 
@@ -79,7 +79,7 @@ public class ExamServiceImpl implements ExamService {
         examRepository.save(midtermExam);
     }
 
-    private Optional<ScheduleStudy> getMatchedStartTime(Integer courseClassId, LocalDateTime startTime){
+    private Optional<ScheduleStudy> getMatchedStartTime(Long courseClassId, LocalDateTime startTime){
         List<ScheduleStudy> scheduleStudies = scheduleStudyRepository.findByCourseClassId(courseClassId);
         return scheduleStudies.stream()
                 .filter(e -> scheduleStudyService.convertToDateTimeRanges(e).stream()
@@ -87,7 +87,7 @@ public class ExamServiceImpl implements ExamService {
                 .findFirst();
     }
 
-    private void validateTeacherCanUpdateMidtermExam(Integer teacherId, Integer courseClassId) {
+    private void validateTeacherCanUpdateMidtermExam(Long teacherId, Long courseClassId) {
         Boolean isExistByIdAndSemesterNotLocked = courseClassRepository.existsByIdAndSemesterNotLocked(courseClassId);
         if (!isExistByIdAndSemesterNotLocked)
             throw new RuntimeException("Course class is locked.");
@@ -97,7 +97,7 @@ public class ExamServiceImpl implements ExamService {
             throw new RuntimeException("You don't teach this course class.");
     }
 
-    private void validateStartTimeMidtermExam(Integer courseClassId, LocalDateTime startTime) {
+    private void validateStartTimeMidtermExam(Long courseClassId, LocalDateTime startTime) {
         Optional<ScheduleStudy> opMatched = getMatchedStartTime(courseClassId, startTime);
 
         if (opMatched.isEmpty())

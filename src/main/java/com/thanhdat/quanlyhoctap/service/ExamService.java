@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ExamService {
 
-    List<ExamScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId);
+    List<? extends ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId);
 
-    List<MidtermExamResponse> getByCurrentTeacherAndSemester(Integer semesterId);
+    List<MidtermExamResponse> getByCurrentTeacherAndSemester(Long semesterId);
 
-    List<AvailableDateForMidtermExamResponse> getAvailableDateMidtermExam(Integer courseClassId);
+    List<AvailableDateForMidtermExamResponse> getAvailableDateMidtermExam(Long courseClassId);
 
-    void updateMidtermExamCurrentTeacher(Integer courseClassId, UpdateMidtermExamRequest updateMidtermExamRequest);
+    void updateMidtermExamCurrentTeacher(Long courseClassId, UpdateMidtermExamRequest updateMidtermExamRequest);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineSearchDto {
-    int id;
+    Long id;
     String courseName;
     String teacherName;
     Float courseCredits;

@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
-    private static final Integer CURRENT_USER_LOGGED_ID = 26;
+    private static final Long CURRENT_USER_LOGGED_ID = (long) 26;
 
 
     @Override
-    public Integer getCurrentUserId() {
+    public Long getCurrentUserId() {
         return CURRENT_USER_LOGGED_ID;
     }
 }

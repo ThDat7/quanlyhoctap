@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeacherScoreResponse {
-    private Integer studyId;
+    private Long studyId;
     private String studentCode;
     private String studentLastName;
     private String studentFirstName;

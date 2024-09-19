@@ -23,7 +23,7 @@ public class StudyResultServiceImpl implements StudyResultService {
 
     @Override
     public List<StudyResultSemesterResponse> getByCurrentStudent() {
-        int currentStudentId = studentService.getCurrentStudentId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         List<Study> studies = new ArrayList<>(studyRepository.findByStudentId(currentStudentId));
         return calculate(studies);
     }

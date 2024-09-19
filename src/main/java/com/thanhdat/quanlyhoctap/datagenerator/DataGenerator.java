@@ -189,7 +189,7 @@ public class DataGenerator {
 
     private Set<StudentStatus> generateStudentStatuses(Student student) {
         Set<StudentStatus> studentStatuses = new HashSet<>();
-        for (int i = 1; i <= GenerateCourseClassHelper.CURRENT_SEMESTER_ID; i++) {
+        for (long i = 1; i <= GenerateCourseClassHelper.CURRENT_SEMESTER_ID; i++) {
             Semester semester = semesterRepository.findById(i).get();
             StudentStatus studentStatus = StudentStatus.builder()
                     .semester(semester)

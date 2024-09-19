@@ -49,12 +49,12 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         newsRepository.deleteById(id);
     }
 
     @Override
-    public NewsViewCrudResponse getById(Integer id) {
+    public NewsViewCrudResponse getById(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
         return mapToNewsViewCrudDto(news);
@@ -72,7 +72,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void update(Integer id, NewsCrudRequest updateRequest) {
+    public void update(Long id, NewsCrudRequest updateRequest) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
 
@@ -97,7 +97,7 @@ public class NewsServiceImpl implements NewsService {
         List<NewsCrudResponse> dto = page.getContent().stream()
                 .map(this::mapToNewsCrudResponse)
                 .collect(Collectors.toList());
-        Integer total = (int) page.getTotalElements();
+        long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
@@ -121,12 +121,12 @@ public class NewsServiceImpl implements NewsService {
         Pageable paging = PageRequest.of(page, pageSize);
 
         Page<News> pageNews = newsRepository.findAll(paging);
-        Integer total = (int) pageNews.getTotalElements();
+        long total = pageNews.getTotalElements();
         List<NewsResponse> newsDto = mapToNewsDto(pageNews.getContent());
         return new DataWithCounterDto(newsDto, total);
     }
 
-    public NewsViewResponse get(Integer id) {
+    public NewsViewResponse get(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
         return mapToNewsViewDto(news);

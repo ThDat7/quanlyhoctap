@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class StudentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

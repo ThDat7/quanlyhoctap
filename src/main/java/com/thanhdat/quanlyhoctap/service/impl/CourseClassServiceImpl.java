@@ -21,8 +21,8 @@ public class CourseClassServiceImpl implements CourseClassService {
     TeacherService teacherService;
 
     @Override
-    public List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Integer semesterId) {
-        Integer currentTeacherId = teacherService.getCurrentTeacherId();
+    public List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Long semesterId) {
+        Long currentTeacherId = teacherService.getCurrentTeacherId();
 
         List<CourseClass> courseClasses = courseClassRepository.findByTeacherIdAndSemesterId(currentTeacherId, semesterId);
         return mapToTeacherCourseClassTeachingResponse(courseClasses);
