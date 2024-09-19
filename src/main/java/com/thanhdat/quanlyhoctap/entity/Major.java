@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -13,24 +14,25 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Major {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
-    private String alias;
+    Integer id;
+    String name;
+    String alias;
 
-    private Integer specializeTuition;
-    private Integer generalTuition;
+    Integer specializeTuition;
+    Integer generalTuition;
 
     @ManyToOne
     @JoinColumn(name = "faculty_id", nullable = false)
-    private Faculty faculty;
+    Faculty faculty;
 
     @OneToMany(mappedBy = "major")
-    private Set<EducationProgram> educationPrograms;
+    Set<EducationProgram> educationPrograms;
 
     @OneToMany(mappedBy = "major")
-    private Set<StudentClass> studentClasses;
+    Set<StudentClass> studentClasses;
 }

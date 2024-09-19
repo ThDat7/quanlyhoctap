@@ -1,13 +1,14 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SelectOptionResponse {
-    private Object value;
-    private String label;
+    Object value;
+    String label;
 }

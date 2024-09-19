@@ -10,7 +10,9 @@ import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.CourseRegisterService;
 import com.thanhdat.quanlyhoctap.service.StudentService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseRegisterServiceImpl implements CourseRegisterService {
-    private final CourseClassRepository courseClassRepository;
-    private final SemesterRepository semesterRepository;
-    private final StudyRepository studyRepository;
-    private final StudentService studentService;
+    CourseClassRepository courseClassRepository;
+    SemesterRepository semesterRepository;
+    StudyRepository studyRepository;
+    StudentService studentService;
 
     @Override
     public void registerCourse(Integer courseClassId) {

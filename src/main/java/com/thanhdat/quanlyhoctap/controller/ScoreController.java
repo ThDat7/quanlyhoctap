@@ -1,9 +1,11 @@
 package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.request.MidtermExamScoreUpdateRequest;
-import com.thanhdat.quanlyhoctap.dto.response.TeacherScoreResponse;
+import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.ScoreService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/scores")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScoreController {
-    private final ScoreService scoreService;
+    ScoreService scoreService;
 
     @GetMapping("/course-class/{courseClassId}/current-teacher")
     public ResponseEntity<List<TeacherScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Integer courseClassId) {

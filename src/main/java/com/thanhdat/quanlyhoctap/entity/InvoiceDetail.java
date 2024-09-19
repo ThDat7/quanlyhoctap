@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "invoice_details")
@@ -10,17 +11,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class InvoiceDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
+    Invoice invoice;
 
     @ManyToOne
     @JoinColumn(name = "course_class_id")
-    private CourseClass courseClass;
-    private Integer tuition;
+    CourseClass courseClass;
+    Integer tuition;
 }

@@ -9,7 +9,9 @@ import com.thanhdat.quanlyhoctap.helper.settingbag.RegisterCourseSettingType;
 import com.thanhdat.quanlyhoctap.repository.SettingRepository;
 import com.thanhdat.quanlyhoctap.service.SettingService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SettingServiceImpl implements SettingService {
-    private final SettingRepository settingRepository;
-    private final PagingHelper pagingHelper;
+    SettingRepository settingRepository;
+    PagingHelper pagingHelper;
 
     public Integer getSemesterIdForRegister() {
         Optional<Setting> setting = settingRepository.findById(RegisterCourseSettingType
@@ -69,6 +72,7 @@ public class SettingServiceImpl implements SettingService {
 
     private SettingCrudResponse mapToSettingCrudResponse(Setting setting) {
         return SettingCrudResponse.builder()
+                .id(setting.getKey())
                 .key(setting.getKey())
                 .value(setting.getValue())
                 .build();

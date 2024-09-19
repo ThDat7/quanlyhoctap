@@ -4,7 +4,9 @@ import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
 import com.thanhdat.quanlyhoctap.service.EducationProgramService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +15,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/education-programs")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EducationProgramController {
-    private final EducationProgramService educationProgramService;
-    private final CourseOutlineService courseOutlineService;
+    EducationProgramService educationProgramService;
+    CourseOutlineService courseOutlineService;
 
     @GetMapping("/search")
     public ResponseEntity<List<DataWithCounterDto>> search(@RequestParam Map<String, String> params) {

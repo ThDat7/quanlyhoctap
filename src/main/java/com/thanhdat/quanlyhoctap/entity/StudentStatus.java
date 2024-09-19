@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "student_statuses")
@@ -10,18 +11,19 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    Student student;
 
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)
-    private Semester semester;
+    Semester semester;
 
-    private Boolean isLock;
+    Boolean isLock;
 }

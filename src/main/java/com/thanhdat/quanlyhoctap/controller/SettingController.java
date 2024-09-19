@@ -5,7 +5,9 @@ import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
 import com.thanhdat.quanlyhoctap.dto.response.SettingCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SettingViewCrudResponse;
 import com.thanhdat.quanlyhoctap.service.SettingService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +15,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/settings")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SettingController {
-    private final SettingService settingService;
+    SettingService settingService;
 
     @GetMapping
     public ResponseEntity<DataWithCounterDto<SettingCrudResponse>> getAll(@RequestParam Map<String, String> params) {

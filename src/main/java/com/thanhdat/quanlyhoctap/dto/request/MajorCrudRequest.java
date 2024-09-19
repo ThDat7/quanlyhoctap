@@ -1,17 +1,18 @@
 package com.thanhdat.quanlyhoctap.dto.request;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorCrudRequest {
-    private String name;
-    private String alias;
-    private Integer facultyId;
+    String name;
+    String alias;
+    Integer facultyId;
 
-    private Integer specializeTuition;
-    private Integer generalTuition;
+    Integer specializeTuition;
+    Integer generalTuition;
 }

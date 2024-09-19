@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramCrudResponse {
-    private Integer id;
-    private String majorName;
-    private Integer schoolYear;
-    private Integer numberOfCourses;
+    Integer id;
+    String majorName;
+    Integer schoolYear;
+    Integer numberOfCourses;
 }

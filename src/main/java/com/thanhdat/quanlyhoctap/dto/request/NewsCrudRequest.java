@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.request;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewsCrudRequest {
-    private String title;
-    private String content;
-    private Boolean isImportant;
-    private Integer authorId;
+    String title;
+    String content;
+    Boolean isImportant;
+    Integer authorId;
 }

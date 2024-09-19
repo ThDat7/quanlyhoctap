@@ -2,16 +2,17 @@ package com.thanhdat.quanlyhoctap.dto.request;
 
 import com.thanhdat.quanlyhoctap.dto.response.EducationProgramCourseDto;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramCrudRequest {
-    private int schoolYear;
-    private Integer majorId;
-    private List<EducationProgramCourseRequest> educationProgramCourses;
+    int schoolYear;
+    Integer majorId;
+    List<EducationProgramCourseRequest> educationProgramCourses;
 }

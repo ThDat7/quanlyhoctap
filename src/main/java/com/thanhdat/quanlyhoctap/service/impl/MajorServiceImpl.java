@@ -11,7 +11,9 @@ import com.thanhdat.quanlyhoctap.repository.FacultyRepository;
 import com.thanhdat.quanlyhoctap.repository.MajorRepository;
 import com.thanhdat.quanlyhoctap.service.MajorService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MajorServiceImpl implements MajorService {
-    private final MajorRepository majorRepository;
-    private final PagingHelper pagingHelper;
-    private final FacultyRepository facultyRepository;
+    MajorRepository majorRepository;
+    PagingHelper pagingHelper;
+    FacultyRepository facultyRepository;
 
     public DataWithCounterDto<MajorCrudResponse> getAll(Map<String, String> params) {
         Pageable paging = pagingHelper.getPageable(params);

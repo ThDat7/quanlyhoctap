@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,32 +14,33 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_rule_id")
-    private CourseRule courseRule;
+    CourseRule courseRule;
 
-    private String url;
+    String url;
 
-    private int yearPublished;
+    int yearPublished;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    Course course;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+    Teacher teacher;
 
     @Column(name = "status", length = 15, columnDefinition = "varchar(15) default 'DOING'", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OutlineStatus status;
-    private LocalDateTime deadline;
+    OutlineStatus status;
+    LocalDateTime deadline;
 
     @OneToMany(mappedBy = "courseOutline")
-    private Set<EducationProgramCourse> educationProgramCourses;
+    Set<EducationProgramCourse> educationProgramCourses;
 }

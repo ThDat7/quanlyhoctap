@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,18 +17,19 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Semester {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private Integer year;
-    private Integer semester;
-    private LocalDate startDate;
-    private Integer durationWeeks;
-    private LocalDateTime lockTime;
+    Integer year;
+    Integer semester;
+    LocalDate startDate;
+    Integer durationWeeks;
+    LocalDateTime lockTime;
 
     @OneToMany(mappedBy = "semester")
-    private Set<CourseClass> courseClasses;
+    Set<CourseClass> courseClasses;
 }

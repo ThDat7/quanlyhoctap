@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -12,21 +13,22 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "course_class_id")
-    private CourseClass courseClass;
+    CourseClass courseClass;
 
     @ManyToOne
     @JoinColumn(name = "classroom_id")
-    private Classroom classroom;
+    Classroom classroom;
 
-    private ExamType type;
+    ExamType type;
 }

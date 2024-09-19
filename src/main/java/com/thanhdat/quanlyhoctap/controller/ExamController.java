@@ -5,7 +5,9 @@ import com.thanhdat.quanlyhoctap.dto.response.AvailableDateForMidtermExamRespons
 import com.thanhdat.quanlyhoctap.dto.response.ExamScheduleResponse;
 import com.thanhdat.quanlyhoctap.dto.response.MidtermExamResponse;
 import com.thanhdat.quanlyhoctap.service.ExamService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/exam-schedules")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamController {
-    private final ExamService examService;
+    ExamService examService;
 
     @GetMapping("/semester/{semesterId}/current-student")
     public ResponseEntity<List<ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Integer semesterId) {

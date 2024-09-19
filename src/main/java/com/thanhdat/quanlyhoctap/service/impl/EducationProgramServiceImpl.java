@@ -7,7 +7,9 @@ import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.repository.*;
 import com.thanhdat.quanlyhoctap.service.EducationProgramService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,14 +26,15 @@ import static com.thanhdat.quanlyhoctap.specification.EducationProgramSpecificat
 import static com.thanhdat.quanlyhoctap.specification.EducationProgramSpecification.schoolYearEqual;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EducationProgramServiceImpl implements EducationProgramService {
-    private final EducationProgramRepository educationProgramRepository;
-    private final PagingHelper pagingHelper;
-    private final EducationProgramCourseRepository educationProgramCourseRepository;
-    private final MajorRepository majorRepository;
-    private final SemesterRepository semesterRepository;
-    private final CourseRepository courseRepository;
+    EducationProgramRepository educationProgramRepository;
+    PagingHelper pagingHelper;
+    EducationProgramCourseRepository educationProgramCourseRepository;
+    MajorRepository majorRepository;
+    SemesterRepository semesterRepository;
+    CourseRepository courseRepository;
 
     public DataWithCounterDto search(Map<String, String> params) {
         Specification<EducationProgram> specification = Specification.where(null);

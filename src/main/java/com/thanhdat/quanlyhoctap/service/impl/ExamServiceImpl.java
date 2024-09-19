@@ -13,7 +13,9 @@ import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
 import com.thanhdat.quanlyhoctap.util.DateTimeRange;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,14 +25,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamServiceImpl implements ExamService {
-    private final StudentService studentService;
-    private final CourseClassRepository courseClassRepository;
-    private final TeacherService teacherService;
-    private final ScheduleStudyService scheduleStudyService;
-    private final ScheduleStudyRepository scheduleStudyRepository;
-    private final ExamRepository examRepository;
+    StudentService studentService;
+    CourseClassRepository courseClassRepository;
+    TeacherService teacherService;
+    ScheduleStudyService scheduleStudyService;
+    ScheduleStudyRepository scheduleStudyRepository;
+    ExamRepository examRepository;
 
     @Override
     public List<ExamScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {

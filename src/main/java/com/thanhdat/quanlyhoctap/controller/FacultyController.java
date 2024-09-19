@@ -3,7 +3,9 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.FacultyCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.FacultyService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/faculties")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FacultyController {
-    private final FacultyService faculTyService;
+    FacultyService faculTyService;
 
     @GetMapping("/select-options")
     public ResponseEntity<List<SelectOptionResponse>> getSelectOptions(){

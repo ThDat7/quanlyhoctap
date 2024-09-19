@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.request;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeToUseClassroomRequest {
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
 }

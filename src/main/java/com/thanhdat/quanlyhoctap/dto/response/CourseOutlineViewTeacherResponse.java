@@ -1,16 +1,17 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineViewTeacherResponse {
-    private Integer id;
-    private String courseName;
-    private String courseCode;
-    private String url;
-    private CourseRuleResponse courseRule;
+    Integer id;
+    String courseName;
+    String courseCode;
+    String url;
+    CourseRuleResponse courseRule;
 }

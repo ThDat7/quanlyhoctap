@@ -2,18 +2,19 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SemesterDetailResponse {
-    private Integer id;
-    private String year;
-    private Integer semester;
-    private LocalDate startDate;
-    private Integer durationWeeks;
+    Integer id;
+    String year;
+    Integer semester;
+    LocalDate startDate;
+    Integer durationWeeks;
 }

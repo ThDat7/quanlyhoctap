@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "staffs")
@@ -10,17 +11,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String code;
+    Integer id;
+    String code;
     @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    User user;
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
-    private Faculty faculty;
+    Faculty faculty;
 
     @Transient
     public String getFullName() {

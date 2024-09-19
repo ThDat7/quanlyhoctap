@@ -8,20 +8,23 @@ import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.SettingService;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.InvoiceService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InvoiceServiceImpl implements InvoiceService {
-    private final StudyRepository studyRepository;
-    private final StudentService studentService;
-    private final MajorRepository majorRepository;
-    private final InvoiceRepository invoiceRepository;
-    private final SettingService settingService;
+    StudyRepository studyRepository;
+    StudentService studentService;
+    MajorRepository majorRepository;
+    InvoiceRepository invoiceRepository;
+    SettingService settingService;
     public List<InvoiceResponse> getByCurrentStudentAndSemester(Integer semesterId) {
         Integer semesterIdForRegister = settingService.getSemesterIdForRegister();
         // need more check for register is open to return temporary invoice

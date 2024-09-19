@@ -10,7 +10,9 @@ import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.ScoreService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
 import static com.thanhdat.quanlyhoctap.specification.StudySpecification.*;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +23,12 @@ import java.util.stream.Collectors;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScoreServiceImpl implements ScoreService {
-    private StudyRepository studyRepository;
-    private TeacherService teacherService;
-    private CourseClassRepository courseClassRepository;
+    StudyRepository studyRepository;
+    TeacherService teacherService;
+    CourseClassRepository courseClassRepository;
     public List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Integer courseClassId) {
         validateTeacherCanGetScoreResponse(courseClassId);
 

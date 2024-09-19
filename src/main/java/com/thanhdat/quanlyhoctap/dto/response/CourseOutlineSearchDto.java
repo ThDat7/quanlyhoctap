@@ -1,19 +1,20 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineSearchDto {
-    private int id;
-    private String courseName;
-    private String teacherName;
-    private Float courseCredits;
-    private List<Integer> years;
-    private String url;
+    int id;
+    String courseName;
+    String teacherName;
+    Float courseCredits;
+    List<Integer> years;
+    String url;
 }

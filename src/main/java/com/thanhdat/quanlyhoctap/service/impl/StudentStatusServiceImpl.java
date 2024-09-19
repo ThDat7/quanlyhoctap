@@ -6,17 +6,20 @@ import com.thanhdat.quanlyhoctap.entity.StudentStatus;
 import com.thanhdat.quanlyhoctap.repository.StudentStatusRepository;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.StudentStatusService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentStatusServiceImpl implements StudentStatusService {
-    private final StudentStatusRepository studentStatusRepository;
-    private final StudentService studentService;
+    StudentStatusRepository studentStatusRepository;
+    StudentService studentService;
 
     public List<StudentStatusResponse> getByCurrentStudent() {
         Integer currentStudentId = studentService.getCurrentStudent().getId();

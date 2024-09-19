@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorCrudResponse {
-    private Integer id;
-    private String name;
-    private String alias;
-    private String faculty;
+    Integer id;
+    String name;
+    String alias;
+    String faculty;
 }

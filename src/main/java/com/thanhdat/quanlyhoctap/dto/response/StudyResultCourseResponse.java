@@ -2,21 +2,22 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudyResultCourseResponse {
-    private String courseCode;
-    private String courseName;
-    private Float credits;
-    private String studentClassName;
-    private Float midTermScore;
-    private Float finalTermScore;
-    private Float totalScore10;
-    private Float totalScore4;
-    private String totalScoreLetter;
-    private Boolean isPassed;
+    String courseCode;
+    String courseName;
+    Float credits;
+    String studentClassName;
+    Float midTermScore;
+    Float finalTermScore;
+    Float totalScore10;
+    Float totalScore4;
+    String totalScoreLetter;
+    Boolean isPassed;
 }

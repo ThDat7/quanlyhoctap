@@ -6,17 +6,20 @@ import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.StudyResultService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudyResultServiceImpl implements StudyResultService {
-    private StudentService studentService;
-    private StudyRepository studyRepository;
+    StudentService studentService;
+    StudyRepository studyRepository;
 
     @Override
     public List<StudyResultSemesterResponse> getByCurrentStudent() {

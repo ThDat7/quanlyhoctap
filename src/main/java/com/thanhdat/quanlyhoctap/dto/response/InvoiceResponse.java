@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class InvoiceResponse {
-    private String courseName;
-    private String courseCode;
-    private Float courseCredits;
-    private Integer tuition;
+    String courseName;
+    String courseCode;
+    Float courseCredits;
+    Integer tuition;
 }

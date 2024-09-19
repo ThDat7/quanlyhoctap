@@ -11,7 +11,9 @@ import com.thanhdat.quanlyhoctap.repository.CourseOutlineRepository;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
 import com.thanhdat.quanlyhoctap.service.FileUploadService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +28,13 @@ import java.util.stream.Collectors;
 import static com.thanhdat.quanlyhoctap.specification.CourseOutlineSpecification.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseOutlineServiceImpl implements CourseOutlineService {
-    private final CourseOutlineRepository courseOutlineRepository;
-    private final PaginationProperties paginationProperties;
-    private final TeacherService teacherService;
-    private final FileUploadService fileUploadService;
+    CourseOutlineRepository courseOutlineRepository;
+    PaginationProperties paginationProperties;
+    TeacherService teacherService;
+    FileUploadService fileUploadService;
 
     @Override
     public DataWithCounterDto<CourseOutlineSearchDto> search(Map<String, String> params) {

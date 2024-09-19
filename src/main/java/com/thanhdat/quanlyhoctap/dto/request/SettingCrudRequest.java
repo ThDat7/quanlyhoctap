@@ -1,14 +1,15 @@
 package com.thanhdat.quanlyhoctap.dto.request;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class
 SettingCrudRequest {
-    private String key;
-    private String value;
+    String key;
+    String value;
 }

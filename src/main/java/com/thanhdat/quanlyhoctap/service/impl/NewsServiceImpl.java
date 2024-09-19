@@ -8,7 +8,9 @@ import com.thanhdat.quanlyhoctap.repository.NewsRepository;
 import com.thanhdat.quanlyhoctap.repository.StaffRepository;
 import com.thanhdat.quanlyhoctap.service.NewsService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +22,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class NewsServiceImpl implements NewsService {
-    private final NewsRepository newsRepository;
-    private final StaffRepository staffRepository;
-    private final PaginationProperties paginationProperties;
-    private final PagingHelper pagingHelper;
+    NewsRepository newsRepository;
+    StaffRepository staffRepository;
+    PaginationProperties paginationProperties;
+    PagingHelper pagingHelper;
 
     @Override
     public void create(NewsCrudRequest createRequest) {

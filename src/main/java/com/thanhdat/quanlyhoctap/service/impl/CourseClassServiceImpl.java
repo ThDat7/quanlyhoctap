@@ -5,17 +5,20 @@ import com.thanhdat.quanlyhoctap.entity.CourseClass;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.service.CourseClassService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseClassServiceImpl implements CourseClassService {
-    private final CourseClassRepository courseClassRepository;
-    private final TeacherService teacherService;
+    CourseClassRepository courseClassRepository;
+    TeacherService teacherService;
 
     @Override
     public List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Integer semesterId) {

@@ -2,7 +2,11 @@ package com.thanhdat.quanlyhoctap.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.github.javafaker.Faker;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -14,9 +18,10 @@ import java.util.Map;
 
 @Component
 @PropertySource("classpath:config.yml")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MyBeanConfig {
-    private Environment env;
+    Environment env;
 
     @Bean
     public Cloudinary cloudinary() {
@@ -31,5 +36,10 @@ public class MyBeanConfig {
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
+    }
+
+    @Bean
+    public Faker faker(){
+        return new Faker();
     }
 }

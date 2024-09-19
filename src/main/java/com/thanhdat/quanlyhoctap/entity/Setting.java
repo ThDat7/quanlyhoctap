@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Objects;
 
@@ -12,13 +13,14 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Setting {
     @Id
     @Column(name = "`key`")
-    private String key;
+    String key;
 
     @Column(nullable = false)
-    private String value;
+    String value;
 
     public Setting(String key) {
         this.key = key;

@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "education_program_courses",
@@ -13,24 +14,25 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)
-    private Semester semester;
+    Semester semester;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    Course course;
 
     @ManyToOne
     @JoinColumn(name = "education_program_id", nullable = false)
-    private EducationProgram educationProgram;
+    EducationProgram educationProgram;
 
     @ManyToOne
     @JoinColumn(name = "course_outline_id")
-    private CourseOutline courseOutline;
+    CourseOutline courseOutline;
 }

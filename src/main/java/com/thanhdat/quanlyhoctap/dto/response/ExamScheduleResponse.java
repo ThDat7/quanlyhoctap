@@ -2,20 +2,21 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 import com.thanhdat.quanlyhoctap.entity.ExamType;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExamScheduleResponse {
-    private String courseCode;
-    private String courseName;
-    private String studentClassName;
-    private Integer quantityStudent;
-    private ExamType type;
-    private LocalDateTime startTime;
-    private String roomName;
+    String courseCode;
+    String courseName;
+    String studentClassName;
+    Integer quantityStudent;
+    ExamType type;
+    LocalDateTime startTime;
+    String roomName;
 }

@@ -1,13 +1,16 @@
 package com.thanhdat.quanlyhoctap.datagenerator.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FacultyWithTeachersModel {
-    private String name;
-    private String alias;
-    private List<MajorModel> majors;
-    private List<String> teachers;
+    String name;
+    String alias;
+    List<MajorModel> majors;
+    List<String> teachers;
 }

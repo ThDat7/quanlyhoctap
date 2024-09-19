@@ -8,7 +8,9 @@ import com.thanhdat.quanlyhoctap.helper.settingbag.StudySettingType;
 import com.thanhdat.quanlyhoctap.repository.SettingRepository;
 import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
 import com.thanhdat.quanlyhoctap.util.DateTimeRange;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,9 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScheduleStudyServiceImpl implements ScheduleStudyService {
-    private SettingRepository settingRepository;
+    SettingRepository settingRepository;
 
     @Override
     public List<DateTimeRange> convertToDateTimeRanges(ScheduleStudy schedule) {

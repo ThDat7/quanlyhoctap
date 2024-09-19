@@ -1,15 +1,16 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TeacherCourseClassTeachingResponse {
-    private Integer id;
-    private String courseName;
-//    private String code; (courseClassCode)
-    private String courseCode;
+    Integer id;
+    String courseName;
+//    String code; (courseClassCode)
+    String courseCode;
 }

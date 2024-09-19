@@ -2,7 +2,9 @@ package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 import com.thanhdat.quanlyhoctap.service.SemesterService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/semesters")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SemesterController {
-    private final SemesterService semesterService;
+    SemesterService semesterService;
 
     @GetMapping("/current-student")
     public ResponseEntity<List<SemesterDetailResponse>> getCurrentStudentSemesters(){

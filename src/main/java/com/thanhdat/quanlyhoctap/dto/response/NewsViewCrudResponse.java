@@ -1,19 +1,20 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewsViewCrudResponse {
-    private Integer id;
-    private String title;
-    private Integer authorId;
-    private String content;
-    private Boolean isImportant;
-    private LocalDateTime createdAt;
+    Integer id;
+    String title;
+    Integer authorId;
+    String content;
+    Boolean isImportant;
+    LocalDateTime createdAt;
 }

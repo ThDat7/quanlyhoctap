@@ -1,18 +1,19 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MidtermExamResponse {
-    private Integer courseClassId;
-    private String courseName;
-    private String courseCode;
-    private LocalDateTime startTime;
-    private String roomName;
+    Integer courseClassId;
+    String courseName;
+    String courseCode;
+    LocalDateTime startTime;
+    String roomName;
 }

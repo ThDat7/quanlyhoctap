@@ -4,15 +4,18 @@ import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.entity.Staff;
 import com.thanhdat.quanlyhoctap.repository.StaffRepository;
 import com.thanhdat.quanlyhoctap.service.StaffService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StaffServiceImpl implements StaffService {
-    private final StaffRepository staffRepository;
+    StaffRepository staffRepository;
 
     @Override
     public List<SelectOptionResponse> getSelectOptions() {

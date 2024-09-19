@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,22 +14,23 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    private Student student;
+    Student student;
 
     @ManyToOne
     @JoinColumn(name = "semester_id")
-    private Semester semester;
+    Semester semester;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-    private Set<InvoiceDetail> invoiceDetails;
+    Set<InvoiceDetail> invoiceDetails;
 
-    private InvoiceStatus status;
-    private LocalDateTime paymentTime;
+    InvoiceStatus status;
+    LocalDateTime paymentTime;
 }

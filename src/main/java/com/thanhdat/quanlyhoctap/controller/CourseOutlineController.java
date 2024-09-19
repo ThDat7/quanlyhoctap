@@ -5,7 +5,9 @@ import com.thanhdat.quanlyhoctap.dto.response.CourseOutlineTeacherResponse;
 import com.thanhdat.quanlyhoctap.dto.response.CourseOutlineViewTeacherResponse;
 import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,9 +16,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/course-outlines")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseOutlineController {
-    private final CourseOutlineService courseOutlineService;
+    CourseOutlineService courseOutlineService;
 
     @GetMapping("/current-teacher")
     public ResponseEntity<DataWithCounterDto<CourseOutlineTeacherResponse>> getAllByCurrentTeacher(@RequestParam Map<String, String> params) {

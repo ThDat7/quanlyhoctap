@@ -2,14 +2,15 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseRuleResponse {
-    private Float midTermFactor;
-    private Float finalTermFactor;
-    private Float passScore;
+    Float midTermFactor;
+    Float finalTermFactor;
+    Float passScore;
 }

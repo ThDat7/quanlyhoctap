@@ -11,7 +11,9 @@ import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.CourseRepository;
 import com.thanhdat.quanlyhoctap.service.CourseService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseServiceImpl implements CourseService {
-    private final CourseRepository courseRepository;
-    private final PagingHelper pagingHelper;
+    CourseRepository courseRepository;
+    PagingHelper pagingHelper;
 
     @Override
     public void create(CourseCrudRequest createRequest) {

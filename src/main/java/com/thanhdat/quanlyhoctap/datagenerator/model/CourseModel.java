@@ -1,15 +1,18 @@
 package com.thanhdat.quanlyhoctap.datagenerator.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseModel {
-    private String name;
-    private String code;
-    private Float credits;
-    private String type;
+    String name;
+    String code;
+    Float credits;
+    String type;
 
-    private Integer sessionInWeek;
-    private Integer theoryPeriod;
-    private Integer practicePeriod;
+    Integer sessionInWeek;
+    Integer theoryPeriod;
+    Integer practicePeriod;
 }

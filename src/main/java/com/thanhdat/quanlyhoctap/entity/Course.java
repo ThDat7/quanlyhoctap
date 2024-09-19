@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -12,27 +13,28 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private String name;
+    String name;
     @Column(nullable = false, unique = true)
-    private String code;
-    private Float credits;
-    private CourseType type;
+    String code;
+    Float credits;
+    CourseType type;
 
-    private Integer sessionInWeek;
-    private Integer theoryPeriod;
-    private Integer practicePeriod;
-
-    @OneToMany(mappedBy = "course")
-    private Set<CourseOutline> courseOutlines;
+    Integer sessionInWeek;
+    Integer theoryPeriod;
+    Integer practicePeriod;
 
     @OneToMany(mappedBy = "course")
-    private Set<EducationProgramCourse> educationProgramCourses;
+    Set<CourseOutline> courseOutlines;
 
     @OneToMany(mappedBy = "course")
-    private Set<CourseClass> courseClasses;
+    Set<EducationProgramCourse> educationProgramCourses;
+
+    @OneToMany(mappedBy = "course")
+    Set<CourseClass> courseClasses;
 }

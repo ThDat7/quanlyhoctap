@@ -3,7 +3,9 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.CourseService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/courses")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseController {
-    private final CourseService courseService;
+    CourseService courseService;
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody CourseCrudRequest createRequest) {

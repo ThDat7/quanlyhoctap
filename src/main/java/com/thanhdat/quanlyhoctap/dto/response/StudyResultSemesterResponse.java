@@ -2,20 +2,21 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudyResultSemesterResponse {
-    private Integer semester;
-    private Integer year;
-    private List<StudyResultCourseResponse> courses;
-    private Float GPA4Semester;
-    private Float creditsEarnedSemester;
-    private Float creditsCumulative;
-    private Float GPA4Cumulative;
+    Integer semester;
+    Integer year;
+    List<StudyResultCourseResponse> courses;
+    Float GPA4Semester;
+    Float creditsEarnedSemester;
+    Float creditsCumulative;
+    Float GPA4Cumulative;
 }

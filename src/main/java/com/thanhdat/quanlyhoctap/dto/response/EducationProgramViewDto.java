@@ -1,18 +1,18 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EducationProgramViewDto {
-    private Integer id;
-    private String majorName;
-    private Integer schoolYear;
-    private List<EducationProgramCourseDto> educationProgramCourses;
+    Integer id;
+    String majorName;
+    Integer schoolYear;
+    List<EducationProgramCourseDto> educationProgramCourses;
 }

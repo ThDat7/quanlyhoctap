@@ -2,14 +2,15 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FacultyViewCrudResponse {
-    private Integer id;
-    private String name;
-    private String alias;
+    Integer id;
+    String name;
+    String alias;
 }

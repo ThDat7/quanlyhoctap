@@ -1,17 +1,18 @@
 package com.thanhdat.quanlyhoctap.util;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DateTimeRange {
-    private LocalDateTime start;
-    private LocalDateTime end;
+    LocalDateTime start;
+    LocalDateTime end;
 
     public boolean isWithinRange(LocalDateTime dateTime) {
         return (dateTime.isEqual(start) || dateTime.isAfter(start)) &&

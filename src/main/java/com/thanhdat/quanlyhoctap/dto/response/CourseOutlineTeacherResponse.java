@@ -2,18 +2,19 @@ package com.thanhdat.quanlyhoctap.dto.response;
 
 import com.thanhdat.quanlyhoctap.entity.OutlineStatus;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineTeacherResponse {
-    private Integer id;
-    private String courseName;
-    private String courseCode;
-    private OutlineStatus status;
-    private LocalDateTime deadline;
+    Integer id;
+    String courseName;
+    String courseCode;
+    OutlineStatus status;
+    LocalDateTime deadline;
 }

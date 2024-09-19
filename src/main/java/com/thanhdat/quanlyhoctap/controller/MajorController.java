@@ -6,7 +6,9 @@ import com.thanhdat.quanlyhoctap.dto.response.MajorCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.MajorViewCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.service.MajorService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/majors")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MajorController {
-    private final MajorService majorService;
+    MajorService majorService;
 
     @GetMapping
     public ResponseEntity<DataWithCounterDto<MajorCrudResponse>> getAll(@RequestParam Map<String, String> params) {

@@ -8,7 +8,10 @@ import com.thanhdat.quanlyhoctap.repository.*;
 import com.thanhdat.quanlyhoctap.service.ClassroomService;
 import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
 import com.thanhdat.quanlyhoctap.util.DateTimeRange;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -19,21 +22,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GenerateCourseClassHelper {
 
-    private TeacherRepository teacherRepository;
-    private StudentRepository studentRepository;
-    private SemesterRepository semesterRepository;
-    private EducationProgramRepository educationProgramRepository;
-    private ScheduleStudyRepository scheduleStudyRepository;
-    private StudentClassRepository studentClassRepository;
-    private CourseClassRepository courseClassRepository;
-    private ClassroomService classroomService;
-    private ScheduleStudyService scheduleStudyService;
-    private StudyRepository studyRepository;
-    private InvoiceRepository invoiceRepository;
-    private final Faker faker = new Faker();
+    TeacherRepository teacherRepository;
+    StudentRepository studentRepository;
+    SemesterRepository semesterRepository;
+    EducationProgramRepository educationProgramRepository;
+    ScheduleStudyRepository scheduleStudyRepository;
+    StudentClassRepository studentClassRepository;
+    CourseClassRepository courseClassRepository;
+    ClassroomService classroomService;
+    ScheduleStudyService scheduleStudyService;
+    StudyRepository studyRepository;
+    InvoiceRepository invoiceRepository;
+    Faker faker;
 
     private static final List<Integer> COMMON_SHIFT_STUDY_START = List.of(1, 7);
     private static final Integer THEORY_SHIFT_LENGTH = 4;

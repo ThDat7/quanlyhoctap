@@ -1,20 +1,21 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleStudyTimeTableResponse {
-    private LocalDate startDate;
-    private Integer weekLength;
-    private Integer shiftStart;
-    private Integer shiftLength;
-    private String roomType;
-    private String roomName;
+    LocalDate startDate;
+    Integer weekLength;
+    Integer shiftStart;
+    Integer shiftLength;
+    String roomType;
+    String roomName;
 }

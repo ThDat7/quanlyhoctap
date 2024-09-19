@@ -1,11 +1,14 @@
 package com.thanhdat.quanlyhoctap.datagenerator.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorCourseOutlineModel {
-    private String majorName;
-    private List<CourseOutlineModel> outlines;
+    String majorName;
+    List<CourseOutlineModel> outlines;
 }

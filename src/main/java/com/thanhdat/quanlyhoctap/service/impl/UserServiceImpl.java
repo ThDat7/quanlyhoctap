@@ -1,11 +1,14 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
     private static final Integer CURRENT_USER_LOGGED_ID = 26;
 

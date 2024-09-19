@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -12,18 +13,19 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-    private String title;
-    private String content;
-    private Boolean isImportant;
+    String title;
+    String content;
+    Boolean isImportant;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private Staff author;
+    Staff author;
 }

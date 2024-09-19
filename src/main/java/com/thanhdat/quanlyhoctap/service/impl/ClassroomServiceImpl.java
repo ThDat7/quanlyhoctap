@@ -9,7 +9,9 @@ import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.ClassroomService;
 import com.thanhdat.quanlyhoctap.service.ScheduleStudyService;
 import com.thanhdat.quanlyhoctap.util.DateTimeRange;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,13 +22,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ClassroomServiceImpl implements ClassroomService {
-    private ClassroomRepository classroomRepository;
-    private ScheduleStudyRepository scheduleStudyRepository;
-    private ExamRepository examRepository;
-    private final ScheduleStudyService scheduleStudyService;
-    private final SemesterRepository semesterRepository;
+    ClassroomRepository classroomRepository;
+    ScheduleStudyRepository scheduleStudyRepository;
+    ExamRepository examRepository;
+    ScheduleStudyService scheduleStudyService;
+    SemesterRepository semesterRepository;
 
     public List<Classroom> getUnUsedClassrooms(ClassroomAvailableRequest classroomAvailableRequest) {
 //        need to check all dates in one semester

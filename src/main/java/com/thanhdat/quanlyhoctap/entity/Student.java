@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -12,20 +13,21 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String studentCode;
+    Integer id;
+    String studentCode;
     @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    User user;
     @ManyToOne
     @JoinColumn(name = "student_class_id", nullable = false)
-    private StudentClass studentClass;
+    StudentClass studentClass;
 
     @OneToMany(mappedBy = "student")
-    private Set<Study> studies;
+    Set<Study> studies;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Set<StudentStatus> studentStatuses;
+    Set<StudentStatus> studentStatuses;
 }

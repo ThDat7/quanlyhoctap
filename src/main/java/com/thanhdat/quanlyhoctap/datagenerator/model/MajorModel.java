@@ -1,11 +1,14 @@
 package com.thanhdat.quanlyhoctap.datagenerator.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MajorModel {
-    private String name;
-    private String alias;
-    private Integer specializeTuition;
-    private Integer generalTuition;
+    String name;
+    String alias;
+    Integer specializeTuition;
+    Integer generalTuition;
 }

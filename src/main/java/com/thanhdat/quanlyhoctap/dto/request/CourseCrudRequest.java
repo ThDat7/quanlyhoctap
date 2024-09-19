@@ -2,19 +2,20 @@ package com.thanhdat.quanlyhoctap.dto.request;
 
 import com.thanhdat.quanlyhoctap.entity.CourseType;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseCrudRequest {
-    private String name;
-    private String code;
-    private Float credits;
-    private CourseType type;
+    String name;
+    String code;
+    Float credits;
+    CourseType type;
 
-    private Integer sessionInWeek;
-    private Integer theoryPeriod;
-    private Integer practicePeriod;
+    Integer sessionInWeek;
+    Integer theoryPeriod;
+    Integer practicePeriod;
 }

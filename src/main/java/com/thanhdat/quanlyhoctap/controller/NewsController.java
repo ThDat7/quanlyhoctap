@@ -1,9 +1,12 @@
 package com.thanhdat.quanlyhoctap.controller;
 
+import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.NewsService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/news")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class NewsController {
-    private final NewsService newsService;
+    NewsService newsService;
 
     @GetMapping("/view")
     public ResponseEntity<DataWithCounterDto<NewsResponse>> getAllNews(@RequestParam Map<String, String> params){

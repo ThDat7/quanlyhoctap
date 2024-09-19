@@ -8,7 +8,10 @@ import com.thanhdat.quanlyhoctap.entity.*;
 import com.thanhdat.quanlyhoctap.helper.settingbag.RegisterCourseSettingType;
 import com.thanhdat.quanlyhoctap.helper.settingbag.StudySettingType;
 import com.thanhdat.quanlyhoctap.repository.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -25,28 +28,29 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DataGenerator {
-    private DataLoader dataLoader;
-    private final Faker faker = new Faker();
-    private GenerateCourseClassHelper generateCourseClassHelper;
+    DataLoader dataLoader;
+    Faker faker;
+    GenerateCourseClassHelper generateCourseClassHelper;
 
     private static final String COMMON_PASSWORD = "123";
     public static final Integer SEMESTER_IN_YEAR = 3;
     private static final Integer DURATION_WEEKS = 15;
-    private FacultyRepository facultyRepository;
-    private CourseRepository courseRepository;
-    private EducationProgramRepository educationProgramRepository;
-    private MajorRepository majorRepository;
-    private StudentClassRepository studentClassRepository;
-    private SemesterRepository semesterRepository;
-    private ClassroomRepository classroomRepository;
-    private CourseOutlineRepository courseOutlineRepository;
-    private TeacherRepository teacherRepository;
-    private EducationProgramCourseRepository educationProgramCourseRepository;
-    private SettingRepository settingRepository;
-    private StaffRepository staffRepository;
-    private NewsRepository newsRepository;
+    FacultyRepository facultyRepository;
+    CourseRepository courseRepository;
+    EducationProgramRepository educationProgramRepository;
+    MajorRepository majorRepository;
+    StudentClassRepository studentClassRepository;
+    SemesterRepository semesterRepository;
+    ClassroomRepository classroomRepository;
+    CourseOutlineRepository courseOutlineRepository;
+    TeacherRepository teacherRepository;
+    EducationProgramCourseRepository educationProgramCourseRepository;
+    SettingRepository settingRepository;
+    StaffRepository staffRepository;
+    NewsRepository newsRepository;
     public void generateData() throws Exception {
         createSettings();
         createFaculties();

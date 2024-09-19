@@ -1,22 +1,23 @@
 package com.thanhdat.quanlyhoctap.dto.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseRegisteredResponse {
-    private Integer id;
-    private String courseCode;
-    private String courseName;
-    private String studentClassName;
-    private Float courseCredits;
-    private LocalDateTime timeRegistered;
-    private String teacherCode;
-    private List<ScheduleStudyCourseRegisterResponse> scheduleStudies;
+    Integer id;
+    String courseCode;
+    String courseName;
+    String studentClassName;
+    Float courseCredits;
+    LocalDateTime timeRegistered;
+    String teacherCode;
+    List<ScheduleStudyCourseRegisterResponse> scheduleStudies;
 }

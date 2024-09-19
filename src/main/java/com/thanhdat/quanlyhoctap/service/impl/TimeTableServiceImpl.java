@@ -9,19 +9,22 @@ import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
 import com.thanhdat.quanlyhoctap.service.TimeTableService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TimeTableServiceImpl implements TimeTableService {
-    private CourseClassRepository courseClassRepository;
-    private final SemesterRepository semesterRepository;
-    private StudentService studentService;
-    private final TeacherService teacherService;
+    CourseClassRepository courseClassRepository;
+    SemesterRepository semesterRepository;
+    StudentService studentService;
+    TeacherService teacherService;
     @Override
     public List<CourseClassScheduleResponse> getByCurrentStudentAndSemester(Integer semesterId) {
         int currentStudentId = studentService.getCurrentStudentId();

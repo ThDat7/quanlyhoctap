@@ -2,15 +2,18 @@ package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.response.StudentCourseRegisterResponse;
 import com.thanhdat.quanlyhoctap.service.CourseRegisterService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/course-registers")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseRegisterController {
-    private final CourseRegisterService courseRegisterService;
+    CourseRegisterService courseRegisterService;
 
     @GetMapping("/by-current-education-program")
     public ResponseEntity<StudentCourseRegisterResponse> getStudentCourseRegisterInfo() {
