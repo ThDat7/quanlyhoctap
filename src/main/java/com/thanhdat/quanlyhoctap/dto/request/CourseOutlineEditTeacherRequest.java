@@ -1,6 +1,8 @@
 package com.thanhdat.quanlyhoctap.dto.request;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,5 +12,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseOutlineEditTeacherRequest {
+    @NotNull(message = "COURSE_RULE_NOT_NULL")
+    @Valid
     CourseRuleRequest courseRule;
 }

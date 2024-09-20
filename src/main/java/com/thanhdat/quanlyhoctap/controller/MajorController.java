@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.MajorCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.MajorService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,13 +30,13 @@ public class MajorController {
     }
 
     @PostMapping
-    public ApiResponse<Void> create(@RequestBody MajorCrudRequest majorCrudRequest) {
+    public ApiResponse<Void> create(@RequestBody @Valid MajorCrudRequest majorCrudRequest) {
         majorService.create(majorCrudRequest);
         return ApiResponse.ok();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody MajorCrudRequest majorCrudRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody @Valid MajorCrudRequest majorCrudRequest) {
         majorService.update(id, majorCrudRequest);
         return ApiResponse.ok();
     }

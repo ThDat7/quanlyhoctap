@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.CourseOutlineEditTeacherRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +32,7 @@ public class CourseOutlineController {
     @PostMapping(value = "/{id}/current-teacher", consumes = {"multipart/form-data"})
     public ApiResponse<Void> teacherUpdate(@PathVariable Long id,
                                         @RequestPart(value = "file") MultipartFile file,
-                                        @RequestPart(value = "data") CourseOutlineEditTeacherRequest request) {
+                                        @RequestPart(value = "data") @Valid CourseOutlineEditTeacherRequest request) {
         courseOutlineService.updateByCurrentTeacher(id, file, request);
         return ApiResponse.ok();
     }

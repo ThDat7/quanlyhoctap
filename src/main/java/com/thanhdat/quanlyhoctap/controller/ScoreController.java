@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.ScoreUpdateRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.ScoreService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +24,7 @@ public class ScoreController {
     }
 
     @PostMapping("/update/current-teacher")
-    public ApiResponse<Void> updateScoreByCurrentTeacher(@RequestBody List<ScoreUpdateRequest> scoreUpdateRequests) {
+    public ApiResponse<Void> updateScoreByCurrentTeacher(@RequestBody @Valid List<ScoreUpdateRequest> scoreUpdateRequests) {
         scoreService.updateByCurrentTeacher(scoreUpdateRequests);
         return ApiResponse.ok();
     }

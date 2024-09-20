@@ -4,6 +4,7 @@ import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
 import com.thanhdat.quanlyhoctap.service.EducationProgramService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -43,7 +44,7 @@ public class EducationProgramController {
     }
 
     @PostMapping
-    public ApiResponse<Void> create(@RequestBody EducationProgramCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody @Valid EducationProgramCrudRequest createRequest) {
         educationProgramService.create(createRequest);
         return ApiResponse.ok();
     }
@@ -60,7 +61,7 @@ public class EducationProgramController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody EducationProgramCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody @Valid EducationProgramCrudRequest updateRequest) {
         educationProgramService.update(id, updateRequest);
         return ApiResponse.ok();
     }

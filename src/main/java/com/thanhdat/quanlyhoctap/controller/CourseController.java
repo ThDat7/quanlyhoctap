@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.CourseService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,7 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping
-    public ApiResponse<Void> create(@RequestBody CourseCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody @Valid CourseCrudRequest createRequest) {
         courseService.create(createRequest);
         return ApiResponse.ok();
     }
@@ -36,7 +37,7 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody CourseCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody @Valid CourseCrudRequest updateRequest) {
         courseService.update(id, updateRequest);
         return ApiResponse.ok();
     }

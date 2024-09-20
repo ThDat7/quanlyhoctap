@@ -6,6 +6,7 @@ import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
 import com.thanhdat.quanlyhoctap.dto.response.SettingCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SettingViewCrudResponse;
 import com.thanhdat.quanlyhoctap.service.SettingService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +27,7 @@ public class SettingController {
     }
 
     @PutMapping("/{key}")
-    public ApiResponse<Void> update(@PathVariable String key, @RequestBody SettingCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable String key, @RequestBody @Valid SettingCrudRequest updateRequest) {
         settingService.update(key, updateRequest);
         return ApiResponse.ok();
     }

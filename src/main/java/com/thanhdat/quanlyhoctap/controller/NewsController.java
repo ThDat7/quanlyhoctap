@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.controller;
 import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.NewsService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +30,7 @@ public class NewsController {
 
 
     @PostMapping
-    public ApiResponse<Void> create(@RequestBody NewsCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody @Valid NewsCrudRequest createRequest) {
         newsService.create(createRequest);
         return ApiResponse.ok();
     }
@@ -46,7 +47,7 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody NewsCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody @Valid NewsCrudRequest updateRequest) {
         newsService.update(id, updateRequest);
         return ApiResponse.ok();
     }
