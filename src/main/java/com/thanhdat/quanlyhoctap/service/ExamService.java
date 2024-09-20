@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExamService {
 
-    List<? extends ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId);
+    List<ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId);
 
     List<MidtermExamResponse> getByCurrentTeacherAndSemester(Long semesterId);
 

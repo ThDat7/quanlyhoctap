@@ -1,15 +1,11 @@
 package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.request.MajorCrudRequest;
-import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
-import com.thanhdat.quanlyhoctap.dto.response.MajorCrudResponse;
-import com.thanhdat.quanlyhoctap.dto.response.MajorViewCrudResponse;
-import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
+import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.MajorService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,35 +19,35 @@ public class MajorController {
     MajorService majorService;
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<MajorCrudResponse>> getAll(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(majorService.getAll(params));
+    public ApiResponse<DataWithCounterDto<MajorCrudResponse>> getAll(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(majorService.getAll(params));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MajorViewCrudResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(majorService.getById(id));
+    public ApiResponse<MajorViewCrudResponse> getById(@PathVariable Long id) {
+        return ApiResponse.ok(majorService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody MajorCrudRequest majorCrudRequest) {
+    public ApiResponse<Void> create(@RequestBody MajorCrudRequest majorCrudRequest) {
         majorService.create(majorCrudRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody MajorCrudRequest majorCrudRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody MajorCrudRequest majorCrudRequest) {
         majorService.update(id, majorCrudRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         majorService.delete(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping("/select-options")
-    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions() {
-        return ResponseEntity.ok(majorService.getSelectOptions());
+    public ApiResponse<List<SelectOptionResponse>> getSelectOptions() {
+        return ApiResponse.ok(majorService.getSelectOptions());
     }
 }

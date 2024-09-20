@@ -7,7 +7,6 @@ import com.thanhdat.quanlyhoctap.service.EducationProgramService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,47 +21,47 @@ public class EducationProgramController {
     CourseOutlineService courseOutlineService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<DataWithCounterDto>> search(@RequestParam Map<String, String> params) {
+    public ApiResponse<List<DataWithCounterDto>> search(@RequestParam Map<String, String> params) {
         DataWithCounterDto dwcCourseOutlines = courseOutlineService.search(params);
         DataWithCounterDto dwcEducationPrograms = educationProgramService.search(params);
-        return ResponseEntity.ok(List.of(dwcCourseOutlines, dwcEducationPrograms));
+        return ApiResponse.ok(List.of(dwcCourseOutlines, dwcEducationPrograms));
     }
 
     @GetMapping("/view/{id}")
-    public ResponseEntity<EducationProgramViewDto> getView(@PathVariable Long id) {
-        return ResponseEntity.ok(educationProgramService.getView(id));
+    public ApiResponse<EducationProgramViewDto> getView(@PathVariable Long id) {
+        return ApiResponse.ok(educationProgramService.getView(id));
     }
 
     @GetMapping("/clone-batching/fromYear/{fromYear}/toYear/{toYear}")
-    public ResponseEntity<EducationProgramCloneBatchingResponse> cloneBatching(@PathVariable int fromYear, @PathVariable int toYear) {
-        return ResponseEntity.ok(educationProgramService.cloneBatching(fromYear, toYear));
+    public ApiResponse<EducationProgramCloneBatchingResponse> cloneBatching(@PathVariable int fromYear, @PathVariable int toYear) {
+        return ApiResponse.ok(educationProgramService.cloneBatching(fromYear, toYear));
     }
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<EducationProgramCrudResponse>> getAll(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(educationProgramService.getAll(params));
+    public ApiResponse<DataWithCounterDto<EducationProgramCrudResponse>> getAll(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(educationProgramService.getAll(params));
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody EducationProgramCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody EducationProgramCrudRequest createRequest) {
         educationProgramService.create(createRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         educationProgramService.delete(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
-        return ResponseEntity.ok(educationProgramService.getById(id));
+    public ApiResponse<EducationProgramViewCrudResponse> getById(@PathVariable Long id) {
+        return ApiResponse.ok(educationProgramService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody EducationProgramCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody EducationProgramCrudRequest updateRequest) {
         educationProgramService.update(id, updateRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 }

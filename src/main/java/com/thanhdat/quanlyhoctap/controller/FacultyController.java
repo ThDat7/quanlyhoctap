@@ -6,7 +6,6 @@ import com.thanhdat.quanlyhoctap.service.FacultyService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,35 +19,35 @@ public class FacultyController {
     FacultyService faculTyService;
 
     @GetMapping("/select-options")
-    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions(){
-        return ResponseEntity.ok(faculTyService.getAllForSelect());
+    public ApiResponse<List<SelectOptionResponse>> getSelectOptions(){
+        return ApiResponse.ok(faculTyService.getAllForSelect());
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody FacultyCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody FacultyCrudRequest createRequest) {
         faculTyService.create(createRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         faculTyService.delete(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<FacultyCrudResponse>> getAll(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(faculTyService.getAll(params));
+    public ApiResponse<DataWithCounterDto<FacultyCrudResponse>> getAll(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(faculTyService.getAll(params));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FacultyViewCrudResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(faculTyService.getById(id));
+    public ApiResponse<FacultyViewCrudResponse> getById(@PathVariable Long id) {
+        return ApiResponse.ok(faculTyService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody FacultyCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody FacultyCrudRequest updateRequest) {
         faculTyService.update(id, updateRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 }

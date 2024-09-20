@@ -6,7 +6,6 @@ import com.thanhdat.quanlyhoctap.service.CourseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,40 +19,40 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CourseCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody CourseCrudRequest createRequest) {
         courseService.create(createRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         courseService.delete(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseViewCrudResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(courseService.getById(id));
+    public ApiResponse<CourseViewCrudResponse> getById(@PathVariable Long id) {
+        return ApiResponse.ok(courseService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CourseCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody CourseCrudRequest updateRequest) {
         courseService.update(id, updateRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<CourseCrudResponse>> getAll(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(courseService.getAll(params));
+    public ApiResponse<DataWithCounterDto<CourseCrudResponse>> getAll(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(courseService.getAll(params));
     }
 
     @GetMapping("/types")
-    public ResponseEntity<List<SelectOptionResponse>> getTypes() {
-        return ResponseEntity.ok(courseService.getTypes());
+    public ApiResponse<List<SelectOptionResponse>> getTypes() {
+        return ApiResponse.ok(courseService.getTypes());
     }
 
     @GetMapping("/select-options")
-    public ResponseEntity<List<SelectOptionResponse>> getSelectOptions() {
-        return ResponseEntity.ok(courseService.getSelectOptions());
+    public ApiResponse<List<SelectOptionResponse>> getSelectOptions() {
+        return ApiResponse.ok(courseService.getSelectOptions());
     }
 }

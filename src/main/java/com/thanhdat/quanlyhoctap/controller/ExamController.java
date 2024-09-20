@@ -1,14 +1,11 @@
 package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.request.UpdateMidtermExamRequest;
-import com.thanhdat.quanlyhoctap.dto.response.AvailableDateForMidtermExamResponse;
-import com.thanhdat.quanlyhoctap.dto.response.ExamScheduleResponse;
-import com.thanhdat.quanlyhoctap.dto.response.MidtermExamResponse;
+import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.ExamService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +18,25 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping("/semester/{semesterId}/current-student")
-    public ResponseEntity<List<? extends ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Long semesterId) {
-        return ResponseEntity.ok(examService.getByCurrentStudentAndSemester(semesterId));
+    public ApiResponse<List<ExamScheduleResponse>> getByCurrentStudentAndSemester(@PathVariable Long semesterId) {
+        return ApiResponse.ok(examService.getByCurrentStudentAndSemester(semesterId));
     }
 
     @GetMapping("/semester/{semesterId}/current-teacher")
-    public ResponseEntity<List<MidtermExamResponse>> getByCurrentTeacherAndSemester(@PathVariable Long semesterId) {
-        return ResponseEntity.ok(examService.getByCurrentTeacherAndSemester(semesterId));
+    public ApiResponse<List<MidtermExamResponse>> getByCurrentTeacherAndSemester(@PathVariable Long semesterId) {
+        return ApiResponse.ok(examService.getByCurrentTeacherAndSemester(semesterId));
     }
 
     @GetMapping("/course-class/{courseClassId}/available-date-midterm-exam")
-    public ResponseEntity<List<AvailableDateForMidtermExamResponse>> getAvailableDateMidtermExam(@PathVariable Long courseClassId) {
-        return ResponseEntity.ok(examService.getAvailableDateMidtermExam(courseClassId));
+    public ApiResponse<List<AvailableDateForMidtermExamResponse>> getAvailableDateMidtermExam(
+                                                                    @PathVariable Long courseClassId) {
+        return ApiResponse.ok(examService.getAvailableDateMidtermExam(courseClassId));
     }
 
     @PostMapping("/course-class/{courseClassId}/midterm-exam/current-teacher")
-    public ResponseEntity updateMidtermExam(@PathVariable Long courseClassId, @RequestBody UpdateMidtermExamRequest updateMidtermExamRequest) {
+    public ApiResponse<Void> updateMidtermExam(@PathVariable Long courseClassId,
+                                               @RequestBody UpdateMidtermExamRequest updateMidtermExamRequest) {
         examService.updateMidtermExamCurrentTeacher(courseClassId, updateMidtermExamRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 }

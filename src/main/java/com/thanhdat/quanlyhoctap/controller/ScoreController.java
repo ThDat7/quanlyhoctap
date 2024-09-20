@@ -6,8 +6,6 @@ import com.thanhdat.quanlyhoctap.service.ScoreService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +18,13 @@ public class ScoreController {
     ScoreService scoreService;
 
     @GetMapping("/course-class/{courseClassId}/current-teacher")
-    public ResponseEntity<List<ScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Long courseClassId) {
-        return ResponseEntity.ok(scoreService.getByCourseClassAndCurrentTeacher(courseClassId));
+    public ApiResponse<List<ScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Long courseClassId) {
+        return ApiResponse.ok(scoreService.getByCourseClassAndCurrentTeacher(courseClassId));
     }
 
     @PostMapping("/update/current-teacher")
-    public ResponseEntity updateScoreByCurrentTeacher(@RequestBody List<ScoreUpdateRequest> scoreUpdateRequests) {
+    public ApiResponse<Void> updateScoreByCurrentTeacher(@RequestBody List<ScoreUpdateRequest> scoreUpdateRequests) {
         scoreService.updateByCurrentTeacher(scoreUpdateRequests);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ApiResponse.ok();
     }
 }

@@ -1,6 +1,7 @@
 package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.request.SettingCrudRequest;
+import com.thanhdat.quanlyhoctap.dto.response.ApiResponse;
 import com.thanhdat.quanlyhoctap.dto.response.DataWithCounterDto;
 import com.thanhdat.quanlyhoctap.dto.response.SettingCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SettingViewCrudResponse;
@@ -8,7 +9,6 @@ import com.thanhdat.quanlyhoctap.service.SettingService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,18 +21,18 @@ public class SettingController {
     SettingService settingService;
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<SettingCrudResponse>> getAll(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(settingService.getAll(params));
+    public ApiResponse<DataWithCounterDto<SettingCrudResponse>> getAll(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(settingService.getAll(params));
     }
 
     @PutMapping("/{key}")
-    public ResponseEntity<Void> update(@PathVariable String key, @RequestBody SettingCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable String key, @RequestBody SettingCrudRequest updateRequest) {
         settingService.update(key, updateRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping("/{key}")
-    public ResponseEntity<SettingViewCrudResponse> getById(@PathVariable String key) {
-        return ResponseEntity.ok(settingService.getById(key));
+    public ApiResponse<SettingViewCrudResponse> getById(@PathVariable String key) {
+        return ApiResponse.ok(settingService.getById(key));
     }
 }

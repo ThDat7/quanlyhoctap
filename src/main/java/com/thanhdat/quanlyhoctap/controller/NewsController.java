@@ -6,7 +6,6 @@ import com.thanhdat.quanlyhoctap.service.NewsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,41 +18,41 @@ public class NewsController {
     NewsService newsService;
 
     @GetMapping("/view")
-    public ResponseEntity<DataWithCounterDto<NewsResponse>> getAllNews(@RequestParam Map<String, String> params){
-        return ResponseEntity.ok(newsService.getAll(params));
+    public ApiResponse<DataWithCounterDto<NewsResponse>> getAllNews(@RequestParam Map<String, String> params){
+        return ApiResponse.ok(newsService.getAll(params));
     }
 
     @GetMapping("/view/{id}")
-    public ResponseEntity<NewsViewResponse> get(@PathVariable Long id){
-        return ResponseEntity.ok(newsService.get(id));
+    public ApiResponse<NewsViewResponse> get(@PathVariable Long id){
+        return ApiResponse.ok(newsService.get(id));
     }
 
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody NewsCrudRequest createRequest) {
+    public ApiResponse<Void> create(@RequestBody NewsCrudRequest createRequest) {
         newsService.create(createRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         newsService.delete(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NewsViewCrudResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(newsService.getById(id));
+    public ApiResponse<NewsViewCrudResponse> getById(@PathVariable Long id) {
+        return ApiResponse.ok(newsService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody NewsCrudRequest updateRequest) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody NewsCrudRequest updateRequest) {
         newsService.update(id, updateRequest);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok();
     }
 
     @GetMapping
-    public ResponseEntity<DataWithCounterDto<NewsCrudResponse>> getAllCrud(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(newsService.getAllCrud(params));
+    public ApiResponse<DataWithCounterDto<NewsCrudResponse>> getAllCrud(@RequestParam Map<String, String> params) {
+        return ApiResponse.ok(newsService.getAllCrud(params));
     }
 }

@@ -36,7 +36,7 @@ public class ExamServiceImpl implements ExamService {
     ExamRepository examRepository;
 
     @Override
-    public List<? extends ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId) {
+    public List<ExamScheduleResponse> getByCurrentStudentAndSemester(Long semesterId) {
         Long currentStudentId = studentService.getCurrentStudentId();
         return courseClassRepository.findBySemesterIdAndStudentId(semesterId, currentStudentId)
                 .stream()
