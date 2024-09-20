@@ -1,12 +1,12 @@
 package com.thanhdat.quanlyhoctap.service;
 
-import com.thanhdat.quanlyhoctap.dto.request.MidtermExamScoreUpdateRequest;
-import com.thanhdat.quanlyhoctap.dto.response.TeacherScoreResponse;
+import com.thanhdat.quanlyhoctap.dto.request.ScoreUpdateRequest;
+import com.thanhdat.quanlyhoctap.dto.response.ScoreResponse;
 
 import java.util.List;
 
 public interface ScoreService {
-    List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId);
+    List<ScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId);
 
-    void updateByCurrentTeacher(List<MidtermExamScoreUpdateRequest> midtermExamScoreUpdateRequests);
+    void updateByCurrentTeacher(List<ScoreUpdateRequest> scoreUpdateRequests);
 }

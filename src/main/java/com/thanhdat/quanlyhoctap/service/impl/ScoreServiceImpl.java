@@ -1,7 +1,7 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
-import com.thanhdat.quanlyhoctap.dto.request.MidtermExamScoreUpdateRequest;
-import com.thanhdat.quanlyhoctap.dto.response.TeacherScoreResponse;
+import com.thanhdat.quanlyhoctap.dto.request.ScoreUpdateRequest;
+import com.thanhdat.quanlyhoctap.dto.response.ScoreResponse;
 import com.thanhdat.quanlyhoctap.entity.FactorScore;
 import com.thanhdat.quanlyhoctap.entity.Score;
 import com.thanhdat.quanlyhoctap.entity.Study;
@@ -29,45 +29,59 @@ public class ScoreServiceImpl implements ScoreService {
     StudyRepository studyRepository;
     TeacherService teacherService;
     CourseClassRepository courseClassRepository;
-    public List<TeacherScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId) {
+    public List<ScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId) {
         validateTeacherCanGetScoreResponse(courseClassId);
 
         List<Study> studies = studyRepository.findByCourseClassId(courseClassId);
-        return mapToTeacherScoreResponse(studies);
+        List<Score> midtermScores = studies.stream()
+                .map(Study::getScores)
+                .flatMap(e -> e.stream())
+                .filter(score -> score.getFactorScore().equals(FactorScore.PROCESS))
+                .collect(Collectors.toList());
+        return midtermScores.stream()
+                .map(this::mapToTeacherScoreResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void updateByCurrentTeacher(List<MidtermExamScoreUpdateRequest> midtermExamScoreUpdateRequests) {
-        List<Long> requestIds = midtermExamScoreUpdateRequests.stream()
-                .map(MidtermExamScoreUpdateRequest::getStudyId)
+    public void updateByCurrentTeacher(List<ScoreUpdateRequest> scoreUpdateRequests) {
+        List<Long> requestIds = scoreUpdateRequests.stream()
+                .map(ScoreUpdateRequest::getStudyId)
                 .collect(Collectors.toList());
 
         validateTeacherCanUpdateScoreRequest(requestIds);
+        updateScore(scoreUpdateRequests, FactorScore.PROCESS);
+    }
+
+    private void updateScore(List<ScoreUpdateRequest> scoreUpdateRequests, FactorScore factorScore) {
+        List<Long> requestIds = scoreUpdateRequests.stream()
+                .map(ScoreUpdateRequest::getStudyId)
+                .collect(Collectors.toList());
 
         List<Study> studies = studyRepository.findAllById(requestIds);
 
         studies.forEach(study -> {
-            MidtermExamScoreUpdateRequest matchRequest = midtermExamScoreUpdateRequests.stream()
+            ScoreUpdateRequest matchRequest = scoreUpdateRequests.stream()
                     .filter(request -> request.getStudyId().equals(study.getId()))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Study not found"));
 
-            Optional<Score> opMidtermScore = study.getScores().stream()
-                    .filter(score -> score.getFactorScore().equals(FactorScore.PROCESS))
+            Optional<Score> opScore = study.getScores().stream()
+                    .filter(score -> score.getFactorScore().equals(factorScore))
                     .findFirst();
 
-            Score midtermScore = opMidtermScore.get();
+            Score score = opScore.get();
 
-            if (midtermScore == null) {
-                midtermScore = Score.builder()
-                        .factorScore(FactorScore.PROCESS)
+            if (score == null) {
+                score = Score.builder()
+                        .factorScore(factorScore)
                         .study(study)
                         .build();
-                study.getScores().add(midtermScore);
+                study.getScores().add(score);
             }
 
-            midtermScore.setScore(matchRequest.getScore());
+            score.setScore(matchRequest.getScore());
         });
 
         studyRepository.saveAll(studies);
@@ -101,20 +115,12 @@ public class ScoreServiceImpl implements ScoreService {
             throw new RuntimeException("Course class is not in un locked semester");
     }
 
-    private List<TeacherScoreResponse> mapToTeacherScoreResponse(List<Study> studies) {
-        return studies.stream()
-                .map(study -> {
-                    Float processScore = (float) study.getScores().stream()
-                            .filter(score -> score.getFactorScore().equals(FactorScore.PROCESS))
-                            .mapToDouble(score -> score.getScore())
-                            .sum();
-                    return TeacherScoreResponse.builder()
-                            .studyId(study.getId())
-                            .studentFirstName(study.getStudent().getUser().getFirstName())
-                            .studentLastName(study.getStudent().getUser().getLastName())
-                            .score(processScore)
-                            .build();
-                })
-                .collect(Collectors.toList());
+    private ScoreResponse mapToTeacherScoreResponse(Score score) {
+        return ScoreResponse.builder()
+                .studyId(score.getStudy().getId())
+                .studentFirstName(score.getStudy().getStudent().getUser().getFirstName())
+                .studentLastName(score.getStudy().getStudent().getUser().getLastName())
+                .score(score.getScore())
+                .build();
     }
 }

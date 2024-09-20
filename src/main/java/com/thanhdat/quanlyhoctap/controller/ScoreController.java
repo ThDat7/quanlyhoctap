@@ -1,6 +1,6 @@
 package com.thanhdat.quanlyhoctap.controller;
 
-import com.thanhdat.quanlyhoctap.dto.request.MidtermExamScoreUpdateRequest;
+import com.thanhdat.quanlyhoctap.dto.request.ScoreUpdateRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.service.ScoreService;
 import lombok.AccessLevel;
@@ -20,13 +20,13 @@ public class ScoreController {
     ScoreService scoreService;
 
     @GetMapping("/course-class/{courseClassId}/current-teacher")
-    public ResponseEntity<List<TeacherScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Long courseClassId) {
+    public ResponseEntity<List<ScoreResponse>> getScoreByCourseClassAndCurrentTeacher(@PathVariable Long courseClassId) {
         return ResponseEntity.ok(scoreService.getByCourseClassAndCurrentTeacher(courseClassId));
     }
 
     @PostMapping("/update/current-teacher")
-    public ResponseEntity updateScoreByCurrentTeacher(@RequestBody List<MidtermExamScoreUpdateRequest> midtermExamScoreUpdateRequests) {
-        scoreService.updateByCurrentTeacher(midtermExamScoreUpdateRequests);
+    public ResponseEntity updateScoreByCurrentTeacher(@RequestBody List<ScoreUpdateRequest> scoreUpdateRequests) {
+        scoreService.updateByCurrentTeacher(scoreUpdateRequests);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
