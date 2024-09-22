@@ -4,6 +4,8 @@ import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.Course;
 import com.thanhdat.quanlyhoctap.entity.CourseType;
+import com.thanhdat.quanlyhoctap.mapper.CourseMapper;
+import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseRepository;
 import com.thanhdat.quanlyhoctap.service.CourseService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
@@ -23,7 +25,11 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseServiceImpl implements CourseService {
     CourseRepository courseRepository;
+
     PagingHelper pagingHelper;
+
+    CourseMapper courseMapper;
+    UtilMapper utilMapper;
 
     @Override
     public void create(CourseCrudRequest createRequest) {
@@ -49,41 +55,17 @@ public class CourseServiceImpl implements CourseService {
         Pageable paging = pagingHelper.getPageable(params);
         Page<Course> page = courseRepository.findAll(paging);
         List<CourseCrudResponse> dto = page.getContent().stream()
-                .map(this::mapToCourseCrudResponse)
+                .map(courseMapper::toCourseCrudResponse)
                 .collect(Collectors.toList());
         long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
-    }
-
-    private CourseCrudResponse mapToCourseCrudResponse(Course course) {
-//        majors
-        return CourseCrudResponse.builder()
-                .id(course.getId())
-                .name(course.getName())
-                .code(course.getCode())
-                .credits(course.getCredits())
-                .build();
     }
 
     @Override
     public CourseViewCrudResponse getById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        return mapToCourseViewCrudResponse(course);
-    }
-
-    private CourseViewCrudResponse mapToCourseViewCrudResponse(Course course) {
-        // majors
-        return CourseViewCrudResponse.builder()
-                .id(course.getId())
-                .name(course.getName())
-                .code(course.getCode())
-                .credits(course.getCredits())
-                .type(course.getType())
-                .sessionInWeek(course.getSessionInWeek())
-                .theoryPeriod(course.getTheoryPeriod())
-                .practicePeriod(course.getPracticePeriod())
-                .build();
+        return courseMapper.toCourseViewCrudResponse(course);
     }
 
     @Override
@@ -105,7 +87,7 @@ public class CourseServiceImpl implements CourseService {
     public List<SelectOptionResponse> getTypes() {
         List<CourseType> types = List.of(CourseType.values());
         return types.stream()
-                .map(type -> mapToSelectOptionResponse(type, type.toString()))
+                .map(type -> utilMapper.toSelectOptionResponse(type, type.getDescription()))
                 .collect(Collectors.toList());
     }
 
@@ -113,15 +95,8 @@ public class CourseServiceImpl implements CourseService {
     public List<SelectOptionResponse> getSelectOptions() {
         List<Course> courses = courseRepository.findAll();
         return courses.stream()
-                .map(course -> mapToSelectOptionResponse(course.getId(), course.getName()))
+                .map(course -> utilMapper.toSelectOptionResponse(course.getId(), course.getName()))
                 .collect(Collectors.toList());
-    }
-
-    private SelectOptionResponse mapToSelectOptionResponse(Object value, String label) {
-        return SelectOptionResponse.builder()
-                .value(value)
-                .label(label)
-                .build();
     }
 
 }

@@ -7,6 +7,7 @@ import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.CourseOutline;
 import com.thanhdat.quanlyhoctap.entity.CourseRule;
 import com.thanhdat.quanlyhoctap.entity.OutlineStatus;
+import com.thanhdat.quanlyhoctap.mapper.CourseOutlineMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseOutlineRepository;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
 import com.thanhdat.quanlyhoctap.service.FileUploadService;
@@ -33,8 +34,12 @@ import static com.thanhdat.quanlyhoctap.specification.CourseOutlineSpecification
 public class CourseOutlineServiceImpl implements CourseOutlineService {
     CourseOutlineRepository courseOutlineRepository;
     PaginationProperties paginationProperties;
+
     TeacherService teacherService;
     FileUploadService fileUploadService;
+
+
+    CourseOutlineMapper courseOutlineMapper;
 
     @Override
     public DataWithCounterDto<CourseOutlineSearchDto> search(Map<String, String> params) {
@@ -62,7 +67,9 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         Pageable paging = PageRequest.of(page, pageSize);
 
         Page<CourseOutline> pageCourseOutlines = courseOutlineRepository.findAll(specification, paging);
-        List<CourseOutlineSearchDto> courseOutlinesDto = courseOutline2Dto(pageCourseOutlines.getContent());
+        List<CourseOutlineSearchDto> courseOutlinesDto = pageCourseOutlines.getContent().stream()
+                .map(courseOutlineMapper::toCourseOutlineSearchDto)
+                .collect(Collectors.toList());
         long total = pageCourseOutlines.getTotalElements();
         return new DataWithCounterDto(courseOutlinesDto, total);
     }
@@ -86,7 +93,9 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         Pageable paging = PageRequest.of(page, pageSize);
 
         Page<CourseOutline> pageCourseOutlines = courseOutlineRepository.findAll(specification, paging);
-        List<CourseOutlineTeacherResponse> courseOutlinesDto = mapToCourseOutlineTeacherResponse(pageCourseOutlines.getContent());
+        List<CourseOutlineTeacherResponse> courseOutlinesDto = pageCourseOutlines.getContent().stream()
+                .map(courseOutlineMapper::toCourseOutlineTeacherResponse)
+                .collect(Collectors.toList());
         long total = pageCourseOutlines.getTotalElements();
         return new DataWithCounterDto(courseOutlinesDto, total);
     }
@@ -105,7 +114,7 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         CourseOutline courseOutline = courseOutlineRepository.findOne(specification)
                 .orElseThrow(() -> new RuntimeException("Course Outline not found"));
 
-        return mapToCourseOutlineViewTeacherResponse(courseOutline);
+        return courseOutlineMapper.toCourseOutlineViewTeacherResponse(courseOutline);
     }
 
     @Override
@@ -166,53 +175,5 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         Boolean isCourseRuleValid = isMidtermFactorValid && isFinalTermFactorValid && isTotalFactorValid && isPassScoreValid;
         if (!isCourseRuleValid)
             throw new RuntimeException("Course rule is invalid");
-    }
-
-    private CourseOutlineViewTeacherResponse mapToCourseOutlineViewTeacherResponse(CourseOutline courseOutline) {
-        CourseRuleResponse courseRuleResponse = mapToCourseRuleResponse(courseOutline.getCourseRule());
-        return CourseOutlineViewTeacherResponse.builder()
-                .id(courseOutline.getId())
-                .courseName(courseOutline.getCourse().getName())
-                .courseCode(courseOutline.getCourse().getCode())
-                .url(courseOutline.getUrl())
-                .courseRule(courseRuleResponse)
-                .build();
-    }
-
-    private CourseRuleResponse mapToCourseRuleResponse(CourseRule courseRule) {
-        return CourseRuleResponse.builder()
-                .midTermFactor(courseRule.getMidTermFactor())
-                .finalTermFactor(courseRule.getFinalTermFactor())
-                .passScore(courseRule.getPassScore())
-                .build();
-    }
-
-    private List<CourseOutlineTeacherResponse> mapToCourseOutlineTeacherResponse(List<CourseOutline> courseOutlines) {
-        return courseOutlines.stream().map(co ->
-                CourseOutlineTeacherResponse.builder()
-                        .id(co.getId())
-                        .courseName(co.getCourse().getName())
-                        .courseCode(co.getCourse().getCode())
-                        .deadline(co.getDeadline())
-                        .status(co.getStatus())
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-    private List<CourseOutlineSearchDto> courseOutline2Dto(List<CourseOutline> cos) {
-        return cos.stream().map(co ->
-                        CourseOutlineSearchDto.builder()
-                                .id(co.getId())
-                                .courseName(co.getCourse().getName())
-                                .teacherName(String.format("%s %s",
-                                        co.getTeacher().getUser().getLastName(),
-                                        co.getTeacher().getUser().getFirstName()))
-                                .courseCredits(co.getCourse().getCredits())
-                                .years(co.getEducationProgramCourses().stream()
-                                        .map(epc -> epc.getEducationProgram().getSchoolYear())
-                                        .collect(Collectors.toList()))
-                                .url(co.getUrl())
-                                .build())
-                .collect(Collectors.toList());
     }
 }

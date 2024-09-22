@@ -1,9 +1,9 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
-import com.thanhdat.quanlyhoctap.config.PaginationProperties;
 import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.mapper.NewsMapper;
 import com.thanhdat.quanlyhoctap.repository.NewsRepository;
 import com.thanhdat.quanlyhoctap.repository.StaffRepository;
 import com.thanhdat.quanlyhoctap.service.NewsService;
@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +26,10 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
     NewsRepository newsRepository;
     StaffRepository staffRepository;
-    PaginationProperties paginationProperties;
+
     PagingHelper pagingHelper;
+
+    NewsMapper newsMapper;
 
     @Override
     public void create(NewsCrudRequest createRequest) {
@@ -57,18 +58,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsViewCrudResponse getById(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
-        return mapToNewsViewCrudDto(news);
-    }
-
-    private NewsViewCrudResponse mapToNewsViewCrudDto(News news) {
-        return NewsViewCrudResponse.builder()
-                .id(news.getId())
-                .title(news.getTitle())
-                .content(news.getContent())
-                .authorId(news.getAuthor().getId())
-                .isImportant(news.getIsImportant())
-                .createdAt(news.getCreatedAt())
-                .build();
+        return newsMapper.toNewsViewCrudResponse(news);
     }
 
     @Override
@@ -95,59 +85,26 @@ public class NewsServiceImpl implements NewsService {
         Pageable paging = pagingHelper.getPageable(params);
         Page<News> page = newsRepository.findAll(paging);
         List<NewsCrudResponse> dto = page.getContent().stream()
-                .map(this::mapToNewsCrudResponse)
+                .map(newsMapper::toNewsCrudResponse)
                 .collect(Collectors.toList());
         long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
     }
 
-    private NewsCrudResponse mapToNewsCrudResponse(News news) {
-        return NewsCrudResponse.builder()
-                .id(news.getId())
-                .title(news.getTitle())
-                .isImportant(news.getIsImportant())
-                .createdAt(news.getCreatedAt())
-                .authorName(news.getAuthor().getFullName())
-                .build();
-    }
-
     public DataWithCounterDto<NewsResponse> getAll(Map<String, String> params) {
-        Integer page = 0;
-        Integer pageSize = paginationProperties.getPageSize();
-
-        if (params.containsKey("page"))
-            page = Integer.parseInt(params.get("page")) - 1;
-
-        Pageable paging = PageRequest.of(page, pageSize);
+        Pageable paging = pagingHelper.getPageable(params);
 
         Page<News> pageNews = newsRepository.findAll(paging);
         long total = pageNews.getTotalElements();
-        List<NewsResponse> newsDto = mapToNewsDto(pageNews.getContent());
+        List<NewsResponse> newsDto = pageNews.getContent().stream()
+                .map(newsMapper::toNewsResponse)
+                .collect(Collectors.toList());
         return new DataWithCounterDto(newsDto, total);
     }
 
     public NewsViewResponse get(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
-        return mapToNewsViewDto(news);
-    }
-
-    private NewsViewResponse mapToNewsViewDto(News news) {
-        return NewsViewResponse.builder()
-                .id(news.getId())
-                .title(news.getTitle())
-                .content(news.getContent())
-                .createdAt(news.getCreatedAt())
-                .build();
-    }
-
-    private List<NewsResponse> mapToNewsDto(List<News> news) {
-        return news.stream().map(n -> NewsResponse.builder()
-                .id(n.getId())
-                .title(n.getTitle())
-                .createdAt(n.getCreatedAt())
-                .isImportant(n.getIsImportant())
-                .build())
-        .collect(Collectors.toList());
+        return newsMapper.toNewsViewResponse(news);
     }
 }

@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.dto.response.InvoiceResponse;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.mapper.InvoiceMapper;
 import com.thanhdat.quanlyhoctap.repository.InvoiceRepository;
 import com.thanhdat.quanlyhoctap.repository.MajorRepository;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
@@ -21,10 +22,14 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InvoiceServiceImpl implements InvoiceService {
     StudyRepository studyRepository;
-    StudentService studentService;
     MajorRepository majorRepository;
     InvoiceRepository invoiceRepository;
+
+    StudentService studentService;
     SettingService settingService;
+
+    private final InvoiceMapper invoiceMapper;
+
     public List<InvoiceResponse> getByCurrentStudentAndSemester(Long semesterId) {
         Long semesterIdForRegister = settingService.getSemesterIdForRegister();
         // need more check for register is open to return temporary invoice
@@ -42,7 +47,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .map(InvoiceDetail::getCourseClass)
                 .map(CourseClass::getCourse)
                 .collect(Collectors.toList());
-        return mapToInvoiceResponse(courses, specializeTuition, generalTuition);
+        return tuitionCalculator(courses, specializeTuition, generalTuition);
     }
 
     private List<InvoiceResponse> getTemporaryInvoice(Long semesterId) {
@@ -56,23 +61,18 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .map(Study::getCourseClass)
                 .map(CourseClass::getCourse)
                 .collect(Collectors.toList());
-        return mapToInvoiceResponse(courses, specializeTuition, generalTuition);
+        return tuitionCalculator(courses, specializeTuition, generalTuition);
     }
 
-    private List<InvoiceResponse> mapToInvoiceResponse(List<Course> courses,
-                                                       Integer specializeTuition,
-                                                       Integer generalTuition) {
+    private List<InvoiceResponse> tuitionCalculator(List<Course> courses,
+                                                    Integer specializeTuition,
+                                                    Integer generalTuition) {
         return courses.stream()
                 .map(course -> {
                     CourseType courseType = course.getType();
                     Integer tuitionPerCredit = courseType == CourseType.SPECIALIZE ? specializeTuition : generalTuition;
                     Integer tuition = Math.round(tuitionPerCredit * course.getCredits());
-                    return InvoiceResponse.builder()
-                            .courseName(course.getName())
-                            .courseCode(course.getCode())
-                            .courseCredits(course.getCredits())
-                            .tuition(tuition)
-                            .build();
+                    return invoiceMapper.toInvoiceResponse(course, tuition);
                 })
                 .collect(Collectors.toList());
     }

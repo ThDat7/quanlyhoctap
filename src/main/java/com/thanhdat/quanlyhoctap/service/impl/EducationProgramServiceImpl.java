@@ -4,9 +4,11 @@ import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCourseRequest;
 import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.mapper.EducationProgramMapper;
 import com.thanhdat.quanlyhoctap.repository.*;
 import com.thanhdat.quanlyhoctap.service.EducationProgramService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
+import com.thanhdat.quanlyhoctap.util.SemesterCalculator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,11 +32,14 @@ import static com.thanhdat.quanlyhoctap.specification.EducationProgramSpecificat
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EducationProgramServiceImpl implements EducationProgramService {
     EducationProgramRepository educationProgramRepository;
-    PagingHelper pagingHelper;
     EducationProgramCourseRepository educationProgramCourseRepository;
     MajorRepository majorRepository;
     SemesterRepository semesterRepository;
     CourseRepository courseRepository;
+
+    PagingHelper pagingHelper;
+
+    EducationProgramMapper educationProgramMapper;
 
     public DataWithCounterDto search(Map<String, String> params) {
         Specification<EducationProgram> specification = Specification.where(null);
@@ -47,7 +52,9 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         Pageable paging = pagingHelper.getPageable(params);
 
         Page<EducationProgram> pageEducationPrograms = educationProgramRepository.findAll(specification, paging);
-        List<EducationProgramSearchDto> educationProgramsDto = educationProgram2Dto(pageEducationPrograms.getContent());
+        List<EducationProgramSearchDto> educationProgramsDto = pageEducationPrograms.getContent().stream()
+                .map(educationProgramMapper::toEducationProgramSearchDto)
+                .collect(Collectors.toList());
         long total = pageEducationPrograms.getTotalElements();
         return new DataWithCounterDto<>(educationProgramsDto, total);
     }
@@ -59,7 +66,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
             throw new RuntimeException("Education program not found");
 
         EducationProgram ep = oEP.get();
-        return educationProgram2ViewDto(ep);
+        return educationProgramMapper.toEducationProgramViewDto(ep);
     }
 
     @Override
@@ -103,7 +110,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         Pageable paging = pagingHelper.getPageable(params);
         Page<EducationProgram> page = educationProgramRepository.findAll(paging);
         List<EducationProgramCrudResponse> dto = page.getContent().stream()
-                .map(this::mapToEducationProgramCrudResponse)
+                .map(educationProgramMapper::toEducationProgramCrudResponse)
                 .collect(Collectors.toList());
         long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
@@ -120,7 +127,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
                 .build();
         if (createRequest.getEducationProgramCourses() != null) {
             List<EducationProgramCourse> epcs = createRequest.getEducationProgramCourses().stream()
-                    .map(epcRequest -> mapToEducationProgramCourse(epcRequest, ep))
+                    .map(epcRequest -> buildEducationProgramCourse(epcRequest, ep))
                     .collect(Collectors.toList());
             ep.setEducationProgramCourses(epcs);
         }
@@ -137,12 +144,12 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     public EducationProgramViewCrudResponse getById(Long id) {
         EducationProgram educationProgram = educationProgramRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Education program not found"));
-        return mapToEducationProgramViewCrudResponse(educationProgram);
+        return educationProgramMapper.toEducationProgramViewCrudResponse(educationProgram);
     }
 
-    private EducationProgramCourse mapToEducationProgramCourse(EducationProgramCourseRequest epcRequest, EducationProgram ep) {
-        Integer semesterInYear = calculateSemesterInYear(epcRequest.getSemester());
-        Integer yearFromEP = calculateYearFromEP(epcRequest.getSemester());
+    private EducationProgramCourse buildEducationProgramCourse(EducationProgramCourseRequest epcRequest, EducationProgram ep) {
+        Integer semesterInYear = SemesterCalculator.calculateSemesterInYear(epcRequest.getSemester());
+        Integer yearFromEP = SemesterCalculator.calculateYearFromEP(epcRequest.getSemester());
         Integer realYear = ep.getSchoolYear() + yearFromEP;
         Semester semester = semesterRepository.findBySemesterAndYear(semesterInYear, realYear)
                 .orElseThrow(() -> new RuntimeException("Semester not found"));
@@ -152,19 +159,6 @@ public class EducationProgramServiceImpl implements EducationProgramService {
                 .semester(semester)
                 .course(course)
                 .educationProgram(ep)
-                .build();
-    }
-
-    private EducationProgramViewCrudResponse mapToEducationProgramViewCrudResponse(EducationProgram ep) {
-        List<EducationProgramCourseResponse> epcs = ep.getEducationProgramCourses().stream()
-                .map(epc -> mapToEducationProgramCourseResponse(ep, epc))
-                .collect(Collectors.toList());
-
-        return EducationProgramViewCrudResponse.builder()
-                .id(ep.getId())
-                .majorId(ep.getMajor().getId())
-                .schoolYear(ep.getSchoolYear())
-                .educationProgramCourses(epcs)
                 .build();
     }
 
@@ -196,12 +190,12 @@ public class EducationProgramServiceImpl implements EducationProgramService {
                     .findFirst()
                     .orElseGet(() -> EducationProgramCourse.builder().educationProgram(ep).build());
 
-            Integer oldSemesterInEP = calculateSemesterInEP(ep, oldEpc.getSemester());
+            Integer oldSemesterInEP = SemesterCalculator.calculateSemesterInEP(ep, oldEpc.getSemester());
             Boolean isSetNewSemester = oldSemesterInEP == null
                     || !oldSemesterInEP.equals(newEpc.getSemester());
             if (isSetNewSemester) {
-                Integer semesterInYear = calculateSemesterInYear(newEpc.getSemester());
-                Integer yearFromEP = calculateYearFromEP(newEpc.getSemester());
+                Integer semesterInYear = SemesterCalculator.calculateSemesterInYear(newEpc.getSemester());
+                Integer yearFromEP = SemesterCalculator.calculateYearFromEP(newEpc.getSemester());
                 Integer realYear = ep.getSchoolYear() + yearFromEP;
 
                 Semester semester = semesterRepository.findBySemesterAndYear(semesterInYear, realYear)
@@ -223,102 +217,10 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         ep.getEducationProgramCourses().addAll(epcsToSave);
     }
 
-
-    private Integer calculateSemesterInYear(Integer semesterInEP) {
-        Integer maxSemesterInYear = 3;
-        Integer moduleSemester = semesterInEP % maxSemesterInYear;
-        Boolean isLastSemester = moduleSemester == 0;
-
-        if (isLastSemester)
-            return maxSemesterInYear;
-        return moduleSemester;
-    }
-
-    private Integer calculateYearFromEP(Integer semesterInEP) {
-        Integer maxSemesterInYear = 3;
-        Integer moduleSemester = semesterInEP % maxSemesterInYear;
-        Boolean isLastSemester = moduleSemester == 0;
-
-        if (isLastSemester)
-            return semesterInEP / maxSemesterInYear - 1;
-        return semesterInEP / maxSemesterInYear;
-    }
-
     private void validateCanCloneBatching(int fromYear, int toYear) {
         Integer countToYear = educationProgramRepository.countBySchoolYear(toYear);
         Boolean isToYearEmpty = countToYear == 0;
         if (!isToYearEmpty)
             throw new RuntimeException("To year is not empty");
     }
-
-
-    private EducationProgramCrudResponse mapToEducationProgramCrudResponse(EducationProgram educationProgram) {
-        Integer numberOfCourses = educationProgram.getEducationProgramCourses().size();
-        return EducationProgramCrudResponse.builder()
-                .id(educationProgram.getId())
-                .majorName(educationProgram.getMajor().getName())
-                .schoolYear(educationProgram.getSchoolYear())
-                .numberOfCourses(numberOfCourses)
-                .build();
-    }
-
-    private EducationProgramCourseResponse mapToEducationProgramCourseResponse(EducationProgram educationProgram,
-                                                                               EducationProgramCourse epc) {
-        Course course = epc.getCourse();
-        CourseOutline courseOutline = epc.getCourseOutline();
-        Long courseOutlineId = courseOutline == null ? null : courseOutline.getId();
-        String courseOutlineUrl = courseOutline == null ? null : courseOutline.getUrl();
-        Integer semesterOnProgram = calculateSemesterInEP(educationProgram, epc.getSemester());
-
-        return EducationProgramCourseResponse.builder()
-                .id(epc.getId())
-                .courseOutlineId(courseOutlineId)
-                .courseId(course.getId())
-                .semester(semesterOnProgram)
-                .courseOutlineUrl(courseOutlineUrl)
-                .build();
-    }
-
-    private Integer calculateSemesterInEP(EducationProgram ep, Semester semester) {
-        if (semester == null)
-            return null;
-
-        Integer countSchoolYear = semester.getYear() - ep.getSchoolYear();
-        return countSchoolYear * 3 + semester.getSemester();
-    }
-
-    private EducationProgramCourseDto mapToEducationProgramCourseDto(EducationProgram ep,
-                                                                     EducationProgramCourse epc) {
-        Integer semesterOnProgram = calculateSemesterInEP(ep, epc.getSemester());
-        return EducationProgramCourseDto.builder()
-                .courseOutlineId(epc.getCourseOutline().getId())
-                .courseName(epc.getCourseOutline().getCourse().getName())
-                .semester(semesterOnProgram)
-                .courseOutlineUrl(epc.getCourseOutline().getUrl())
-                .build();
-    }
-
-    private EducationProgramViewDto educationProgram2ViewDto(EducationProgram ep) {
-        List<EducationProgramCourseDto> epcs = ep.getEducationProgramCourses().stream()
-                .map(epc -> mapToEducationProgramCourseDto(ep, epc))
-                .collect(Collectors.toList());
-
-        return EducationProgramViewDto.builder()
-                .id(ep.getId())
-                .majorName(ep.getMajor().getName())
-                .schoolYear(ep.getSchoolYear())
-                .educationProgramCourses(epcs)
-                .build();
-    }
-
-    private List<EducationProgramSearchDto> educationProgram2Dto(List<EducationProgram> eps) {
-        return eps.stream().map(ep ->
-                        EducationProgramSearchDto.builder()
-                                .id(ep.getId())
-                                .majorName(ep.getMajor().getName())
-                                .schoolYear(ep.getSchoolYear())
-                                .build())
-                .collect(Collectors.toList());
-    }
-
 }

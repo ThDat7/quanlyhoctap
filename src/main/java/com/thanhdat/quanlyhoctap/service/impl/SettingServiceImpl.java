@@ -6,6 +6,7 @@ import com.thanhdat.quanlyhoctap.dto.response.SettingCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SettingViewCrudResponse;
 import com.thanhdat.quanlyhoctap.entity.Setting;
 import com.thanhdat.quanlyhoctap.helper.settingbag.RegisterCourseSettingType;
+import com.thanhdat.quanlyhoctap.mapper.SettingMapper;
 import com.thanhdat.quanlyhoctap.repository.SettingRepository;
 import com.thanhdat.quanlyhoctap.service.SettingService;
 import com.thanhdat.quanlyhoctap.util.PagingHelper;
@@ -26,7 +27,10 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SettingServiceImpl implements SettingService {
     SettingRepository settingRepository;
+
     PagingHelper pagingHelper;
+
+    SettingMapper settingMapper;
 
     public Long getSemesterIdForRegister() {
         Optional<Setting> setting = settingRepository.findById(RegisterCourseSettingType
@@ -40,14 +44,7 @@ public class SettingServiceImpl implements SettingService {
     public SettingViewCrudResponse getById(String key) {
         Setting setting = settingRepository.findById(key)
                 .orElseThrow(() -> new RuntimeException("Setting not found"));
-        return mapToSettingViewCrudResponse(setting);
-    }
-
-    private SettingViewCrudResponse mapToSettingViewCrudResponse(Setting setting) {
-        return SettingViewCrudResponse.builder()
-                .key(setting.getKey())
-                .value(setting.getValue())
-                .build();
+        return settingMapper.toSettingViewCrudResponse(setting);
     }
 
     @Override
@@ -64,17 +61,9 @@ public class SettingServiceImpl implements SettingService {
         Pageable paging = pagingHelper.getPageable(params);
         Page<Setting> page = settingRepository.findAll(paging);
         List<SettingCrudResponse> dto = page.getContent().stream()
-                .map(this::mapToSettingCrudResponse)
+                .map(settingMapper::toSettingCrudResponse)
                 .collect(Collectors.toList());
         long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
-    }
-
-    private SettingCrudResponse mapToSettingCrudResponse(Setting setting) {
-        return SettingCrudResponse.builder()
-                .id(setting.getKey())
-                .key(setting.getKey())
-                .value(setting.getValue())
-                .build();
     }
 }

@@ -3,6 +3,7 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.response.StudyResultCourseResponse;
 import com.thanhdat.quanlyhoctap.dto.response.StudyResultSemesterResponse;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.mapper.StudyMapper;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.StudentService;
 import com.thanhdat.quanlyhoctap.service.StudyResultService;
@@ -18,8 +19,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudyResultServiceImpl implements StudyResultService {
-    StudentService studentService;
     StudyRepository studyRepository;
+
+    StudentService studentService;
+
+    StudyMapper studyMapper;
 
     @Override
     public List<StudyResultSemesterResponse> getByCurrentStudent() {
@@ -85,13 +89,7 @@ public class StudyResultServiceImpl implements StudyResultService {
                 .sum() / allCredits;
         if (allCredits == 0) GPA4Semester = 0f;
 
-        return StudyResultSemesterResponse.builder()
-                .semester(semester.getSemester())
-                .year(semester.getYear())
-                .courses(resultCourses)
-                .creditsEarnedSemester(creditsEarnedSemester)
-                .GPA4Semester(GPA4Semester)
-                .build();
+        return studyMapper.toStudyResultSemesterResponse(semester, creditsEarnedSemester, GPA4Semester, resultCourses);
     }
 
     private void calculateGPAAndCreditsCumulative(List<StudyResultSemesterResponse> studyResultSemesters) {
@@ -181,42 +179,34 @@ public class StudyResultServiceImpl implements StudyResultService {
         }
     }
 
+    private Float calculateScore10(Float midTermFactor, Float finalTermFactor, Float midTermScore, Float finalTermScore) {
+        if (midTermFactor == null || finalTermFactor == null || midTermScore == null || finalTermScore == null) {
+            return null;
+        }
+
+        return midTermScore * midTermFactor + finalTermScore * finalTermFactor;
+    }
+
     private StudyResultCourseResponse calculateResultCourse(Study study) {
         CourseClass courseClass = study.getCourseClass();
         Float midTermFactor = courseClass.getCourseRule().getMidTermFactor();
         Float finalTermFactor = courseClass.getCourseRule().getFinalTermFactor();
         Float passScore = courseClass.getCourseRule().getPassScore();
 
-        StudyResultCourseResponse response = StudyResultCourseResponse.builder()
-                .courseCode(courseClass.getCourse().getCode())
-                .courseName(courseClass.getCourse().getName())
-                .credits(courseClass.getCourse().getCredits())
-                .studentClassName(study.getStudent().getStudentClass().getName())
-                .isPassed(false)
-                .build();
-
         Optional<Score> midTermOp = study.getScores().stream()
                 .filter(score -> score.getFactorScore().equals(FactorScore.PROCESS)).findFirst();
-        if (midTermOp.isEmpty()) return response;
+        Float midTermScore = midTermOp.map(Score::getScore).orElse(null);
 
-        Float midTermScore = midTermOp.get().getScore();
-        response.setMidTermScore(midTermScore);
         Optional<Score> finalTermOp = study.getScores().stream()
                 .filter(score -> score.getFactorScore().equals(FactorScore.FINAL)).findFirst();
-        if (finalTermOp.isEmpty()) return response;
+        Float finalTermScore = finalTermOp.map(Score::getScore).orElse(null);
 
-        Float finalTermScore = finalTermOp.get().getScore();
-        Float totalScore10 = midTermScore * midTermFactor + finalTermScore * finalTermFactor;
+        Float totalScore10 = calculateScore10(midTermFactor, finalTermFactor, midTermScore, finalTermScore);
         Float totalScore4 = convertToTotalScore4(totalScore10);
         String totalScoreLetter = convertToTotalScoreLetter(totalScore10);
-        Boolean isPassed = totalScore10 >= passScore;
+        Boolean isPassed = totalScore10 != null && passScore != null && totalScore10 >= passScore;
 
-        response.setIsPassed(isPassed);
-        response.setFinalTermScore(finalTermScore);
-        response.setTotalScore10(totalScore10);
-        response.setTotalScore4(totalScore4);
-        response.setTotalScoreLetter(totalScoreLetter);
-
-        return response;
+        return studyMapper.toStudyResultCourseResponse(courseClass, midTermScore, finalTermScore, totalScore10,
+                totalScore4, totalScoreLetter, isPassed);
     }
 }

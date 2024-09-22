@@ -5,6 +5,7 @@ import com.thanhdat.quanlyhoctap.dto.response.ScoreResponse;
 import com.thanhdat.quanlyhoctap.entity.FactorScore;
 import com.thanhdat.quanlyhoctap.entity.Score;
 import com.thanhdat.quanlyhoctap.entity.Study;
+import com.thanhdat.quanlyhoctap.mapper.ScoreMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
 import com.thanhdat.quanlyhoctap.service.ScoreService;
@@ -27,8 +28,12 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScoreServiceImpl implements ScoreService {
     StudyRepository studyRepository;
-    TeacherService teacherService;
     CourseClassRepository courseClassRepository;
+
+    TeacherService teacherService;
+
+    ScoreMapper scoreMapper;
+
     public List<ScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId) {
         validateTeacherCanGetScoreResponse(courseClassId);
 
@@ -39,7 +44,7 @@ public class ScoreServiceImpl implements ScoreService {
                 .filter(score -> score.getFactorScore().equals(FactorScore.PROCESS))
                 .collect(Collectors.toList());
         return midtermScores.stream()
-                .map(this::mapToTeacherScoreResponse)
+                .map(scoreMapper::toScoreResponse)
                 .collect(Collectors.toList());
     }
 
@@ -113,14 +118,5 @@ public class ScoreServiceImpl implements ScoreService {
         Boolean isCourseClassInUnLockedSemester = courseClassRepository.existsByIdAndSemesterNotLocked(courseClassId);
         if (!isCourseClassInUnLockedSemester)
             throw new RuntimeException("Course class is not in un locked semester");
-    }
-
-    private ScoreResponse mapToTeacherScoreResponse(Score score) {
-        return ScoreResponse.builder()
-                .studyId(score.getStudy().getId())
-                .studentFirstName(score.getStudy().getStudent().getUser().getFirstName())
-                .studentLastName(score.getStudy().getStudent().getUser().getLastName())
-                .score(score.getScore())
-                .build();
     }
 }

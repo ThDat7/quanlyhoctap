@@ -7,6 +7,8 @@ import com.thanhdat.quanlyhoctap.dto.response.MajorViewCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.entity.Faculty;
 import com.thanhdat.quanlyhoctap.entity.Major;
+import com.thanhdat.quanlyhoctap.mapper.MajorMapper;
+import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.FacultyRepository;
 import com.thanhdat.quanlyhoctap.repository.MajorRepository;
 import com.thanhdat.quanlyhoctap.service.MajorService;
@@ -27,14 +29,18 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MajorServiceImpl implements MajorService {
     MajorRepository majorRepository;
-    PagingHelper pagingHelper;
     FacultyRepository facultyRepository;
+    
+    PagingHelper pagingHelper;
+
+    UtilMapper utilMapper;
+    MajorMapper majorMapper;
 
     public DataWithCounterDto<MajorCrudResponse> getAll(Map<String, String> params) {
         Pageable paging = pagingHelper.getPageable(params);
             Page<Major> page = majorRepository.findAll(paging);
         List<MajorCrudResponse> dto = page.getContent().stream()
-                .map(this::mapToMajorCrudResponse)
+                .map(majorMapper::toMajorCrudResponse)
                 .collect(Collectors.toList());
         long total = page.getTotalElements();
         return new DataWithCounterDto<>(dto, total);
@@ -82,41 +88,14 @@ public class MajorServiceImpl implements MajorService {
     public MajorViewCrudResponse getById(Long id) {
         Major major = majorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Major not found"));
-        return mapToMajorViewCrudResponse(major);
+        return majorMapper.toMajorViewCrudResponse(major);
     }
 
     @Override
     public List<SelectOptionResponse> getSelectOptions() {
         List<Major> majors = majorRepository.findAll();
         return majors.stream()
-                .map(major -> mapToSelectOptionResponse(major.getId(), major.getName()))
+                .map(major -> utilMapper.toSelectOptionResponse(major.getId(), major.getName()))
                 .collect(Collectors.toList());
-    }
-
-    private SelectOptionResponse mapToSelectOptionResponse(Object value, String label) {
-        return SelectOptionResponse.builder()
-                .value(value)
-                .label(label)
-                .build();
-    }
-
-    private MajorViewCrudResponse mapToMajorViewCrudResponse(Major major) {
-        return MajorViewCrudResponse.builder()
-                .id(major.getId())
-                .name(major.getName())
-                .alias(major.getAlias())
-                .facultyId(major.getFaculty().getId())
-                .generalTuition(major.getGeneralTuition())
-                .specializeTuition(major.getSpecializeTuition())
-                .build();
-    }
-
-    private MajorCrudResponse mapToMajorCrudResponse(Major major) {
-        return MajorCrudResponse.builder()
-                .id(major.getId())
-                .name(major.getName())
-                .alias(major.getAlias())
-                .faculty(major.getFaculty().getName())
-                .build();
     }
 }

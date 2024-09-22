@@ -1,15 +1,14 @@
 package com.thanhdat.quanlyhoctap.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum CourseType {
-    SPECIALIZE {
-        @Override
-        public String toString() {
-            return "Chuyên ngành";
-        }
-    }, GENERAL {
-        @Override
-        public String toString() {
-            return "Đại cương";
-        }
-    }
+    SPECIALIZE("Chuyên ngành"),
+    GENERAL("Đại cương"),
+    ;
+
+    private final String description;
 }

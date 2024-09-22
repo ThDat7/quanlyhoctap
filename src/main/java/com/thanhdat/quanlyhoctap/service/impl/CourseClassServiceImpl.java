@@ -2,6 +2,7 @@ package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.dto.response.TeacherCourseClassTeachingResponse;
 import com.thanhdat.quanlyhoctap.entity.CourseClass;
+import com.thanhdat.quanlyhoctap.mapper.CourseClassMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.service.CourseClassService;
 import com.thanhdat.quanlyhoctap.service.TeacherService;
@@ -20,21 +21,15 @@ public class CourseClassServiceImpl implements CourseClassService {
     CourseClassRepository courseClassRepository;
     TeacherService teacherService;
 
+    CourseClassMapper courseClassMapper;
+
     @Override
     public List<TeacherCourseClassTeachingResponse> getCurrentTeacherTeaching(Long semesterId) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();
 
         List<CourseClass> courseClasses = courseClassRepository.findByTeacherIdAndSemesterId(currentTeacherId, semesterId);
-        return mapToTeacherCourseClassTeachingResponse(courseClasses);
-    }
-
-    private List<TeacherCourseClassTeachingResponse> mapToTeacherCourseClassTeachingResponse(List<CourseClass> courseClasses) {
         return courseClasses.stream()
-                .map(cc -> TeacherCourseClassTeachingResponse.builder()
-                            .id(cc.getId())
-                            .courseName(cc.getCourse().getName())
-                            .courseCode(cc.getCourse().getCode())
-                            .build())
+                .map(courseClassMapper::toTeacherCourseClassTeachingResponse)
                 .collect(Collectors.toList());
     }
 }
