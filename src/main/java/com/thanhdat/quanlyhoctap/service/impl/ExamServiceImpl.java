@@ -3,6 +3,8 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.request.UpdateMidtermExamRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.ExamMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.ExamRepository;
@@ -30,9 +32,9 @@ import java.util.stream.Collectors;
 public class ExamServiceImpl implements ExamService {
     ScheduleStudyRepository scheduleStudyRepository;
     ExamRepository examRepository;
+    CourseClassRepository courseClassRepository;
 
     StudentService studentService;
-    CourseClassRepository courseClassRepository;
     TeacherService teacherService;
     ScheduleStudyService scheduleStudyService;
 
@@ -50,6 +52,7 @@ public class ExamServiceImpl implements ExamService {
                 .toList();
     }
 
+//    need check again if exam not exist, teacher can request course class id to create it
     @Override
     public List<MidtermExamResponse> getByCurrentTeacherAndSemester(Long semesterId) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();
@@ -58,7 +61,7 @@ public class ExamServiceImpl implements ExamService {
                 .map(courseClass -> {
                     Exam midtermExam = courseClass.getExams().stream()
                             .filter(e -> e.getType() == ExamType.MIDTERM)
-                            .findFirst().get();
+                            .findFirst().orElseGet(() -> Exam.builder().build());
                     return examMapper.toMidtermExamResponse(courseClass, midtermExam);
                 }).collect(Collectors.toList());
     }
@@ -80,9 +83,10 @@ public class ExamServiceImpl implements ExamService {
     public void updateMidtermExamCurrentTeacher(Long courseClassId, UpdateMidtermExamRequest updateMidtermExamRequest) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();
         validateTeacherCanUpdateMidtermExam(currentTeacherId, courseClassId);
-        validateStartTimeMidtermExam(courseClassId, updateMidtermExamRequest.getStartTime());
 
-        ScheduleStudy scheduleStudy = getMatchedStartTime(courseClassId, updateMidtermExamRequest.getStartTime()).get();
+        ScheduleStudy scheduleStudy = getMatchedStartTime(courseClassId, updateMidtermExamRequest.getStartTime())
+                .orElseThrow(() ->
+                        new AppException(ErrorCode.MIDTERM_EXAM_START_TIME_NOT_IN_STUDY_TIMES));
 
         Optional<Exam> opMidtermExam = examRepository.findByCourseClassIdAndType(courseClassId, ExamType.MIDTERM);
         Exam midtermExam = opMidtermExam.orElseGet(() -> Exam.builder()
@@ -105,17 +109,10 @@ public class ExamServiceImpl implements ExamService {
     private void validateTeacherCanUpdateMidtermExam(Long teacherId, Long courseClassId) {
         Boolean isExistByIdAndSemesterNotLocked = courseClassRepository.existsByIdAndSemesterNotLocked(courseClassId);
         if (!isExistByIdAndSemesterNotLocked)
-            throw new RuntimeException("Course class is locked.");
+            throw new AppException(ErrorCode.COURSE_CLASS_LOCKED);
 
         Boolean isTeacherTeaching = courseClassRepository.existsByIdAndTeacherId(courseClassId, teacherId);
         if (!isTeacherTeaching)
-            throw new RuntimeException("You don't teach this course class.");
-    }
-
-    private void validateStartTimeMidtermExam(Long courseClassId, LocalDateTime startTime) {
-        Optional<ScheduleStudy> opMatched = getMatchedStartTime(courseClassId, startTime);
-
-        if (opMatched.isEmpty())
-            throw new RuntimeException("Start time of midterm exam must be in the schedule study times.");
+            throw new AppException(ErrorCode.NOT_TEACH_COURSE_CLASS);
     }
 }

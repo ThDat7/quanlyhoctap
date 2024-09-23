@@ -3,6 +3,8 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.request.NewsCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.NewsMapper;
 import com.thanhdat.quanlyhoctap.repository.NewsRepository;
 import com.thanhdat.quanlyhoctap.repository.StaffRepository;
@@ -33,11 +35,8 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void create(NewsCrudRequest createRequest) {
-        if (createRequest.getAuthorId() == null)
-            throw new RuntimeException("Author id is required");
-
         Staff author = staffRepository.findById(createRequest.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Staff not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
 
         News newNews = News.builder()
                 .title(createRequest.getTitle())
@@ -51,20 +50,24 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void delete(Long id) {
+        if (!newsRepository.existsById(id)) {
+            throw newsNotFound();
+        }
+
         newsRepository.deleteById(id);
     }
 
     @Override
     public NewsViewCrudResponse getById(Long id) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(this::newsNotFound);
         return newsMapper.toNewsViewCrudResponse(news);
     }
 
     @Override
     public void update(Long id, NewsCrudRequest updateRequest) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(this::newsNotFound);
 
         news.setTitle(updateRequest.getTitle());
         news.setContent(updateRequest.getContent());
@@ -73,7 +76,7 @@ public class NewsServiceImpl implements NewsService {
         Boolean isAuthorChanged = !news.getAuthor().getId().equals(updateRequest.getAuthorId());
         if (isAuthorChanged) {
             Staff author = staffRepository.findById(updateRequest.getAuthorId())
-                    .orElseThrow(() -> new RuntimeException("Staff not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
             news.setAuthor(author);
         }
 
@@ -104,7 +107,11 @@ public class NewsServiceImpl implements NewsService {
 
     public NewsViewResponse get(Long id) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(this::newsNotFound);
         return newsMapper.toNewsViewResponse(news);
+    }
+
+    private AppException newsNotFound() {
+        return new AppException(ErrorCode.NEWS_NOT_FOUND);
     }
 }

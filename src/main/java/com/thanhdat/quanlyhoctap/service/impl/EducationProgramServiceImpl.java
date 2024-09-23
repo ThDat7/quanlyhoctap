@@ -4,6 +4,8 @@ import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCourseRequest;
 import com.thanhdat.quanlyhoctap.dto.request.EducationProgramCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.EducationProgramMapper;
 import com.thanhdat.quanlyhoctap.repository.*;
 import com.thanhdat.quanlyhoctap.service.EducationProgramService;
@@ -21,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.thanhdat.quanlyhoctap.specification.EducationProgramSpecification.nameLike;
@@ -61,11 +62,9 @@ public class EducationProgramServiceImpl implements EducationProgramService {
 
     @Override
     public EducationProgramViewDto getView(Long id) {
-        Optional<EducationProgram> oEP =  educationProgramRepository.findById(id);
-        if (oEP.isEmpty())
-            throw new RuntimeException("Education program not found");
+        EducationProgram ep =  educationProgramRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.EDUCATION_PROGRAM_NOT_FOUND));
 
-        EducationProgram ep = oEP.get();
         return educationProgramMapper.toEducationProgramViewDto(ep);
     }
 
@@ -73,12 +72,16 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     @Transactional
     public EducationProgramCloneBatchingResponse cloneBatching(int fromYear, int toYear) {
         validateCanCloneBatching(fromYear, toYear);
-        Integer recordAdded = educationProgramRepository.cloneBatching(fromYear, toYear);
-        createSemestersForNewEP(toYear);
-        educationProgramCourseRepository.cloneBatching(fromYear, toYear);
-        return EducationProgramCloneBatchingResponse.builder()
-                .totalCloned(recordAdded)
-                .build();
+        try {
+            Integer recordAdded = educationProgramRepository.cloneBatching(fromYear, toYear);
+            createSemestersForNewEP(toYear);
+            educationProgramCourseRepository.cloneBatching(fromYear, toYear);
+            return EducationProgramCloneBatchingResponse.builder()
+                    .totalCloned(recordAdded)
+                    .build();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.CLONE_EDUCATION_PROGRAM_FAILED);
+        }
     }
 
     private void createSemestersForNewEP(int year) {
@@ -120,7 +123,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     @Transactional
     public void create(EducationProgramCrudRequest createRequest) {
         Major major = majorRepository.findById(createRequest.getMajorId())
-                .orElseThrow(() -> new RuntimeException("Major not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
         EducationProgram ep = EducationProgram.builder()
                 .major(major)
                 .schoolYear(createRequest.getSchoolYear())
@@ -137,13 +140,16 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     @Override
     @Transactional
     public void delete(Long id) {
+        if (!educationProgramRepository.existsById(id))
+            throw new AppException(ErrorCode.EDUCATION_PROGRAM_NOT_FOUND);
+
         educationProgramRepository.deleteById(id);
     }
 
     @Override
     public EducationProgramViewCrudResponse getById(Long id) {
         EducationProgram educationProgram = educationProgramRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Education program not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.EDUCATION_PROGRAM_NOT_FOUND));
         return educationProgramMapper.toEducationProgramViewCrudResponse(educationProgram);
     }
 
@@ -152,9 +158,9 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         Integer yearFromEP = SemesterCalculator.calculateYearFromEP(epcRequest.getSemester());
         Integer realYear = ep.getSchoolYear() + yearFromEP;
         Semester semester = semesterRepository.findBySemesterAndYear(semesterInYear, realYear)
-                .orElseThrow(() -> new RuntimeException("Semester not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
         Course course = courseRepository.findById(epcRequest.getCourseId())
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         return EducationProgramCourse.builder()
                 .semester(semester)
                 .course(course)
@@ -166,11 +172,11 @@ public class EducationProgramServiceImpl implements EducationProgramService {
     @Transactional
     public void update(Long id, EducationProgramCrudRequest updateRequest) {
         EducationProgram ep = educationProgramRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Education program not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.EDUCATION_PROGRAM_NOT_FOUND));
         Boolean isMajorChanged = !ep.getMajor().getId().equals(updateRequest.getMajorId());
         if (isMajorChanged) {
             Major major = majorRepository.findById(updateRequest.getMajorId())
-                    .orElseThrow(() -> new RuntimeException("Major not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
             ep.setMajor(major);
         }
         ep.setSchoolYear(updateRequest.getSchoolYear());
@@ -199,7 +205,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
                 Integer realYear = ep.getSchoolYear() + yearFromEP;
 
                 Semester semester = semesterRepository.findBySemesterAndYear(semesterInYear, realYear)
-                        .orElseThrow(() -> new RuntimeException("Semester not found"));
+                        .orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
                 oldEpc.setSemester(semester);
             }
             Boolean isSetNewCourse = oldEpc.getCourseOutline() == null
@@ -207,7 +213,7 @@ public class EducationProgramServiceImpl implements EducationProgramService {
 
             if (isSetNewCourse) {
                 Course course = courseRepository.findById(newEpc.getCourseId())
-                        .orElseThrow(() -> new RuntimeException("Course not found"));
+                        .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
                 oldEpc.setCourse(course);
             }
             return oldEpc;
@@ -221,6 +227,6 @@ public class EducationProgramServiceImpl implements EducationProgramService {
         Integer countToYear = educationProgramRepository.countBySchoolYear(toYear);
         Boolean isToYearEmpty = countToYear == 0;
         if (!isToYearEmpty)
-            throw new RuntimeException("To year is not empty");
+            throw new AppException(ErrorCode.EDUCATION_PROGRAM_CLONE_NOT_EMPTY);
     }
 }

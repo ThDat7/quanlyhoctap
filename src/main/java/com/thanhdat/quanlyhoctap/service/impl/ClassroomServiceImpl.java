@@ -35,7 +35,10 @@ public class ClassroomServiceImpl implements ClassroomService {
 //        need to check all dates in one semester
         LocalDate sampleStartDate = classroomAvailableRequest.getTimeToUseClassroomRequests().get(0).getStartTime().toLocalDate();
         LocalDate sampleEndDate = classroomAvailableRequest.getTimeToUseClassroomRequests().get(0).getEndTime().toLocalDate();
-        Semester semester = semesterRepository.findByDateRange(sampleStartDate, sampleEndDate);
+        Semester semester = semesterRepository.findByDateRange(sampleStartDate, sampleEndDate)
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Semester not found for date range: " + "start: %s, end: %s",
+                                sampleStartDate, sampleEndDate)));
 
         List<ScheduleStudy> schedules = scheduleStudyRepository.findBySemesterId(semester.getId());
         List<Exam> finalExams = examRepository.findBySemesterIdAndType(semester.getId(), ExamType.FINAL);
@@ -84,13 +87,8 @@ public class ClassroomServiceImpl implements ClassroomService {
     private Boolean isScheduleTimeConflict(DateTimeRange toUseDateTimeRange, ScheduleStudy schedule) {
         List<DateTimeRange> scheduleDateTimeRanges = scheduleStudyService.convertToDateTimeRanges(schedule);
         return scheduleDateTimeRanges.stream()
+//                should move overlaps, isWithinRange to logic, DateTimeRange only for data
                 .anyMatch(toUseDateTimeRange::overlaps);
     }
 
-    private Boolean isTimeConflict(DateTimeRange dateTimeRange,
-                                   LocalDateTime startTime, LocalDateTime endTime) {
-        Boolean isStartTimeConflict = dateTimeRange.isWithinRange(startTime);
-        Boolean isEndTimeConflict = dateTimeRange.isWithinRange(endTime);
-        return isStartTimeConflict || isEndTimeConflict;
-    }
 }

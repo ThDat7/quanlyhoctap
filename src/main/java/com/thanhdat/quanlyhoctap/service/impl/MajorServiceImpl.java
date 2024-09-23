@@ -7,6 +7,8 @@ import com.thanhdat.quanlyhoctap.dto.response.MajorViewCrudResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.entity.Faculty;
 import com.thanhdat.quanlyhoctap.entity.Major;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.MajorMapper;
 import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.FacultyRepository;
@@ -49,7 +51,7 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public void create(MajorCrudRequest majorCrudRequest) {
         Faculty faculty = facultyRepository.findById(majorCrudRequest.getFacultyId())
-                .orElseThrow(() -> new RuntimeException("Faculty not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
         Major newMajor = Major.builder()
                 .name(majorCrudRequest.getName())
                 .alias(majorCrudRequest.getAlias())
@@ -63,7 +65,7 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public void update(Long id, MajorCrudRequest majorCrudRequest) {
         Major oldMajor = majorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Major not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
 //        validate
         oldMajor.setName(majorCrudRequest.getName());
         oldMajor.setAlias(majorCrudRequest.getAlias());
@@ -73,7 +75,7 @@ public class MajorServiceImpl implements MajorService {
         Boolean isFacultyChanged = !oldMajor.getFaculty().getId().equals(majorCrudRequest.getFacultyId());
         if (isFacultyChanged) {
             Faculty newFaculty = facultyRepository.findById(majorCrudRequest.getFacultyId())
-                    .orElseThrow(() -> new RuntimeException("Faculty not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
             oldMajor.setFaculty(newFaculty);
         }
         majorRepository.save(oldMajor);
@@ -81,13 +83,17 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public void delete(Long id) {
+        if (!majorRepository.existsById(id)) {
+            throw new AppException(ErrorCode.MAJOR_NOT_FOUND);
+        }
+
         majorRepository.deleteById(id);
     }
 
     @Override
     public MajorViewCrudResponse getById(Long id) {
         Major major = majorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Major not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
         return majorMapper.toMajorViewCrudResponse(major);
     }
 

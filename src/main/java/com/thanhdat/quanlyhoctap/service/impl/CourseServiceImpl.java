@@ -4,6 +4,8 @@ import com.thanhdat.quanlyhoctap.dto.request.CourseCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.Course;
 import com.thanhdat.quanlyhoctap.entity.CourseType;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.CourseMapper;
 import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseRepository;
@@ -47,6 +49,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(Long id) {
+        if (!courseRepository.existsById(id)) {
+            throw new AppException(ErrorCode.COURSE_NOT_FOUND);
+        }
+
         courseRepository.deleteById(id);
     }
 
@@ -64,14 +70,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseViewCrudResponse getById(Long id) {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         return courseMapper.toCourseViewCrudResponse(course);
     }
 
     @Override
     public void update(Long id, CourseCrudRequest updateRequest) {
         Course oldCourse = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
 //        validate
         oldCourse.setName(updateRequest.getName());
         oldCourse.setCode(updateRequest.getCode());

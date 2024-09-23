@@ -5,6 +5,8 @@ import com.thanhdat.quanlyhoctap.dto.response.ScoreResponse;
 import com.thanhdat.quanlyhoctap.entity.FactorScore;
 import com.thanhdat.quanlyhoctap.entity.Score;
 import com.thanhdat.quanlyhoctap.entity.Study;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.ScoreMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.StudyRepository;
@@ -70,21 +72,20 @@ public class ScoreServiceImpl implements ScoreService {
             ScoreUpdateRequest matchRequest = scoreUpdateRequests.stream()
                     .filter(request -> request.getStudyId().equals(study.getId()))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Study not found"));
+//                    or study not found?
+                    .orElseThrow(() -> new AppException(ErrorCode.NOT_TEACH_COURSE_CLASS));
 
-            Optional<Score> opScore = study.getScores().stream()
-                    .filter(score -> score.getFactorScore().equals(factorScore))
-                    .findFirst();
-
-            Score score = opScore.get();
-
-            if (score == null) {
-                score = Score.builder()
-                        .factorScore(factorScore)
-                        .study(study)
-                        .build();
-                study.getScores().add(score);
-            }
+            Score score = study.getScores().stream()
+                    .filter(e -> e.getFactorScore().equals(factorScore))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        Score newscore = Score.builder()
+                                .factorScore(factorScore)
+                                .study(study)
+                                .build();
+                        study.getScores().add(newscore);
+                        return newscore;
+                    });
 
             score.setScore(matchRequest.getScore());
         });
@@ -92,6 +93,7 @@ public class ScoreServiceImpl implements ScoreService {
         studyRepository.saveAll(studies);
     }
 
+//    refactor: logic of validate update and get score is same. validateTeacherCanActionOnScore
     private void validateTeacherCanUpdateScoreRequest(List<Long> requestIds) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();
 
@@ -104,7 +106,7 @@ public class ScoreServiceImpl implements ScoreService {
 
         Boolean isRequestValid = countValidRequest == requestIds.size();
         if (!isRequestValid)
-            throw new RuntimeException("Teacher is not teach this course class");
+            throw new AppException(ErrorCode.NOT_TEACH_COURSE_CLASS);
     }
 
     private void validateTeacherCanGetScoreResponse(Long courseClassId) {
@@ -113,10 +115,10 @@ public class ScoreServiceImpl implements ScoreService {
         Boolean isTeacherTeachCourseClass = courseClassRepository.existsByIdAndTeacherId(courseClassId, currentTeacherId);
 
         if (!isTeacherTeachCourseClass)
-            throw new RuntimeException("Teacher is not teach this course class");
+            throw new AppException(ErrorCode.NOT_TEACH_COURSE_CLASS);
 
         Boolean isCourseClassInUnLockedSemester = courseClassRepository.existsByIdAndSemesterNotLocked(courseClassId);
         if (!isCourseClassInUnLockedSemester)
-            throw new RuntimeException("Course class is not in un locked semester");
+            throw new AppException(ErrorCode.COURSE_CLASS_LOCKED);
     }
 }

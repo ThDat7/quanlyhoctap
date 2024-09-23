@@ -3,6 +3,8 @@ package com.thanhdat.quanlyhoctap.service.impl;
 import com.thanhdat.quanlyhoctap.dto.request.FacultyCrudRequest;
 import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.Faculty;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.FacultyMapper;
 import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.FacultyRepository;
@@ -40,11 +42,15 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public void delete(Long id) {
+        if (!facultyRepository.existsById(id)) {
+            throw new AppException(ErrorCode.FACULTY_NOT_FOUND);
+        }
+
         facultyRepository.deleteById(id);
     }
 
     @Override
-    public DataWithCounterDto<FacultyCrudResponse> getAll(Map params) {
+    public DataWithCounterDto<FacultyCrudResponse> getAll(Map<String, String> params) {
         Pageable paging = pagingHelper.getPageable(params);
         Page<Faculty> page = facultyRepository.findAll(paging);
         List<FacultyCrudResponse> dto = page.getContent().stream()
@@ -57,7 +63,7 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public FacultyViewCrudResponse getById(Long id) {
         Faculty faculty = facultyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Faculty not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
         return facultyMapper.toFacultyViewCrudResponse(faculty);
     }
     @Override
@@ -72,7 +78,7 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public void update(Long id, FacultyCrudRequest updateRequest) {
         Faculty faculty = facultyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Faculty not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
         faculty.setName(updateRequest.getName());
         faculty.setAlias(updateRequest.getAlias());
         facultyRepository.save(faculty);

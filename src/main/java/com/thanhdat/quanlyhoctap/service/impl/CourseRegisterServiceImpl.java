@@ -2,6 +2,8 @@ package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.dto.response.StudentCourseRegisterResponse;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.CourseClassMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseClassRepository;
 import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
@@ -34,7 +36,8 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
     @Override
     public void registerCourse(Long courseClassId) {
         Student currentStudent = studentService.getCurrentStudent();
-        CourseClass courseClass = courseClassRepository.findById(courseClassId).get();
+        CourseClass courseClass = courseClassRepository.findById(courseClassId)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_CLASS_NOT_FOUND));
 
         validateStudentCanRegister(currentStudent, courseClass);
 
@@ -45,7 +48,11 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
                 .courseClass(courseClass)
                 .timeRegistered(now)
                 .build();
-        studyRepository.save(study);
+        try {
+            studyRepository.save(study);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.REGISTER_COURSE_FAILED);
+        }
     }
 
     @Transactional
@@ -53,14 +60,19 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
         Long currentStudentId = studentService.getCurrentStudentId();
         validateIsOnRegisterTime();
 
-        studyRepository.deleteByStudentIdAndCourseClassId(currentStudentId, courseClassId);
+        try {
+            studyRepository.deleteByStudentIdAndCourseClassId(currentStudentId, courseClassId);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNREGISTER_COURSE_FAILED);
+        }
     }
 
     @Override
     public StudentCourseRegisterResponse getStudentCourseRegisterInfo() {
         validateStudentViewRegister();
 
-        Semester semesterRegister = semesterRepository.findForRegister();
+        Semester semesterRegister = semesterRepository.findForRegister().orElseThrow(
+                () -> new AppException(ErrorCode.SEMESTER_FOR_REGISTER_NOT_FOUND));
         Long currentStudentId = studentService.getCurrentStudentId();
         List<Study> registered = studyRepository.findByStudentIdAndSemesterId(currentStudentId, semesterRegister.getId());
         Map<CourseClass, Integer> openWithRemaining = findOpenRegisterInStudentEducationProgram(currentStudentId);
@@ -78,9 +90,9 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
 
     private void validateStudentViewRegister() {
 //        Logic to check is available current student to view register. Will code later
-        Boolean isValidate = true;
-        if (!isValidate)
-            throw new RuntimeException("You is not available to view register now");
+//        Boolean isValidate = true;
+//        if (!isValidate)
+//            throw new RuntimeException("You is not available to view register now");
     }
 
     private void validateStudentCanRegister(Student student, CourseClass courseClass) {
@@ -90,21 +102,21 @@ public class CourseRegisterServiceImpl implements CourseRegisterService {
 
         Boolean isRegistered = studyRepository.existsByStudentIdAndCourseClassId(studentId, courseClassId);
         if (isRegistered)
-            throw new RuntimeException("You have already registered this course");
+            throw new AppException(ErrorCode.COURSE_ALREADY_REGISTERED);
 
         Boolean isHaveCourseClassAndNotFull = courseClassRepository.existsByIdAndNotFull(courseClassId);
         if (!isHaveCourseClassAndNotFull)
-            throw new RuntimeException("Course class is full");
+            throw new AppException(ErrorCode.COURSE_CLASS_FULL);
 
         Boolean isCourseInStudentEducationProgram = courseClassRepository.isCourseClassInStudentEducationProgram(courseClassId, studentId);
         if (!isCourseInStudentEducationProgram)
-            throw new RuntimeException("This course is not in your education program");
+            throw new AppException(ErrorCode.COURSE_NOT_IN_EDUCATION_PROGRAM);
     }
 
     private void validateIsOnRegisterTime() {
 //        Logic to check is available current student to register. Will code later
-        Boolean isValidate = true;
-        if (!isValidate)
-            throw new RuntimeException("It's not time to registering for courses now");
+//        Boolean isValidate = true;
+//        if (!isValidate)
+//            throw new RuntimeException("It's not time to registering for courses now");
     }
 }

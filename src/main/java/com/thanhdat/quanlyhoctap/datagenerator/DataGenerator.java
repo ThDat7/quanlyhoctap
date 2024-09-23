@@ -150,7 +150,8 @@ public class DataGenerator {
                     .build();
             epModel.getEducationProgramCourse().forEach(epcModel -> epcModel.getCoursesCode().forEach(cCode -> {
                 Course course = courseRepository.findByCode(cCode).get();
-                Semester semester = semesterRepository.findByYearAndSemester(epcModel.getYear(), epcModel.getSemester());
+                Semester semester = semesterRepository.findByYearAndSemester(epcModel.getYear(), epcModel.getSemester())
+                        .orElseThrow(() -> new RuntimeException("Semester not found"));
                 EducationProgramCourse educationProgramCourse = EducationProgramCourse.builder()
                         .semester(semester)
                         .course(course)

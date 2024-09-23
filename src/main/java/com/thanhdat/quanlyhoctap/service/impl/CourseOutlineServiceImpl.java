@@ -7,6 +7,8 @@ import com.thanhdat.quanlyhoctap.dto.response.*;
 import com.thanhdat.quanlyhoctap.entity.CourseOutline;
 import com.thanhdat.quanlyhoctap.entity.CourseRule;
 import com.thanhdat.quanlyhoctap.entity.OutlineStatus;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.CourseOutlineMapper;
 import com.thanhdat.quanlyhoctap.repository.CourseOutlineRepository;
 import com.thanhdat.quanlyhoctap.service.CourseOutlineService;
@@ -102,17 +104,10 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
 
     @Override
     public CourseOutlineViewTeacherResponse getViewByCurrentTeacher(Long id) {
-        Long currentTeacherId = teacherService.getCurrentTeacherId();
-        Specification<CourseOutline> specification = Specification.where(belongsToTeacherId(currentTeacherId));
-
-        Specification statusEqual = statusEqual(OutlineStatus.DOING);
-        statusEqual = statusEqual.or(statusEqual(OutlineStatus.COMPLETED));
-        specification = specification.and(statusEqual);
-
-        specification = specification.and(idEqual(id));
+        Specification<CourseOutline> specification = getDetailSpecification(id);
 
         CourseOutline courseOutline = courseOutlineRepository.findOne(specification)
-                .orElseThrow(() -> new RuntimeException("Course Outline not found"));
+                .orElseThrow(this::courseOutlineNotFoundException);
 
         return courseOutlineMapper.toCourseOutlineViewTeacherResponse(courseOutline);
     }
@@ -120,17 +115,17 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
     @Override
     public void updateByCurrentTeacher(Long id, MultipartFile file, CourseOutlineEditTeacherRequest request) {
         CourseRuleRequest courseRuleRequest = request.getCourseRule();
-        validateTeacherCanUpDate(id, courseRuleRequest);
+        validateTeacherCanUpDate(id);
 
         CourseOutline courseOutline = courseOutlineRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course Outline not found"));
+                .orElseThrow(this::courseOutlineNotFoundException);
         String folder = String.format("course-outline/%s/%s", courseOutline.getCourse().getCode(), courseOutline.getId());
         String url;
 
         try {
             url = fileUploadService.upload(file, folder);
         } catch (Exception e) {
-            throw new RuntimeException("Course Outline upload failed");
+            throw new AppException(ErrorCode.COURSE_OUTLINE_UPLOAD_FAILED);
         }
 
         CourseRule courseRule = courseOutline.getCourseRule();
@@ -149,7 +144,7 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         courseOutlineRepository.save(courseOutline);
     }
 
-    private void validateTeacherCanUpDate(Long id, CourseRuleRequest courseRuleRequest) {
+    private Specification<CourseOutline> getDetailSpecification(Long id) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();
         Specification<CourseOutline> specification = Specification.where(belongsToTeacherId(currentTeacherId));
 
@@ -158,22 +153,18 @@ public class CourseOutlineServiceImpl implements CourseOutlineService {
         specification = specification.and(statusEqual);
 
         specification = specification.and(idEqual(id));
+        return specification;
+    }
 
+    private void validateTeacherCanUpDate(Long id) {
+        Specification<CourseOutline> specification = getDetailSpecification(id);
         Boolean isCourseExist = courseOutlineRepository.exists(specification);
 
         if (!isCourseExist)
-            throw new RuntimeException("You can't update this course outline");
-        Float midtermExamFactor = courseRuleRequest.getMidTermFactor();
-        Float finalExamFactor = courseRuleRequest.getFinalTermFactor();
-        Float passScore = courseRuleRequest.getPassScore();
+            throw new AppException(ErrorCode.COURSE_OUTLINE_UPDATE_FORBIDDEN);
+    }
 
-        Boolean isMidtermFactorValid = midtermExamFactor >= 0 && midtermExamFactor <= 0.5;
-        Boolean isFinalTermFactorValid = finalExamFactor >= 0.5 && finalExamFactor <= 1;
-        Boolean isTotalFactorValid = midtermExamFactor + finalExamFactor == 1;
-        Boolean isPassScoreValid = passScore >= 4.0 && passScore <= 5.0;
-
-        Boolean isCourseRuleValid = isMidtermFactorValid && isFinalTermFactorValid && isTotalFactorValid && isPassScoreValid;
-        if (!isCourseRuleValid)
-            throw new RuntimeException("Course rule is invalid");
+    private AppException courseOutlineNotFoundException() {
+        return new AppException(ErrorCode.COURSE_OUTLINE_NOT_FOUND);
     }
 }

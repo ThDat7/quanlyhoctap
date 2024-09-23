@@ -2,6 +2,8 @@ package com.thanhdat.quanlyhoctap.service.impl;
 
 import com.thanhdat.quanlyhoctap.dto.response.InvoiceResponse;
 import com.thanhdat.quanlyhoctap.entity.*;
+import com.thanhdat.quanlyhoctap.exception.code.ErrorCode;
+import com.thanhdat.quanlyhoctap.exception.type.AppException;
 import com.thanhdat.quanlyhoctap.mapper.InvoiceMapper;
 import com.thanhdat.quanlyhoctap.repository.InvoiceRepository;
 import com.thanhdat.quanlyhoctap.repository.MajorRepository;
@@ -15,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,18 +35,24 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public List<InvoiceResponse> getByCurrentStudentAndSemester(Long semesterId) {
         Long semesterIdForRegister = settingService.getSemesterIdForRegister();
-        // need more check for register is open to return temporary invoice
+
         Boolean isMatchSemesterRegister = semesterId.equals(semesterIdForRegister);
         if (isMatchSemesterRegister)
             return getTemporaryInvoice(semesterId);
 
         Long currentStudentId = studentService.getCurrentStudent().getId();
-        Invoice invoice = invoiceRepository
+        Optional<Invoice> opInvoice = invoiceRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
-        Major major = majorRepository.getByStudentId(currentStudentId);
+
+        if (opInvoice.isEmpty())
+            return List.of();
+
+        Major major = majorRepository.getByStudentId(currentStudentId)
+                .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
+
         Integer specializeTuition = major.getSpecializeTuition();
         Integer generalTuition = major.getGeneralTuition();
-        List<Course> courses = invoice.getInvoiceDetails().stream()
+        List<Course> courses = opInvoice.get().getInvoiceDetails().stream()
                 .map(InvoiceDetail::getCourseClass)
                 .map(CourseClass::getCourse)
                 .collect(Collectors.toList());
@@ -54,7 +63,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         Long currentStudentId = studentService.getCurrentStudent().getId();
         List<Study> studies = studyRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
-        Major major = majorRepository.getByStudentId(currentStudentId);
+        Major major = majorRepository.getByStudentId(currentStudentId)
+                .orElseThrow(() -> new AppException(ErrorCode.MAJOR_NOT_FOUND));
+
         Integer specializeTuition = major.getSpecializeTuition();
         Integer generalTuition = major.getGeneralTuition();
         List<Course> courses = studies.stream()

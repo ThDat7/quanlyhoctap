@@ -13,7 +13,7 @@ public interface FacultyService {
 
     void delete(Long id);
 
-    DataWithCounterDto<FacultyCrudResponse> getAll(Map params);
+    DataWithCounterDto<FacultyCrudResponse> getAll(Map<String, String> params);
 
     FacultyViewCrudResponse getById(Long id);
 

@@ -14,5 +14,5 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
     @Query("SELECT sc.major FROM StudentClass sc " +
             "LEFT JOIN sc.students st " +
             "WHERE st.id = :studentId")
-    Major getByStudentId(Long studentId);
+    Optional<Major> getByStudentId(Long studentId);
 }
