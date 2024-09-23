@@ -21,30 +21,30 @@ This system is designed to facilitate seamless management of academic activities
 
 ### Student
 
-Search and view course syllabus.
-View curricula by faculty and academic year.
-Register for courses.
-View announcements.
-Check timetables and exam schedules.
-View academic results and tuition fees.
-Verify student enrollment status.
+- Search and view course syllabus.
+- View curricula by faculty and academic year.
+- Register for courses.
+- View announcements.
+- Check timetables and exam schedules.
+- View academic results and tuition fees.
+- Verify student enrollment status.
 
 ### Lecturer
 
-Create and edit course syllabus.
-View teaching schedules.
-Input grades.
-Manage exam schedules.
+- Create and edit course syllabus.
+- View teaching schedules.
+- Input grades.
+- Manage exam schedules.
 
 ### Staff & Admin
 
-Manage courses and curricula.
-Automatically & manually copy curricula and course syllabus from previous years.
-Assign faculty for course syllabus preparation.
-Manage announcements, departments, programs, and tuition fees.
-Manage user accounts.
-Automatically & manually create registration classes and schedules.
-Manage student enrollment status.
+- Manage courses and curricula.
+- Automatically & manually copy curricula and course syllabus from previous years.
+- Assign faculty for course syllabus preparation.
+- Manage announcements, departments, programs, and tuition fees.
+- Manage user accounts.
+- Automatically & manually create registration classes and schedules.
+- Manage student enrollment status.
 
 ## Technologies Used
 
@@ -57,7 +57,7 @@ Manage student enrollment status.
 ### Frameworks
 
 - Spring MVC
-- ReactJs ([Frontend repository](#about-client-repository))
+- ReactJs ([Frontend repository](#about-frontend-repository))
 
 ## Interface
 
