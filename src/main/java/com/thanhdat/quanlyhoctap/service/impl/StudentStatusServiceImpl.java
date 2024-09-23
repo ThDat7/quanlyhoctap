@@ -25,7 +25,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
     StudentStatusMapper studentStatusMapper;
 
     public List<StudentStatusResponse> getByCurrentStudent() {
-        Long currentStudentId = studentService.getCurrentStudent().getId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         List<StudentStatus> studentStatuses =  studentStatusRepository.findByStudentId(currentStudentId);
 
         return studentStatuses.stream()

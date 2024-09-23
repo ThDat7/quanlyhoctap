@@ -77,10 +77,13 @@ public enum ValidationErrorCode {
     SETTING_VALUE_SIZE(2034, "Setting value size must be between {min} and {max}"),
 
     SUM_MID_FINAL_TERM_FACTOR(2035, "Sum of mid term factor and final term factor must be equal to 1"),
+
+    INTROSPECT_TOKEN_NOT_NULL(2036, "Introspect token must not be null"),
+    USERNAME_NOT_NULL(2037, "Username must not be null"),
+    PASSWORD_NOT_NULL(2038, "Password must not be null"),
     ;
 
     private final int code;
     private final String baseMessage;
     private final HttpStatusCode statusCode = HttpStatus.BAD_REQUEST;
 }
-

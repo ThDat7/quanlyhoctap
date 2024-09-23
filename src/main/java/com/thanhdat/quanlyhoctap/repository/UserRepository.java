@@ -1,12 +1,12 @@
 package com.thanhdat.quanlyhoctap.repository;
 
-import com.thanhdat.quanlyhoctap.entity.Teacher;
+import com.thanhdat.quanlyhoctap.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface TeacherRepository extends JpaRepository<Teacher, Long> {
-    Optional<Teacher> findByUserId(long userId);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }

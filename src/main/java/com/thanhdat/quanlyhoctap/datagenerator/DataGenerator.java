@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -34,6 +35,7 @@ public class DataGenerator {
     DataLoader dataLoader;
     Faker faker;
     GenerateCourseClassHelper generateCourseClassHelper;
+    PasswordEncoder passwordEncoder;
 
     private static final String COMMON_PASSWORD = "123";
     public static final Integer SEMESTER_IN_YEAR = 3;
@@ -76,11 +78,12 @@ public class DataGenerator {
         name = String.join(" ", tokens);
         String firstName = tokens[tokens.length - 1];
         String lastName = name.replace(firstName, "").trim();
+        String password = passwordEncoder.encode(COMMON_PASSWORD);
 
         return User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .password(COMMON_PASSWORD)
+                .password(password)
                 .build();
     }
 

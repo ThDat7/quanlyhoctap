@@ -40,7 +40,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (isMatchSemesterRegister)
             return getTemporaryInvoice(semesterId);
 
-        Long currentStudentId = studentService.getCurrentStudent().getId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         Optional<Invoice> opInvoice = invoiceRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
 
@@ -60,7 +60,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private List<InvoiceResponse> getTemporaryInvoice(Long semesterId) {
-        Long currentStudentId = studentService.getCurrentStudent().getId();
+        Long currentStudentId = studentService.getCurrentStudentId();
         List<Study> studies = studyRepository
                 .findByStudentIdAndSemesterId(currentStudentId, semesterId);
         Major major = majorRepository.getByStudentId(currentStudentId)

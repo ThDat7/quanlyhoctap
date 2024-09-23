@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
 
+    USER_NOT_FOUND(1100, "User not found", HttpStatus.NOT_FOUND),
     COURSE_CLASS_NOT_FOUND(1101, "Course Class not found", HttpStatus.NOT_FOUND),
     EDUCATION_PROGRAM_NOT_FOUND(1102, "Education Program not found", HttpStatus.NOT_FOUND),
     COURSE_OUTLINE_NOT_FOUND(1103, "Course Outline not found", HttpStatus.NOT_FOUND),
@@ -37,6 +38,9 @@ public enum ErrorCode {
     COURSE_CLASS_LOCKED(1015, "Course class is locked.", HttpStatus.CONFLICT),
     NOT_TEACH_COURSE_CLASS(1016, "You don't teach this course class", HttpStatus.FORBIDDEN),
     DATABASE_DUPLICATE_ENTRY(1017, "Duplicate value {value} in {table}", HttpStatus.CONFLICT),
+
+    UNAUTHENTICATED(1500, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(1501, "Don't have permission", HttpStatus.FORBIDDEN),
     ;
 
     private final int code;
