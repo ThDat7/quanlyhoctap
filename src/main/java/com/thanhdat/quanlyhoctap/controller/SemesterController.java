@@ -31,4 +31,9 @@ public class SemesterController {
     public ApiResponse<List<SemesterDetailResponse>> getCurrentTeacherSemesters(){
         return ApiResponse.ok(semesterService.getByCurrentTeacher());
     }
+
+    @GetMapping
+    public ApiResponse<List<SemesterDetailResponse>> getAllSemesters(){
+        return ApiResponse.ok(semesterService.getAll());
+    }
 }

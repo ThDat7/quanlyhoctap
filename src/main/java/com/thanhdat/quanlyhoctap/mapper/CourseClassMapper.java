@@ -21,6 +21,13 @@ public abstract class CourseClassMapper {
     @Mapping(source = "course.code", target = "courseCode")
     public abstract TeacherCourseClassTeachingResponse toTeacherCourseClassTeachingResponse(CourseClass courseClass);
 
+    @Mapping(source = "course.name", target = "courseName")
+    @Mapping(source = "course.code", target = "courseCode")
+    @Mapping(source = "course.credits", target = "courseCredits")
+    @Mapping(source = "studentClass.name", target = "studentClassName")
+    @Mapping(source = "teacher.fullName", target = "teacherName")
+    public abstract CourseClassResponse toCourseClassResponse(CourseClass courseClass);
+
     @Mapping(source = "courseClass.id", target = "id")
     @Mapping(source = "courseClass.course.code", target = "courseCode")
     @Mapping(source = "courseClass.course.name", target = "courseName")

@@ -93,6 +93,25 @@ public class ScoreServiceImpl implements ScoreService {
         studyRepository.saveAll(studies);
     }
 
+    @Override
+    public List<ScoreResponse> getFinalExamScoreByCourseClass(Long courseClassId) {
+        List<Study> studies = studyRepository.findByCourseClassId(courseClassId);
+        List<Score> finalScores = studies.stream()
+                .map(Study::getScores)
+                .flatMap(e -> e.stream())
+                .filter(score -> score.getFactorScore().equals(FactorScore.FINAL))
+                .collect(Collectors.toList());
+        return finalScores.stream()
+                .map(scoreMapper::toScoreResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateFinalExamScore(List<ScoreUpdateRequest> scoreUpdateRequests) {
+        updateScore(scoreUpdateRequests, FactorScore.FINAL);
+    }
+
 //    refactor: logic of validate update and get score is same. validateTeacherCanActionOnScore
     private void validateTeacherCanUpdateScoreRequest(List<Long> requestIds) {
         Long currentTeacherId = teacherService.getCurrentTeacherId();

@@ -47,6 +47,11 @@ public class CourseController {
         return ApiResponse.ok(courseService.getAll(params));
     }
 
+    @GetMapping("/semester/{semesterId}/from-course-class")
+    public ApiResponse<List<CourseResponse>> getFromCourseClassBySemester(@PathVariable Long semesterId) {
+        return ApiResponse.ok(courseService.getFromCourseClassBySemester(semesterId));
+    }
+
     @GetMapping("/types")
     public ApiResponse<List<SelectOptionResponse>> getTypes() {
         return ApiResponse.ok(courseService.getTypes());

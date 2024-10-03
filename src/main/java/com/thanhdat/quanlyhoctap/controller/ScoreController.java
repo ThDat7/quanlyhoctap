@@ -28,4 +28,15 @@ public class ScoreController {
         scoreService.updateByCurrentTeacher(scoreUpdateRequests);
         return ApiResponse.ok();
     }
+
+    @GetMapping("/course-class/{courseClassId}/final-exam")
+    public ApiResponse<List<ScoreResponse>> getFinalExamScoreByCourseClass(@PathVariable Long courseClassId) {
+        return ApiResponse.ok(scoreService.getFinalExamScoreByCourseClass(courseClassId));
+    }
+
+    @PostMapping("/update/final-exam")
+    public ApiResponse<Void> updateFinalExamScore(@RequestBody @Valid List<ScoreUpdateRequest> scoreUpdateRequests) {
+        scoreService.updateFinalExamScore(scoreUpdateRequests);
+        return ApiResponse.ok();
+    }
 }

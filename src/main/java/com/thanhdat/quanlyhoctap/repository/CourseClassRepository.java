@@ -1,6 +1,8 @@
 package com.thanhdat.quanlyhoctap.repository;
 
 import com.thanhdat.quanlyhoctap.entity.CourseClass;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -58,4 +60,6 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Long> 
     Boolean existsByIdAndSemesterNotLocked(Long id);
 
     List<CourseClass> findByTeacherIdAndSemesterId(Long teacherId, Long semesterId);
+
+    Page<CourseClass> findBySemesterIdAndCourseId(Long semesterId, Long courseId, Pageable pageable);
 }

@@ -11,4 +11,6 @@ public interface SemesterService {
     List<SemesterDetailResponse> getByCurrentTeacher();
 
     List<SemesterDetailResponse> getNoneLocked();
+
+    List<SemesterDetailResponse> getAll();
 }

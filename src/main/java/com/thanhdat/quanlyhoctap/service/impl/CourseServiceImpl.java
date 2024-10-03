@@ -90,6 +90,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseResponse> getFromCourseClassBySemester(Long semesterId) {
+        List<Course> courses = courseRepository.findFromCourseClassBySemester(semesterId);
+        return courses.stream()
+                .map(courseMapper::toCourseResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<SelectOptionResponse> getTypes() {
         List<CourseType> types = List.of(CourseType.values());
         return types.stream()
@@ -104,5 +112,4 @@ public class CourseServiceImpl implements CourseService {
                 .map(course -> utilMapper.toSelectOptionResponse(course.getId(), course.getName()))
                 .collect(Collectors.toList());
     }
-
 }

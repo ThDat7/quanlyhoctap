@@ -13,6 +13,8 @@ public interface CourseService {
     CourseViewCrudResponse getById(Long id);
     void update(Long id, CourseCrudRequest updateRequest);
 
+    List<CourseResponse> getFromCourseClassBySemester(Long semesterId);
+
     List<SelectOptionResponse> getTypes();
 
     List<SelectOptionResponse> getSelectOptions();

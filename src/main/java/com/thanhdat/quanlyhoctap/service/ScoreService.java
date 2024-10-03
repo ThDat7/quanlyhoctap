@@ -9,4 +9,8 @@ public interface ScoreService {
     List<ScoreResponse> getByCourseClassAndCurrentTeacher(Long courseClassId);
 
     void updateByCurrentTeacher(List<ScoreUpdateRequest> scoreUpdateRequests);
+
+    List<ScoreResponse> getFinalExamScoreByCourseClass(Long courseClassId);
+
+    void updateFinalExamScore(List<ScoreUpdateRequest> scoreUpdateRequests);
 }

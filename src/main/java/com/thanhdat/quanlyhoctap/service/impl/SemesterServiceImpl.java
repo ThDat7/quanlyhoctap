@@ -10,6 +10,7 @@ import com.thanhdat.quanlyhoctap.service.TeacherService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,6 +49,15 @@ public class SemesterServiceImpl implements SemesterService {
         LocalDateTime now = LocalDateTime.now();
         List<Semester> noneLocked = semesterRepository.findByLockTimeGreaterThan(now);
         return noneLocked.stream()
+                .map(semesterMapper::toSemesterDetailResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SemesterDetailResponse> getAll() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "year", "semester");
+        List<Semester> semesters = semesterRepository.findAll(sort);
+        return semesters.stream()
                 .map(semesterMapper::toSemesterDetailResponse)
                 .collect(Collectors.toList());
     }
