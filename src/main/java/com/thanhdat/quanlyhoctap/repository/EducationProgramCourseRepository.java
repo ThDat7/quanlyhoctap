@@ -29,4 +29,11 @@ public interface EducationProgramCourseRepository
             "JOIN education_programs newEp ON newEp.school_year = :toYear AND newEp.major_id = oldEp.major_id " +
             "WHERE epc.education_program_id = oldEp.id", nativeQuery = true)
     void cloneBatching(int fromYear, int toYear);
+
+    @Query("SELECT course.id, course.name, course.credits, COUNT(distinct epc.id), COUNT(distinct courseClass.id) FROM EducationProgramCourse epc " +
+            "INNER JOIN epc.course course " +
+            "INNER JOIN CourseClass courseClass ON courseClass.course = course AND courseClass.semester.id = :semesterId " +
+            "WHERE epc.semester.id = :semesterId " +
+            "GROUP BY course.id, course.name, course.credits")
+    Page<Object[]> findCourseRegistered(long semesterId, Pageable pageable);
 }

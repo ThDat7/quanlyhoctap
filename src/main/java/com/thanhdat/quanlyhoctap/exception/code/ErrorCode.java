@@ -22,6 +22,8 @@ public enum ErrorCode {
     STAFF_NOT_FOUND(1110, "Staff not found", HttpStatus.NOT_FOUND),
     SETTING_NOT_FOUND(1111, "Setting not found", HttpStatus.NOT_FOUND),
     CLASSROOM_NOT_FOUND(1113, "Classroom not found", HttpStatus.NOT_FOUND),
+    STUDENT_CLASS_NOT_FOUND(1114, "Student Class not found", HttpStatus.NOT_FOUND),
+    TEACHER_NOT_FOUND(1115, "Teacher not found", HttpStatus.NOT_FOUND),
 
     COURSE_OUTLINE_UPLOAD_FAILED(1002, "Course Outline upload failed", HttpStatus.CONFLICT),
     COURSE_OUTLINE_UPDATE_FORBIDDEN(1004, "Don't have permission to edit or Course outline is " +

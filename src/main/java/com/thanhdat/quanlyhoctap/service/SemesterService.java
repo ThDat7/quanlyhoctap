@@ -13,4 +13,6 @@ public interface SemesterService {
     List<SemesterDetailResponse> getNoneLocked();
 
     List<SemesterDetailResponse> getAll();
+
+    List<SelectOptionResponse> getSelectOptions();
 }

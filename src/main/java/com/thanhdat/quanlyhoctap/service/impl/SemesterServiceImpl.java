@@ -1,8 +1,10 @@
 package com.thanhdat.quanlyhoctap.service.impl;
 
+import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 import com.thanhdat.quanlyhoctap.entity.Semester;
 import com.thanhdat.quanlyhoctap.mapper.SemesterMapper;
+import com.thanhdat.quanlyhoctap.mapper.UtilMapper;
 import com.thanhdat.quanlyhoctap.repository.SemesterRepository;
 import com.thanhdat.quanlyhoctap.service.SemesterService;
 import com.thanhdat.quanlyhoctap.service.StudentService;
@@ -27,6 +29,7 @@ public class SemesterServiceImpl implements SemesterService {
     TeacherService teacherService;
 
     SemesterMapper semesterMapper;
+    UtilMapper utilMapper;
 
     @Override
     public List<SemesterDetailResponse> getByCurrentStudent() {
@@ -59,6 +62,13 @@ public class SemesterServiceImpl implements SemesterService {
         List<Semester> semesters = semesterRepository.findAll(sort);
         return semesters.stream()
                 .map(semesterMapper::toSemesterDetailResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SelectOptionResponse> getSelectOptions() {
+        return semesterRepository.findAll().stream()
+                .map(e -> utilMapper.toSelectOptionResponse(e.getId(), e.getSemester() + " - " + e.getYear()))
                 .collect(Collectors.toList());
     }
 }

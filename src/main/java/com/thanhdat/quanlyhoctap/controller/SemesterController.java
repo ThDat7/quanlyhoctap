@@ -1,6 +1,7 @@
 package com.thanhdat.quanlyhoctap.controller;
 
 import com.thanhdat.quanlyhoctap.dto.response.ApiResponse;
+import com.thanhdat.quanlyhoctap.dto.response.SelectOptionResponse;
 import com.thanhdat.quanlyhoctap.dto.response.SemesterDetailResponse;
 import com.thanhdat.quanlyhoctap.service.SemesterService;
 import lombok.AccessLevel;
@@ -35,5 +36,10 @@ public class SemesterController {
     @GetMapping
     public ApiResponse<List<SemesterDetailResponse>> getAllSemesters(){
         return ApiResponse.ok(semesterService.getAll());
+    }
+
+    @GetMapping("/select-options")
+    public ApiResponse<List<SelectOptionResponse>> getSelectOptions(){
+        return ApiResponse.ok(semesterService.getSelectOptions());
     }
 }

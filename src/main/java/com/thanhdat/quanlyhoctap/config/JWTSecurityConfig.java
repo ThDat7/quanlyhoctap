@@ -51,7 +51,12 @@ public class JWTSecurityConfig {
 
                         .requestMatchers("/api/course-classes/semester/*/course/*",
                                 "/api/course-classes/semester/*/course/*",
-                                "/api/course-classes//semester/*/course/*",
+                                "/api/course-classes/semester/*/course/*",
+                                "/api/course-classes/semester/*/course-with-courseclass-count",
+                                "/api/course-classes/*",
+                                "/api/course-classes/course/*/semester/*/select-options-available-teacher",
+                                "/api/course-classes/course/*/semester/*/select-options-available-student-class",
+                                "/api/course-classes",
 
                                 "/api/courses",
                                 "/api/courses/*",
@@ -92,6 +97,7 @@ public class JWTSecurityConfig {
                                 "/api/scores/update/final-exam",
 
                                 "/api/semesters",
+                                "/api/semesters/select-options",
 
                                 "/api/settings",
                                 "/api/settings/*",

@@ -65,4 +65,12 @@ public abstract class CourseClassMapper {
     @Mapping(source = "scheduleStudies", target = "schedules")
     public abstract CourseClassScheduleResponse toCourseClassScheduleResponse(CourseClass courseClass);
 
+    public abstract CourseWithCourseClassCountResponse toCourseWithCourseClassCountResponse(Long id, String name, Float credit, Long needCount, Long presentCount);
+
+
+    @Mapping(target = "teacherId", source = "teacher.id")
+    @Mapping(target = "studentClassId", source = "studentClass.id")
+    @Mapping(target = "semesterId", source = "semester.id")
+    @Mapping(target = "courseId", source = "course.id")
+    public abstract CourseClassViewCrudResponse toCourseClassViewCrudResponse(CourseClass courseClass);
 }
