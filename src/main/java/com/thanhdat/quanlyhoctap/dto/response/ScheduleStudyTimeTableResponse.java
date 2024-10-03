@@ -12,10 +12,12 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleStudyTimeTableResponse {
+    Long id;
     LocalDate startDate;
     Integer weekLength;
     Integer shiftStart;
     Integer shiftLength;
     String roomType;
     String roomName;
+    Long roomId;
 }

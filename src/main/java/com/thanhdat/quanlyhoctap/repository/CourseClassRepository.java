@@ -1,5 +1,6 @@
 package com.thanhdat.quanlyhoctap.repository;
 
+import com.thanhdat.quanlyhoctap.entity.Course;
 import com.thanhdat.quanlyhoctap.entity.CourseClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,4 +66,30 @@ public interface CourseClassRepository
     List<CourseClass> findByTeacherIdAndSemesterId(Long teacherId, Long semesterId);
 
     Page<CourseClass> findBySemesterIdAndCourseId(Long semesterId, Long courseId, Pageable pageable);
+
+    @Query("SELECT sc, " +
+            "CASE WHEN (" +
+            "(" +
+                "SELECT SUM(ss.shiftLength * ss.weekLength) " +
+                "FROM ScheduleStudy ss " +
+                "WHERE ss.courseClass.studentClass = sc " +
+                "AND ss.courseClass.semester.id = :semesterId" +
+            ") < SUM(cc.course.practicePeriod + cc.course.theoryPeriod)) " +
+            "THEN FALSE ELSE TRUE END " +
+            "FROM StudentClass sc " +
+            "INNER JOIN sc.courseClasses cc " +
+            "WHERE cc.semester.id = :semesterId " +
+            "GROUP BY sc")
+    List<Object[]> findStudentClassWithStatusScheduleStudy(long semesterId);
+
+    @Query("SELECT cc, " +
+            "CASE WHEN " +
+            "(" +
+                "SUM(ss.weekLength * ss.shiftLength) < (cc.course.theoryPeriod + cc.course.practicePeriod)" +
+            ") THEN FALSE ELSE TRUE END " +
+            "FROM CourseClass cc " +
+            "INNER JOIN cc.scheduleStudies ss " +
+            "WHERE cc.semester.id = :semesterId AND cc.studentClass.id = :studentClassId " +
+            "GROUP BY cc")
+    List<Object[]> findCourseClassWithStatusScheduleStudy(long semesterId, long studentClassId);
 }

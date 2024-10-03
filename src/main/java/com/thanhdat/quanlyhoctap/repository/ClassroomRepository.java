@@ -20,4 +20,10 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
     @Query("SELECT c FROM Classroom c WHERE c.id NOT IN :ids " +
             "ORDER BY c.name, c.roomType")
     List<Classroom> findAllByIdNotIn(Collection<Long> ids);
+
+    @Query("SELECT c FROM Classroom c JOIN c.scheduleStudies ss " +
+            "WHERE ss.courseClass.id = :courseClassId " +
+            "AND c.roomType = :roomType " +
+            "ORDER BY c.name, c.roomType")
+    List<Classroom> findByCourseClassAndRoomType(Long courseClassId, RoomType roomType);
 }

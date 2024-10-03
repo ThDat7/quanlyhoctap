@@ -14,5 +14,6 @@ public interface ScheduleStudyMapper {
 
     @Mapping(source = "classroom.roomType", target = "roomType")
     @Mapping(source = "classroom.name", target = "roomName")
+    @Mapping(source = "classroom.id", target = "roomId")
     ScheduleStudyTimeTableResponse toScheduleStudyTimeTableResponse(ScheduleStudy scheduleStudy);
 }

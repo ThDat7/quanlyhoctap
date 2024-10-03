@@ -81,6 +81,22 @@ public enum ValidationErrorCode {
     INTROSPECT_TOKEN_NOT_NULL(2036, "Introspect token must not be null"),
     USERNAME_NOT_NULL(2037, "Username must not be null"),
     PASSWORD_NOT_NULL(2038, "Password must not be null"),
+
+    ROOM_AVAILABLE_START_TIME_NOT_NULL(2039, "Start time must not be null"),
+
+    STUDENT_CLASS_NOT_NULL(2041, "Student class must not be null"),
+    COURSE_CLASS_CAPACITY_NOT_NULL(2042, "Course class capacity must not be null"),
+    COURSE_CLASS_CAPACITY_POSITIVE(2043, "Course class capacity must be positive"),
+
+    SCHEDULE_STUDY_WEEK_LENGTH_NOT_NULL(2044, "Week length must not be null"),
+    SCHEDULE_STUDY_WEEK_LENGTH_MIN_VALUE(2044, "Week length must be at least {value}"),
+    SCHEDULE_STUDY_START_DATE_NOT_NULL(2045, "Start date must not be null"),
+    SCHEDULE_STUDY_SHIFT_START_NOT_NULL(2046, "Shift start must not be null"),
+    SCHEDULE_STUDY_SHIFT_START_MIN_VALUE(2046, "Shift start must be at least {value}"),
+    SCHEDULE_STUDY_SHIFT_LENGTH_NOT_NULL(2047, "Shift length must not be null"),
+    SCHEDULE_STUDY_SHIFT_LENGTH_MIN_VALUE(2047, "Shift length must be at least {value}"),
+    SCHEDULE_STUDY_CLASSROOM_ID_NOT_NULL(2048, "Classroom id must not be null"),
+    SCHEDULE_STUDY_ROOM_TYPE_NOT_NULL(2049, "Room type must not be null"),
     ;
 
     private final int code;

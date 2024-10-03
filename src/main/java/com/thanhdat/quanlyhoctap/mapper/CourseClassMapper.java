@@ -73,4 +73,7 @@ public abstract class CourseClassMapper {
     @Mapping(target = "semesterId", source = "semester.id")
     @Mapping(target = "courseId", source = "course.id")
     public abstract CourseClassViewCrudResponse toCourseClassViewCrudResponse(CourseClass courseClass);
+
+    @Mapping(target = "courseName", source = "courseClass.course.name")
+    public abstract CourseClassWithStatusResponse toCourseClassWithStatusResponse(CourseClass courseClass, boolean status);
 }

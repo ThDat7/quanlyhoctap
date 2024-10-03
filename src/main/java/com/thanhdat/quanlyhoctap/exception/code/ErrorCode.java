@@ -24,6 +24,7 @@ public enum ErrorCode {
     CLASSROOM_NOT_FOUND(1113, "Classroom not found", HttpStatus.NOT_FOUND),
     STUDENT_CLASS_NOT_FOUND(1114, "Student Class not found", HttpStatus.NOT_FOUND),
     TEACHER_NOT_FOUND(1115, "Teacher not found", HttpStatus.NOT_FOUND),
+    SCHEDULE_STUDY_NOT_FOUND(1116, "Schedule Study not found", HttpStatus.NOT_FOUND),
 
     COURSE_OUTLINE_UPLOAD_FAILED(1002, "Course Outline upload failed", HttpStatus.CONFLICT),
     COURSE_OUTLINE_UPDATE_FORBIDDEN(1004, "Don't have permission to edit or Course outline is " +
@@ -42,6 +43,8 @@ public enum ErrorCode {
     NOT_TEACH_COURSE_CLASS(1016, "You don't teach this course class", HttpStatus.FORBIDDEN),
     DATABASE_DUPLICATE_ENTRY(1017, "Duplicate value {value} in {table}", HttpStatus.CONFLICT),
     TIME_IN_USED(1018, "Time is in used", HttpStatus.CONFLICT),
+
+    SCHEDULE_STUDY_TIME_OVER_PERIOD(1019, "Schedule study time is over period of course", HttpStatus.CONFLICT),
 
     UNAUTHENTICATED(1500, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1501, "Don't have permission", HttpStatus.FORBIDDEN),

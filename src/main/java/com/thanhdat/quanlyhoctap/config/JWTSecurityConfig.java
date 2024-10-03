@@ -103,7 +103,14 @@ public class JWTSecurityConfig {
                                 "/api/settings/*",
 
                                 "/api/staffs",
-                                "/api/staffs/select-options")
+                                "/api/staffs/select-options",
+
+                                "/api/timetables/semester/*/student-classes-with-status",
+                                "/api/timetables/semester/*/student-class/*/course-classes-with-status",
+                                "/api/timetables/semester/*/student-class/*/schedules",
+                                "/api/timetables/course-class/*",
+                                "/api/timetables/course-class/*/available-classrooms",
+                                "/api/timetables/schedule-study/*")
                         .hasAuthority(UserRole.ADMIN.name())
 
 
