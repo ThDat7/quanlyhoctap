@@ -310,6 +310,8 @@ public class DataGenerator {
 
                 LocalDateTime deadline = LocalDateTime.now().withYear(defaultYearPublished - 1);
 
+                List<Integer> randomDurationFinalExams = List.of(60, 90, 120);
+                Integer durationFinalExam = randomDurationFinalExams.get(faker.random().nextInt(randomDurationFinalExams.size() - 1));
 
                 CourseOutline courseOutline = CourseOutline.builder()
                         .url(url)
@@ -320,6 +322,7 @@ public class DataGenerator {
                         .status(defaultOutlineStatus)
                         .deadline(deadline)
                         .educationProgramCourses(allEpcAssociateWithCourse)
+                        .durationFinalExam(durationFinalExam)
                         .build();
                 courseOutlineRepository.save(courseOutline);
 
@@ -336,6 +339,7 @@ public class DataGenerator {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(DateTimeFormatters.TIME_FORMAT);
         String timeString = timeStartStudy.format(timeFormatter);
         Integer shiftLengthMinutes = 45;
+        int endShiftOfDay = 17;
 
         List<Setting> settings = new ArrayList<>();
         settings.add(Setting.builder()
@@ -346,6 +350,11 @@ public class DataGenerator {
         settings.add(Setting.builder()
                 .key(StudySettingType.SHIFT_LENGTH_MINUTES.name())
                 .value(shiftLengthMinutes.toString())
+                .build());
+
+        settings.add(Setting.builder()
+                .key(StudySettingType.END_SHIFT_OF_DAY.name())
+                .value(Integer.toString(endShiftOfDay))
                 .build());
 
         Integer semesterIdForRegister = 9;

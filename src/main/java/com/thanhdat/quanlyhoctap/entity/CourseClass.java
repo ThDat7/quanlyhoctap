@@ -27,6 +27,8 @@ public class CourseClass {
     @JoinColumn(name = "course_rule_id")
     CourseRule courseRule;
 
+    Integer durationFinalExam;
+
     @ManyToOne
     @JoinColumn(name = "semester_id")
     Semester semester;

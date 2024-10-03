@@ -81,19 +81,9 @@ public class GenerateCourseClassHelper {
                 .build();
 
         List<DateTimeRange> scheduleDateTimeRanges = scheduleStudyService.convertToDateTimeRanges(scheduleStudy);
-        List<TimeToUseClassroomRequest> scheduleDateTimeRangesRequest = scheduleDateTimeRanges.stream()
-                .map(dateTimeRange -> TimeToUseClassroomRequest.builder()
-                        .startTime(dateTimeRange.getStart())
-                        .endTime(dateTimeRange.getEnd())
-                        .build())
-                .collect(Collectors.toList());
 
-        ClassroomAvailableRequest classroomAvailableRequest = ClassroomAvailableRequest.builder()
-                .roomType(roomType)
-                .timeToUseClassroomRequests(scheduleDateTimeRangesRequest)
-                .build();
         List<Classroom> validClassroom = classroomService
-                .getUnUsedClassrooms(classroomAvailableRequest);
+                .getUnUsedClassrooms(scheduleDateTimeRanges, roomType);
         Classroom randomClassroom = validClassroom.get(faker.number().numberBetween(0, validClassroom.size() - 1));
         scheduleStudy.setClassroom(randomClassroom);
 
@@ -187,6 +177,7 @@ public class GenerateCourseClassHelper {
                             .teacher(randomTeacher)
                             .studentClass(studentClass)
                             .capacity(capacityClass)
+                            .durationFinalExam(epc.getCourseOutline().getDurationFinalExam())
                             .scheduleStudies(null)
                             .studies(null)
                             .exams(null)
@@ -308,16 +299,12 @@ public class GenerateCourseClassHelper {
         List<Classroom> availableClassroom;
         do {
             LocalDateTime examEnd = examStart.plusHours(1).plusMinutes(30);
-            TimeToUseClassroomRequest timeToUseClassroomRequest = TimeToUseClassroomRequest.builder()
-                    .startTime(examStart)
-                    .endTime(examEnd)
-                    .build();
-            ClassroomAvailableRequest classroomAvailableRequest = ClassroomAvailableRequest.builder()
-                    .roomType(RoomType.CLASS_ROOM)
-                    .timeToUseClassroomRequests(List.of(timeToUseClassroomRequest))
+            DateTimeRange timeToUse = DateTimeRange.builder()
+                    .start(examStart)
+                    .end(examEnd)
                     .build();
 
-            availableClassroom = classroomService.getUnUsedClassrooms(classroomAvailableRequest);
+            availableClassroom = classroomService.getUnUsedClassrooms(List.of(timeToUse), RoomType.CLASS_ROOM);
             if (availableClassroom.size() == 0) {
                 examStart = examStart.plusDays(1);
                 continue;

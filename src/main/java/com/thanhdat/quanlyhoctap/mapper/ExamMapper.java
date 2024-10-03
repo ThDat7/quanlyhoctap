@@ -8,6 +8,7 @@ import com.thanhdat.quanlyhoctap.util.DateTimeRange;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -55,4 +56,26 @@ public abstract class ExamMapper {
                 .map(dateTimeRange -> toAvailableDateForMidtermExamResponse(dateTimeRange, roomType))
                 .toList();
     }
+
+    @Mapping(target = "courseClassId", source = "courseClass.id")
+    @Mapping(target = "courseName", source = "courseClass.course.name")
+    @Mapping(target = "courseCode", source = "courseClass.course.code")
+    @Mapping(target = "startTime", source = "finalExam.startTime")
+    @Mapping(target = "roomName", source = "finalExam.classroom.name")
+    public abstract FinalExamResponse toFinalExamResponse(CourseClass courseClass, Exam finalExam);
+
+    @Mapping(target = "id", source = "courseId")
+    @Mapping(target = "code", source = "courseCode")
+    @Mapping(target = "name", source = "courseName")
+    public abstract CourseWithFinalExamScheduleStatusResponse toCourseWithFinalExamScheduleStatus(Long courseId,
+                                                                                                  String courseCode,
+                                                                                                  String courseName,
+                                                                                                  Boolean isHaveFullFinalExamSchedule);
+
+    public AvailableTimeForFinalExamResponse toAvailableTimeForFinalExamResponse(List<LocalDateTime> startTimeSlots) {
+        return AvailableTimeForFinalExamResponse.builder()
+                .startTimeSlots(startTimeSlots)
+                .build();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.thanhdat.quanlyhoctap.repository;
 
+import com.thanhdat.quanlyhoctap.entity.RoomType;
 import com.thanhdat.quanlyhoctap.entity.ScheduleStudy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,6 @@ public interface ScheduleStudyRepository extends JpaRepository<ScheduleStudy, Lo
     List<ScheduleStudy> findBySemesterId(Long semesterId);
 
     List<ScheduleStudy> findByCourseClassId(Long courseClassId);
+
+    List<ScheduleStudy> findAllByCourseClassIdIn(List<Long> courseClassIds);
 }

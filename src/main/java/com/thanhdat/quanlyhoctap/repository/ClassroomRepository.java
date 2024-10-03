@@ -11,6 +11,13 @@ import java.util.List;
 
 @Repository
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
-    @Query("SELECT c FROM Classroom c WHERE c.roomType = :roomType AND c.isAvailable = true AND c.id NOT IN :ids")
+    @Query("SELECT c FROM Classroom c WHERE c.roomType = :roomType " +
+            "AND c.isAvailable = true " +
+            "AND c.id NOT IN :ids " +
+            "ORDER BY c.name, c.roomType")
     List<Classroom> findByRoomTypeAndIdNotIn(RoomType roomType, Collection<Long> ids);
+
+    @Query("SELECT c FROM Classroom c WHERE c.id NOT IN :ids " +
+            "ORDER BY c.name, c.roomType")
+    List<Classroom> findAllByIdNotIn(Collection<Long> ids);
 }

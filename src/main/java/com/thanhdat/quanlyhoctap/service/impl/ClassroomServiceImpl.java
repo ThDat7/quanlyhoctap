@@ -31,10 +31,15 @@ public class ClassroomServiceImpl implements ClassroomService {
     ScheduleStudyService scheduleStudyService;
     SemesterRepository semesterRepository;
 
-    public List<Classroom> getUnUsedClassrooms(ClassroomAvailableRequest classroomAvailableRequest) {
-//        need to check all dates in one semester
-        LocalDate sampleStartDate = classroomAvailableRequest.getTimeToUseClassroomRequests().get(0).getStartTime().toLocalDate();
-        LocalDate sampleEndDate = classroomAvailableRequest.getTimeToUseClassroomRequests().get(0).getEndTime().toLocalDate();
+    @Override
+    public List<Classroom> getUnUsedClassrooms(List<DateTimeRange> timeToUse, RoomType roomType) {
+        Set<Long> usedClassroomIds = getUnUsedClassroomsIds(timeToUse);
+        return classroomRepository.findByRoomTypeAndIdNotIn(roomType, usedClassroomIds);
+    }
+
+    private Set<Long> getUnUsedClassroomsIds(List<DateTimeRange> timeToUseClassrooms) {
+        LocalDate sampleStartDate = timeToUseClassrooms.get(0).getStart().toLocalDate();
+        LocalDate sampleEndDate = timeToUseClassrooms.get(0).getEnd().toLocalDate();
         Semester semester = semesterRepository.findByDateRange(sampleStartDate, sampleEndDate)
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Semester not found for date range: " + "start: %s, end: %s",
@@ -42,46 +47,48 @@ public class ClassroomServiceImpl implements ClassroomService {
 
         List<ScheduleStudy> schedules = scheduleStudyRepository.findBySemesterId(semester.getId());
         List<Exam> finalExams = examRepository.findBySemesterIdAndType(semester.getId(), ExamType.FINAL);
-        RoomType roomType = classroomAvailableRequest.getRoomType();
-        Boolean isAvailable = true;
 
         Set<Long> usedClassroomIdsForSchedule = new HashSet<>();
         Set<Long> usedClassroomIdsForExam= new HashSet<>();
 
-        classroomAvailableRequest.getTimeToUseClassroomRequests().stream()
-                .forEach(timeToUseClassroomRequest -> {
+        timeToUseClassrooms.stream()
+                .forEach(timeToUse -> {
                     DateTimeRange toUseDateTimeRange = DateTimeRange.builder()
-                            .start(timeToUseClassroomRequest.getStartTime())
-                            .end(timeToUseClassroomRequest.getEndTime())
+                            .start(timeToUse.getStart())
+                            .end(timeToUse.getEnd())
                             .build();
 
                     usedClassroomIdsForSchedule.addAll(
                             schedules.stream()
-                            .filter(scheduleStudy ->
-                                    isScheduleTimeConflict(toUseDateTimeRange, scheduleStudy))
-                            .map(ScheduleStudy::getClassroom)
-                            .map(Classroom::getId)
-                            .collect(Collectors.toList()));
+                                    .filter(scheduleStudy ->
+                                            isScheduleTimeConflict(toUseDateTimeRange, scheduleStudy))
+                                    .map(ScheduleStudy::getClassroom)
+                                    .map(Classroom::getId)
+                                    .collect(Collectors.toList()));
 
                     usedClassroomIdsForExam.addAll(
                             finalExams.stream()
-                            .filter(finalExam -> {
-                                DateTimeRange examDateTimeRange = DateTimeRange.builder()
-                                        .start(finalExam.getStartTime())
-                                        .end(finalExam.getEndTime())
-                                        .build();
-                                return examDateTimeRange.overlaps(toUseDateTimeRange);
-                            })
-                            .map(Exam::getClassroom)
-                            .map(Classroom::getId)
-                            .collect(Collectors.toList()));
+                                    .filter(finalExam -> {
+                                        DateTimeRange examDateTimeRange = DateTimeRange.builder()
+                                                .start(finalExam.getStartTime())
+                                                .end(finalExam.getEndTime())
+                                                .build();
+                                        return examDateTimeRange.overlaps(toUseDateTimeRange);
+                                    })
+                                    .map(Exam::getClassroom)
+                                    .map(Classroom::getId)
+                                    .collect(Collectors.toList()));
                 });
 
         Set<Long> usedClassroomIds = new HashSet<>();
         usedClassroomIds.addAll(usedClassroomIdsForSchedule);
         usedClassroomIds.addAll(usedClassroomIdsForExam);
+        return usedClassroomIds;
+    }
 
-        return classroomRepository.findByRoomTypeAndIdNotIn(roomType, usedClassroomIds);
+    public List<Classroom> getUnUsedClassrooms(List<DateTimeRange> timeToUseClassrooms) {
+        Set<Long> usedClassroomIds = getUnUsedClassroomsIds(timeToUseClassrooms);
+        return classroomRepository.findAllByIdNotIn(usedClassroomIds);
     }
 
     private Boolean isScheduleTimeConflict(DateTimeRange toUseDateTimeRange, ScheduleStudy schedule) {

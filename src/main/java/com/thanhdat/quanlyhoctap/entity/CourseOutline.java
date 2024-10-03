@@ -24,6 +24,8 @@ public class CourseOutline {
     @JoinColumn(name = "course_rule_id")
     CourseRule courseRule;
 
+    Integer durationFinalExam;
+
     String url;
 
     int yearPublished;

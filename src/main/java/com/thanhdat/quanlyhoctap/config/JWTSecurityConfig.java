@@ -69,6 +69,11 @@ public class JWTSecurityConfig {
 
                                 "/api/exam-schedules/semester/*/course-with-final-exam-schedule-status",
                                 "/api/exam-schedules/semester/*/course/*/final-exam",
+                                "/api/exam-schedules/semester/*/course-with-final-exam-schedule-status",
+                                "/api/exam-schedules/semester/*/course/*/final-exam",
+                                "/api/exam-schedules/course-class/*/available-time-final-exam",
+                                "/api/exam-schedules/course-class/*/available-room-final-exam",
+                                "/api/exam-schedules/course-class/*/final-exam",
 
                                 "/api/faculties",
                                 "/api/faculties/*",
